@@ -1,6 +1,6 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/keys", 
+define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys",  
 	"./utils", "dijit/_FocusMixin"],
-	function(arr, lang, declare, on, keys, utils, _FocusMixin){
+	function(arr, lang, event, declare, on, keys, utils, _FocusMixin){
 		
 	/*=====
 	var _FocusMixin = dijit._FocusMixin;
@@ -73,6 +73,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 				case keys.NUMPAD_PLUS:
 				if(!this._isLeaf(selected)){
 					this.drillDown(renderer);
+					event.stop(e);
 				}
 				break;
 				// TODO
@@ -80,12 +81,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 				case keys.NUMPAD_MINUS:
 				if(!this._isLeaf(selected)){
 					this.drillUp(renderer);
+					event.stop(e);
 				}
 				break;
 			}
 			if(newSelected){
 				if(!this._isRoot(newSelected)){
 					this.set("selectedItem", newSelected);
+					event.stop(e);
 				}
 			}
 		}

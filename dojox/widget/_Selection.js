@@ -6,12 +6,14 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 	=====*/		
 	
 	return declare("dojox.widget._Selection", Stateful, {
+		// summary:
+		//		Base class for widgets that manage a list of selected data items.
 		
 		//	selectionMode: String
 		//		Valid values are "none", "single", "multiple".
 		//		- "none": No selection can be done.
-		//		-	"single": Only one item can be selected at a time.
-		//		-	"multiple": Several item can be selected using the control key modifier.
+		//		- "single": Only one item can be selected at a time.
+		//		- "multiple": Several item can be selected using the control key modifier.
 		//		Default value is "single".
 		selectionMode: "single",
 		
@@ -23,7 +25,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 				this.selectionMode = value;
 				if(value == "none"){
 					this.set("selectedItems", null);
-				} else if(value == "single"){
+				}else if(value == "single"){
 					this.set("selectedItem", this.selectedItem); // null or last selected item 
 				}
 			}
@@ -65,6 +67,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		},
 		
 		isItemSelected: function(item){
+			// summary:
+			//		Returns wether an item is selected or not.
+			// item: Object
+			//		The item to test the selection for.			
 			if(this.selectedItems == null || this.selectedItems.length== 0){
 				return false;
 			}
@@ -75,10 +81,17 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		},
 		
 		getIdentity: function(item){
-			//	summary: This function must be implemented to return the id of a item. 
+			//	summary: 
+			//		This function must be implemented to return the id of a item. 
 		},
 		
 		setItemSelected: function(item, value){
+			//	summary: 
+			//		Change the selection state of an item.
+			//	item: Object
+			//		The item to change the selection state for.
+			//	value: Boolean
+			//		True to select the item, false to deselect it. 
 			
 			if(this.selectionMode == "none" || item == null){
 				return;
@@ -86,13 +99,12 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 
 			// copy is returned
 			var sel = this.get("selectedItems");
-			var old = this.get
-			("selectedItems");
+			var old = this.get("selectedItems");
 			
 			if(this.selectionMode == "single"){
 				if(value){
 					this.set("selectedItem", item);
-				} else if(isItemSelected(item)){
+				}else if(isItemSelected(item)){
 					this.set("selectedItems", null);
 				}
 			}else{ // multiple
@@ -102,7 +114,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 					}
 					if(sel == null){
 						sel = [item];
-					} else {
+					}else{
 						sel.unshift(item);
 					}
 					this.set("selectedItems", sel);
@@ -114,7 +126,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 						return // already not selected
 					}
 					this.set("selectedItems", res);
-					
 				}
 			}
 		},
@@ -127,7 +138,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			//	item: Object
 			//		The render item that has been selected/deselected.
 			//	renderer: Object
-			//		The source item renderer of the interaction.
+			//		The visual renderer of the selected/deselected item.			
 			//	dispatch: Boolean
 			//		Whether an event must be dispatched or not.
 			//	returns: Boolean
@@ -150,10 +161,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 					changed = true;
 				}
 			}else if(this.selectionMode == "multiple"){
-					
-				//if(selected){
-					//_selectionPostponed = true;					
-				//} else
 				 if(e.ctrlKey){
 					this.setItemSelected(item, !selected);
 					changed = true;
@@ -164,7 +171,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			}else{ // single
 				if(e.ctrlKey){					
 					//if the object is selected deselects it.
-					//_selectionPostponed = true;
 					this.set("selectedItem", selected ? null : item);
 					changed = true;					
 				}else{
@@ -183,6 +189,16 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		},
 		
 		dispatchChange: function(oldSelectedItem, newSelectedItem, renderer, triggerEvent){
+			//	summary: 
+			//		Dispatch a selection change event.
+			//	oldSelectedItem: Object
+			//		The previously selectedItem
+			//	newSelectedItem: Object
+			//		The new selectedItem.
+			//	render: Object
+			//		The visual renderer of the selected/deselected item.
+			//	triggerEvent: Event
+			//		The event that lead to the selection of the item. 			
 			this.onChange({
 				oldValue: oldSelectedItem,
 				newValue: newSelectedItem,
@@ -191,10 +207,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			});
 		},
 		
-		onChange: function(e){
-			
+		onChange: function(){
+			// summary:
+			//		Called when the selection changed.
+			// tags:
+			//		callback			
 		}
 	});
 });
-		
-		
