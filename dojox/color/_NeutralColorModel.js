@@ -39,8 +39,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_ColorModelB
 			}
 			value = (value - this._min) / (this._max - this._min);
 			return Math.pow(value, this._e);
-		},
-	
+		}
 	});
 
 });
