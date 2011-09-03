@@ -110,7 +110,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			}else{ // multiple
 				if(value){
 					if(this.isItemSelected(item)){
-						return // already selected
+						return; // already selected
 					}
 					if(sel == null){
 						sel = [item];
@@ -123,7 +123,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 						return sitem.id != item.id; 
 					});
 					if(res == null || res.length == sel.length){
-						return // already not selected
+						return; // already not selected
 					}
 					this.set("selectedItems", res);
 				}
