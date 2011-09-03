@@ -304,7 +304,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					return {
 						name: item,
 						values: []
-					}
+					};
 				}), dojo.hitch(this, this._getAreaForItem)).children;
 			}else{
 				this._items = this._data;
@@ -475,7 +475,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				renderer = this.createRenderer("div", "group");
 			}
 			domClass.add(renderer, "dojoxTreeMapGroup");
-	
+			domStyle.set(renderer, "overflow", "hidden");
+			domStyle.set(renderer, "position", "absolute");
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
 			if(forceCreate){
@@ -522,6 +523,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			if(renderer == null){
 				renderer = this.createRenderer(item, "leaf");
 			}
+			domStyle.set(renderer, "overflow", "hidden");
+			domStyle.set(renderer, "position", "absolute");			
 			this.styleLeafRenderer(renderer, item, level);
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
 				renderer.innerHTML = this._getLabelForItem(item);
@@ -547,6 +550,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			if(renderer == null){
 				renderer = this.createRenderer(item, "content");
 			}
+			domStyle.set(renderer, "overflow", "hidden");
+			domStyle.set(renderer, "position", "absolute");			
 			return renderer;
 		},
 	

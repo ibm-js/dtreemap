@@ -4,19 +4,13 @@
 }
 
 .dojoxTreeMapLeaf {
-  position: absolute;
   border: 1px solid black;
-  overflow: hidden;
 }
 
 .dojoxTreeMapGroup {
-  position: absolute;
-  overflow: hidden;
 }
 
 .dojoxTreeMapGroupContent {
-  position: absolute;
-  overflow: hidden;
 }
 
 .dojoxTreeMapHeader {
