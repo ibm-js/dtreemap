@@ -2,7 +2,10 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_ColorModelB
 	function(arr, declare, Color, _ColorModelBase){
 	
 	return declare("dojox.color._NeutralColorModel", _ColorModelBase, {
-	
+		// summary:
+		//		Base class for classes for color model that returns a color from a data value
+		//		using an interpolation between two extremum colors around a neutral value.
+		
 		_min: 0, 
 		_max: 0, 
 		_e: 0,
@@ -11,6 +14,13 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_ColorModelB
 		},
 	
 		initialize: function(items, colorFunc){
+			//	summary:
+			//		Initialize the color model from a list of data items and using a function
+			//		that returns the value used to compute the color for a given item.
+			//	items: Object[]
+			//		The data items. 
+			//	colorFunc: Function
+			//		The function that returns the value used to compute the color for particular data item.
 			var values = [];
 			var sum = 0;
 			var min = 100000000; 
@@ -33,7 +43,27 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_ColorModelB
 			}
 		},
 		
+		computeNeutral: function(min, max, sum, values){
+			//	summary:
+			//		Return the neutral value. This can be for example the mean or average value.
+			//		This function must be implemented by implementations.
+			//	min: Number
+			//		The minimal value.
+			//	max: Number
+			//		The maximum value.
+			//	sum: Number
+			//		The sum of all values.
+			//	values: Number[]
+			//		The sorted array of values used to compute colors.
+		},
+		
 		getNormalizedValue: function(value){
+			//	summary:
+			//		Return the normalized (between 0 and 1) value for a given data value.
+			//		This implementation uses an power function to map neutral value to 0.5
+			//		and distribute other values around it.
+			//	value: Number
+			//		The data value			
 			if(this._e < 0){
 				return 0;
 			}
