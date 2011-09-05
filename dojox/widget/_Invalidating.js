@@ -34,7 +34,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"],
 			//		watch for.
 			// properties: String[]
 			//		The list of properties to watch for.
-			this.watchProperties = this.watchedProperties?this.watchedProperties.concat(properties):properties;
+			this.watchedProperties = this.watchedProperties?this.watchedProperties.concat(properties):properties;
 		},
 		invalidateRendering: function(){
 			// summary:
