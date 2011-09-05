@@ -14,7 +14,10 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"],
 		//		The list of properties to watch for. This list must be initialized in the constructor.
 		//		Default value is null.
 		watchedProperties: null,
-		_invalidRendering: false,
+		//	invalidRenderering: Boolean
+		//		Whether the rendering is invalid or not. This is a readonly information, one must call 
+		//		invalidateRendering to modify this flag. 
+		invalidRendering: false,
 		postscript: function(){
 			this.inherited(arguments);		
 			if(this.watchedProperties){
