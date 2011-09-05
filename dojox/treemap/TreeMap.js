@@ -410,10 +410,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				renderer.item = child;
 				renderer.parentItem = parent;
 				this.itemToRenderer[this.getIdentity(child)] = renderer;
-				on(renderer, "mouseover", lang.hitch(this, this._onMouseOver));
-				on(renderer, "mouseout", lang.hitch(this, this._onMouseOut));
-				on(renderer, "dblclick", lang.hitch(this, this._onDoubleClick));
-				on(renderer, "mouseup", lang.hitch(this, this._onMouseUp));
+				this.connect(renderer, "mouseover", lang.hitch(this, this._onMouseOver));
+				this.connect(renderer, "mouseout", lang.hitch(this, this._onMouseOut));
+				this.connect(renderer, "dblclick", lang.hitch(this, this._onDoubleClick));
+				this.connect(renderer, "mouseup", lang.hitch(this, this._onMouseUp));
 			}
 	
 			// in some cases the computation might be slightly incorrect (0.0000...1)
