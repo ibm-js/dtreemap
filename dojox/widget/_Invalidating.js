@@ -39,8 +39,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"],
 		invalidateRendering: function(){
 			// summary:
 			//		Invalidating the rendering for the next executation frame.
-			if(!this._invalidRendering){
-				this._invalidRendering = true;
+			if(!this.invalidRendering){
+				this.invalidRendering = true;
 				setTimeout(lang.hitch(this, this.validateRendering), 0);
 			}
 		},
@@ -49,9 +49,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"],
 			//		Immediately validate the rendering if it has been invalidated. You generally do not call that method yourself.
 			//	tags:
 			//		protected
-			if(this._invalidRendering){
+			if(this.invalidRendering){
 				this.refreshRendering();
-				this._invalidRendering = false;
+				this.invalidRendering = false;
 			}
 		},
 		refreshRendering: function(){
