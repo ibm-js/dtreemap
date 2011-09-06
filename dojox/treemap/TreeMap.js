@@ -11,6 +11,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	=====*/ 	
 	
 	return declare("dojox.treemap.TreeMap", [_WidgetBase, _Invalidating, _Selection], {
+		// summary:
+		//		A treemap widget.
+		
 		baseClass: "treeMap",
 		
 		//	store: dojo.store.Store
@@ -31,8 +34,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_storeChanged: false,
 		_dataChanged: false,
 	
-		// First visible Item
-		_rootItem: null,
+		//	rootItem: Object
+		//		The root item of the treemap, that is the first visible item.
+		//		If null the entire treemap hierarchy is shown.	
+		//		Default is null.
+		rootItem: null,
 		_rootItemChanged: false,
 	
 		//	tooltipAttr: String
@@ -77,7 +83,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		constructor: function(){
 			this.watchedProperties = [ "colorModel", "groupAttrs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc" ];
+				"colorAttr", "colorFunc", "rootItem" ];
 		},
 		
 		getIdentity: function(item){
@@ -89,10 +95,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domGeom.setMarginBox(this.domNode, box);
 				this.invalidateRendering();						
 			}
-		},
-		
-		destroy: function(preserveDom){
-			this.inherited(arguments);
 		},
 		
 		buildRendering: function(){
@@ -111,7 +113,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 			if(this._groupingChanged){
 				this._groupingChanged = false;
-				this._rootItem = null;
+				this._set("rootItem", null);
 				this._updateTreeMapHierarchy();
 				forceCreate = true;
 			}
@@ -145,7 +147,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}
 			}
 	
-			var rootItem = this._rootItem;
+			var rootItem = this.rootItem;
 	
 			if(rootItem != null){
 				if(this._isLeaf(rootItem)){
@@ -159,18 +161,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					x: box.l, y: box.t, w: box.w, h: box.h
 				}, 0, forceCreate);
 			}else{
-				this._buildChildrenRenderers(this.domNode, this._rootItem?this._rootItem:{ __treeRoot: true, children : this._items }, 0, forceCreate, box);
+				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._items }, 0, forceCreate, box);
 			}
 		},
 	
-		rootItem: function(){
-			return this._rootItem;
-		},
-	
-		setRootItem: function(value){
-			this._rootItem = value;
+		_setRootItemAttr: function(value){
 			this._rootItemChanged = true;
-			this.invalidateRendering();
+			this._set("rootItem", value);
 		},
 	
 		_setStoreAttr: function(value){
@@ -571,7 +568,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var item = renderer.item;
 			if(!this._isLeaf(item)){
 				// Drill up
-				if(this._rootItem == item){
+				if(this.rootItem == item){
 					this.drillUp(renderer);
 				}else{
 					this.drillDown(renderer);
@@ -590,7 +587,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 
 			this.domNode.removeChild(renderer);
 			var parent = this.itemToRenderer[this.getIdentity(item)].parentItem;
-			this.setRootItem(parent);
+			this.set("rootItem", parent);
 			this.validateRendering(); // Must call this to create the treemap now
 
 			// re-add the old renderer to show the animation
@@ -647,7 +644,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					var box2 = domGeom.getContentBox(renderer);
 					this._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
 				}), onEnd: lang.hitch(this, function(){
-					this.setRootItem(item);
+					this.set("rootItem", item);
 				})
 			}).play();
 		},
