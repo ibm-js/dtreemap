@@ -125,7 +125,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 			if(this._coloringChanged){
 				this._coloringChanged = false;			
-				if(this.colorModel != null && this._data != null){
+				if(this.colorModel != null && this._data != null && this.colorModel.initialize){
 					this.colorModel.initialize(this._data, lang.hitch(this, function(item){
 						return this.colorFunc(item, this.store);
 					}));

@@ -12,7 +12,7 @@ define(["dojo/_base/declare"],
 	
 		initialize: function(items, colorFunc){
 			//	summary:
-			//		Initialize the color model from a list of data items and using a function
+			//		Optionally initialize the color model from a list of data items and using a function
 			//		that returns the value used to compute the color for a given item.
 			//	items: Object[]
 			//		The data items. 
