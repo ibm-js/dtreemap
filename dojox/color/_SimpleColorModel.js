@@ -41,12 +41,12 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color"],
 			return(from + (to - from) * value);
 		},
 	
-		//	summary:
-		//		Return the normalized (between 0 and 1) value for a given data value.
-		//		This function must be implemented by implementations.
-		//	value: Number
-		//		The data value. 
 		getNormalizedValue: function(value){
+			//	summary:
+			//		Return the normalized (between 0 and 1) value for a given data value.
+			//		This function must be implemented by implementations.
+			//	value: Number
+			//		The data value. 			
 		},
 	
 		getColor: function(value){
