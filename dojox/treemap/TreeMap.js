@@ -11,7 +11,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	=====*/ 	
 	
 	return declare("dojox.treemap.TreeMap", [_WidgetBase, _Invalidating, _Selection], {
-		// summary:
+		//	summary:
 		//		A treemap widget.
 		
 		baseClass: "treeMap",
@@ -278,20 +278,41 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._set("colorFunc", value);
 		},
 		
-		//	summary: 
-		//		Creates an item renderer of the specified kind. 
-		//	item: Object
-		//		The data item.
-		//	kind: String
-		//		The specified kind. This can either be "leaf", "group", "header" or "content". 
-		//	returns: DomNode
-		//		The renderer use for the specified kind.
-		//	tags
-		//		protected	
-		createRenderer: function(item, kind){
+		createRenderer: function(item, level, kind){
+			//	summary: 
+			//		Creates an item renderer of the specified kind. Default implementation always create div nodes.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.		
+			//	kind: String
+			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
+			//	returns: DomNode
+			//		The renderer use for the specified kind.
+			//	tags
+			//		protected					
 			return domConstruct.create("div");
 		},
-	
+		
+		styleRenderer: function(renderer, item, level, kind){
+			//	summary:
+			//		Style the item renderer. For leaf items it colors them with the color
+			//		computed from the color model. For other items it does nothing.
+			//	renderer: DomNode
+			//		The item renderer.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.
+			//	kind: String
+			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
+			//	tags
+			//		protected				
+			if(kind == "leaf"){
+				domStyle.set(renderer, "background", this._getColorForItem(item).toHex());
+			}
+		},
+
 		_updateTreeMapHierarchy: function(){
 			if(this._data == null){
 				return;
@@ -469,11 +490,12 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_updateGroupRenderer: function(renderer, item, level){
 			var forceCreate = renderer == null;
 			if(renderer == null){
-				renderer = this.createRenderer("div", "group");
+				renderer = this.createRenderer("div", level, "group");
+				domClass.add(renderer, "dojoxTreeMapGroup");
+				domStyle.set(renderer, "overflow", "hidden");
+				domStyle.set(renderer, "position", "absolute");				
 			}
-			domClass.add(renderer, "dojoxTreeMapGroup");
-			domStyle.set(renderer, "overflow", "hidden");
-			domStyle.set(renderer, "position", "absolute");
+			this.styleRenderer(renderer, item, level, "group");
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
 			if(forceCreate){
@@ -489,10 +511,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		updateHeaderRenderer: function(renderer, item, level){
+		_updateHeaderRenderer: function(renderer, item, level){
 			if(renderer == null){
-				renderer = this.createRenderer(item, "header");
+				renderer = this.createRenderer(item, level, "header");
+				domClass.add(renderer, "dojoxTreeMapHeader");
+				domClass.add(renderer, "dojoxTreeMapHeader_" + level);				
 			}
+			this.styleRenderer(renderer, item, level, "header");
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
 				renderer.innerHTML = this._getLabelForItem(item);
 			}else{
@@ -501,28 +526,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		_updateHeaderRenderer: function(renderer, item, level){
-			if(renderer != null){
-				return this.updateHeaderRenderer(renderer, item, level);
-			}else{
-				renderer = this.updateHeaderRenderer(renderer, item, level);
-				domClass.add(renderer, "dojoxTreeMapHeader");
-				domClass.add(renderer, "dojoxTreeMapHeader_" + level);
-				return renderer;
-			}
-		},
-	
-		styleLeafRenderer: function(renderer, item, level){
-			domStyle.set(renderer, "background", this._getColorForItem(item).toHex());
-		},
-	
-		updateLeafRenderer: function(renderer, item, level){
+		_updateLeafRenderer: function(renderer, item, level){
 			if(renderer == null){
-				renderer = this.createRenderer(item, "leaf");
-			}
-			domStyle.set(renderer, "overflow", "hidden");
-			domStyle.set(renderer, "position", "absolute");			
-			this.styleLeafRenderer(renderer, item, level);
+				renderer = this.createRenderer(item, level, "leaf");
+				domClass.add(renderer, "dojoxTreeMapLeaf");
+				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
+				domStyle.set(renderer, "overflow", "hidden");
+				domStyle.set(renderer, "position", "absolute");	
+			}		
+			this.styleRenderer(renderer, item, level, "leaf");
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
 				renderer.innerHTML = this._getLabelForItem(item);
 			}else{
@@ -532,35 +544,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		_updateLeafRenderer: function(renderer, item, level){
-			if(renderer != null){
-				return this.updateLeafRenderer(renderer, item, level);
-			}else{
-				renderer = this.updateLeafRenderer(renderer, item, level);
-				domClass.add(renderer, "dojoxTreeMapLeaf");
-				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
-				return renderer;
-			}
-		},
-	
-		updateGroupContentRenderer: function(renderer, item, level){
-			if(renderer == null){
-				renderer = this.createRenderer(item, "content");
-			}
-			domStyle.set(renderer, "overflow", "hidden");
-			domStyle.set(renderer, "position", "absolute");			
-			return renderer;
-		},
-	
 		_updateGroupContentRenderer: function(renderer, item, level){
-			if(renderer != null){
-				return this.updateGroupContentRenderer(renderer, item, level);
-			}else{
-				renderer = this.updateGroupContentRenderer(renderer, item, level);
+			if(renderer == null){
+				renderer = this.createRenderer(item, level, "content");
 				domClass.add(renderer, "dojoxTreeMapGroupContent");
 				domClass.add(renderer, "dojoxTreeMapGroupContent_" + level);
-				return renderer;
+				domStyle.set(renderer, "overflow", "hidden");
+				domStyle.set(renderer, "position", "absolute");
 			}
+			this.styleRenderer(renderer, item, level, "content");
+			return renderer;
 		},
 	
 		_onDoubleClick: function(e){
@@ -578,6 +571,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		drillUp: function(renderer){
+			//	summary:
+			//		Drill up from the given renderer.
+			//	renderer: DomNode
+			//		The item renderer.				
 			var box = domGeom.position(this.domNode, true);
 			var item = renderer.item;
 
@@ -616,6 +613,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		drillDown: function(renderer){
+			//	summary:
+			//		Drill up from the given renderer.
+			//	renderer: DomNode
+			//		The item renderer.				
 			var box = domGeom.position(this.domNode, true);
 			var item = renderer.item;
 			
@@ -675,9 +676,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		
 		updateItemRenderer: function(item){
 			//	summary:
-			//		Updates all the renderers that represents the specified item.
+			//		Updates the renderer that represents the specified item.
 			//	item: Object
-			//		The render item.
+			//		The item.
 			
 			if(item == null){
 				return;
@@ -699,5 +700,4 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 		}
 	});
-
 });
