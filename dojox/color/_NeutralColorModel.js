@@ -32,7 +32,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "./_SimpleColorModel"],
 				sum += value;
 				values.push(value);
 			});
-			values.sort();
+			values.sort(function(a,b){return a - b});
 			var neutral = this.computeNeutral(min, max, sum, values);
 			this._min = min;
 			this._max = max;
