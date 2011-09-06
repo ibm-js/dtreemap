@@ -3,7 +3,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color"],
 	
 	return declare("dojox.color._ColorModelBase", null, {
 		// summary:
-		//		Base class for classes for color model that returns a color from a data value
+		//		Base class for color models that return a color from a data value
 		//		using an interpolation between two extremum colors.
 		
 		_startColor: null, 

@@ -3,7 +3,7 @@ define(["dojo/_base/declare"],
 	
 	return declare("dojox.color.api.ColorModel", null, {
 		// summary:
-		//		API for classes that implements a color model that returns a color from a data value.
+		//		API for classes that implement a color model that returns a color from a data value.
 		
 		constructor: function(){
 			//	summary:
