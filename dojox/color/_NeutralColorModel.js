@@ -1,5 +1,5 @@
-define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_ColorModelBase"], 
-	function(arr, declare, Color, _ColorModelBase){
+define(["dojo/_base/array", "dojo/_base/declare", "dojox/color", "./_SimpleColorModel"], 
+	function(arr, declare, Color, _SimpleColorModel){
 	
 	return declare("dojox.color._NeutralColorModel", _SimpleColorModel, {
 		// summary:
