@@ -41,8 +41,7 @@
 				var store = new DataStore({ store: new CsvStore({url: "freight.csv"}) });
 				
 				ready(function(){
-					MyTreeMap = declare("MyTreeMap", [TreeMap, _KeyNavTreeMapMixin], {
-					});
+					MyTreeMap = declare([TreeMap, _KeyNavTreeMapMixin]);
 					parser.parse();
 			        var treeMap = registry.byId("treeMap");
 		    	    treeMap.set("colorModel", colorModel);
