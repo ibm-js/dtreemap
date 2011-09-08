@@ -682,6 +682,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		_onMouseUp: function(e){
+			this.domNode.focus();
 			var item = e.currentTarget.item;
 			this.selectFromEvent(e, item, e.currentTarget, true);
 			event.stop(e);
