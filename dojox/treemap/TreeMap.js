@@ -103,7 +103,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		refreshRendering: function(){
-			// FIXME: when forceCreate == true we certainly have listeners to remove
 			var forceCreate = false;
 	
 			if(this._dataChanged){
@@ -145,6 +144,12 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			if(forceCreate){
 				while(this.domNode.hasChildNodes()){
 					this.domNode.removeChild(this.domNode.firstChild);
+				}
+				// we also have listeners to remove...
+				// TODO: this is working if no subclass registered its own listeners...
+				var c;
+				while(c = this._connects.pop()){
+					c.remove();
 				}
 			}
 	
