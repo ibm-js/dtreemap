@@ -627,7 +627,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			parentNode.removeChild(renderer);
 			this.domNode.appendChild(renderer);
 			domStyle.set(renderer, {
-				left: spanInfo.x - box.x + "px", top: spanInfo.y - box.y + "px"
+				left: spanInfo.x  + "px", top: spanInfo.y  + "px"
 			});
 
 			fx.animateProperty({
