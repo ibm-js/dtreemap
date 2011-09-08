@@ -585,8 +585,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}else{
 					this.drillDown(renderer);
 				}
+				event.stop(e);
 			}
-			event.stop(e);
 		},
 		
 		drillUp: function(renderer){
