@@ -103,6 +103,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		refreshRendering: function(){
+			// FIXME: when forceCreate == true we certainly have listeners to remove
 			var forceCreate = false;
 	
 			if(this._dataChanged){
@@ -151,7 +152,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 			if(rootItem != null){
 				if(this._isLeaf(rootItem)){
-					rootItem = this.itemToRenderer[this.getIdentity(rootItem)].parentItem;
+					rootItem = this._getRenderer(rootItem).parentItem;
 				}
 			}
 
@@ -385,7 +386,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return item.__treeName?item.__treeName:this.labelFunc(item, this.store);
 		},
 	
-		_buildChildrenRenderers: function(domNode, item, level, forceCreate, delta){
+		_buildChildrenRenderers: function(domNode, item, level, forceCreate, delta, anim){
 			var children = item.children;
 			var box = domGeom.getMarginBox(domNode);
 
@@ -402,11 +403,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				});
 			}
 	
-			var max = 0, rectangle;
+			var rectangle;
 			for(var j = 0; j < children.length; ++j){
 				rectangle = rectangles[j];
-				max = Math.max(max, rectangle.x + rectangle.w);
-				this._buildItemRenderer(domNode, item, children[j], rectangle, level, forceCreate);
+				this._buildItemRenderer(domNode, item, children[j], rectangle, level, forceCreate, anim);
 			}
 		},
 		
@@ -417,10 +417,24 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_isRoot: function(item){
 			return item.__treeRoot;
 		},
+		
+		_getRenderer: function(item, anim, parent){
+			if(anim){
+				// while animating we do that on a copy of the subtree
+				// so we can use our hash object to get to the renderer
+				for(var i = 0; i < parent.children.length; ++i){
+	        		if(parent.children[i].item == item){
+	            		return parent.children[i];
+	                }
+				}	
+			}else{
+				return this.itemToRenderer[this.getIdentity(item)];
+			}
+		},
 
-		_buildItemRenderer: function(container, parent, child, rect, level, forceCreate){
+		_buildItemRenderer: function(container, parent, child, rect, level, forceCreate, anim){
 			var isLeaf = this._isLeaf(child);
-			var renderer = !forceCreate ? this.itemToRenderer[this.getIdentity(child)] : null;
+			var renderer = !forceCreate ? this._getRenderer(child, anim, container) : null;
 			renderer = isLeaf ? this._updateLeafRenderer(renderer, child, level) : this._updateGroupRenderer(renderer,
 					child, level);
 			if(forceCreate){
@@ -454,11 +468,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 			if(!isLeaf){
 				var box = domGeom.getContentBox(renderer);
-				this._layoutGroupContent(renderer, box.w, box.h, level + 1, forceCreate);
+				this._layoutGroupContent(renderer, box.w, box.h, level + 1, forceCreate, anim);
 			}
 		},
 	
-		_layoutGroupContent: function(renderer, width, height, level, forceCreate){
+		_layoutGroupContent: function(renderer, width, height, level, forceCreate, anim){
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
 			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
 			if(header == null || content == null){
@@ -479,7 +493,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domGeom.setMarginBox(content, {
 					l: 0, t: box.h, w: width, h: (height - box.h)
 				});
-				this._buildChildrenRenderers(content, renderer.item, level, forceCreate);
+				this._buildChildrenRenderers(content, renderer.item, level, forceCreate, null, anim);
 			}
 	
 			domGeom.setMarginBox(header, {
@@ -575,7 +589,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		Drill up from the given renderer.
 			//	renderer: DomNode
 			//		The item renderer.				
-			var box = domGeom.position(this.domNode, true);
 			var item = renderer.item;
 
 			// Remove the current rootItem renderer
@@ -583,29 +596,30 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			// and animate the old renderer before deleting it.
 
 			this.domNode.removeChild(renderer);
-			var parent = this.itemToRenderer[this.getIdentity(item)].parentItem;
+			var parent = this._getRenderer(item).parentItem;
 			this.set("rootItem", parent);
 			this.validateRendering(); // Must call this to create the treemap now
 
 			// re-add the old renderer to show the animation
 			this.domNode.appendChild(renderer);
 
-			var finalBox = domGeom.position(this.itemToRenderer[this.getIdentity(item)], true);
+			var finalBox = domGeom.position(this._getRenderer(item), true);
+			var corner = domGeom.getMarginBox(this.domNode);
 
 			fx.animateProperty({
 				node: renderer, duration: 500, properties: {
 					left: {
-						end: finalBox.x - box.x
+						end: finalBox.x - corner.l
 					}, top: {
-						end: finalBox.y - box.y
+						end: finalBox.y - corner.t
 					}, height: {
 						end: finalBox.h
 					}, width: {
 						end: finalBox.w
 					}
 				}, onAnimate: lang.hitch(this, function(values){
-					var box2 = domGeom.getContentBox(renderer);
-					this._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
+					var box = domGeom.getContentBox(renderer);
+					this._layoutGroupContent(renderer, box.w, box.h, renderer.level + 1, false, true);
 				}), onEnd: lang.hitch(this, function(){
 					this.domNode.removeChild(renderer);
 				})
@@ -617,7 +631,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		Drill up from the given renderer.
 			//	renderer: DomNode
 			//		The item renderer.				
-			var box = domGeom.position(this.domNode, true);
+			var box = domGeom.getMarginBox(this.domNode);
 			var item = renderer.item;
 			
 			// Set the new root item into the rootPanel to make it appear on top
@@ -627,17 +641,17 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			parentNode.removeChild(renderer);
 			this.domNode.appendChild(renderer);
 			domStyle.set(renderer, {
-				left: spanInfo.x  + "px", top: spanInfo.y  + "px"
+				left: (spanInfo.x - box.l)+ "px", top: (spanInfo.y - box.t)+ "px"
 			});
 
 			fx.animateProperty({
 				node: renderer, duration: 500, properties: {
 					left: {
-						end: 0
+						end: box.l
 					}, top: {
-						end: 0
+						end: box.t
 					}, height: {
-						end: box.h
+						end: box.h 
 					}, width: {
 						end: box.w
 					}
@@ -684,7 +698,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				return;
 			}
 			
-			var renderer = this.itemToRenderer[this.getIdentity(item)];
+			var renderer = this._getRenderer(item);
 			
 			var selected = this.isItemSelected(item);
 			if(selected){
