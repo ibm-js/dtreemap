@@ -1,8 +1,9 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/fx", "dojo/_base/event", "dojo/_base/Color", 
 		"dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-		"./utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/_Selection"],
+		"./utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/_Selection", 
+		"dojo/has!touch?dojox/gesture/tap"],
 	function(arr, lang, declare, fx, event, Color, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, _Selection){
+		utils, _WidgetBase, _Invalidating, _Selection, tap){
 
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
@@ -450,6 +451,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				this.connect(renderer, "mouseover", lang.hitch(this, this._onMouseOver));
 				this.connect(renderer, "mouseout", lang.hitch(this, this._onMouseOut));
 				this.connect(renderer, "dblclick", lang.hitch(this, this._onDoubleClick));
+				if(tap){
+					this.connect(renderer, tap.doubletap, lang.hitch(this, this._onDoubleClick));
+				}
 				this.connect(renderer, "mouseup", lang.hitch(this, this._onMouseUp));
 			}
 	
@@ -587,6 +591,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}
 				event.stop(e);
 			}
+			// the event is bubbling if nobody interested (i.e. stopping it)
+			// this will drill down/up from parent
 		},
 		
 		drillUp: function(renderer){
