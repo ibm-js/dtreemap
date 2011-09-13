@@ -1,9 +1,9 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/fx", "dojo/_base/event", "dojo/_base/Color", 
 		"dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/_Selection", 
-		"dojo/has!touch?dojox/gesture/tap"],
+		"dojo/has!touch?dojox/gesture/tap", "dojo/has", "dojo/_base/sniff"],
 	function(arr, lang, declare, fx, event, Color, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, _Selection, tap){
+		utils, _WidgetBase, _Invalidating, _Selection, tap, has){
 
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
