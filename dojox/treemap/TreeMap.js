@@ -316,7 +316,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	tags
 			//		protected				
 			if(kind == "leaf"){
-				domStyle.set(renderer, "background", this._getColorForItem(item).toHex());
+				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
 			}
 		},
 
@@ -379,7 +379,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return value;
 		},
 	
-		_getColorForItem: function(item){
+		getColorForItem: function(item){
+			//	summary:
+			//		Returns the color for a given item. This either use the colorModel if not null
+			//		or just the result of the colorFunc.
+			//	item: Object
+			//		The data item.
+			//	tags
+			//		protected	
 			var value = this.colorFunc(item, this.store);
 			if(this.colorModel != null){
 				return this.colorModel.getColor(value);
@@ -388,7 +395,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 		},
 	
-		_getLabelForItem: function(item){
+		getLabelForItem: function(item){
+			//	summary:
+			//		Returns the label for a given item.
+			//	item: Object
+			//		The data item.
+			//	tags
+			//		protected	
 			return item.__treeName?item.__treeName:this.labelFunc(item, this.store);
 		},
 	
@@ -542,7 +555,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 			this.styleRenderer(renderer, item, level, "header");
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-				renderer.innerHTML = this._getLabelForItem(item);
+				renderer.innerHTML = this.getLabelForItem(item);
 			}else{
 				renderer.innerHTML = null;
 			}
@@ -559,7 +572,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-				renderer.innerHTML = this._getLabelForItem(item);
+				renderer.innerHTML = this.getLabelForItem(item);
 			}else{
 				renderer.innerHTML = null;
 			}
