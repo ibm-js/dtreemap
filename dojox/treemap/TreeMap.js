@@ -319,7 +319,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
 			}
 		},
-
+		
 		_updateTreeMapHierarchy: function(){
 			if(this._data == null){
 				return;
@@ -454,7 +454,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_buildItemRenderer: function(container, parent, child, rect, level, forceCreate, anim){
 			var isLeaf = this._isLeaf(child);
 			var renderer = !forceCreate ? this._getRenderer(child, anim, container) : null;
-			renderer = isLeaf ? this._updateLeafRenderer(renderer, child, level) : this._updateGroupRenderer(renderer,
+			renderer = isLeaf ? this.updateLeafRenderer(renderer, child, level) : this.updateGroupRenderer(renderer,
 					child, level);
 			if(forceCreate){
 				renderer.level = level;
@@ -523,7 +523,18 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			});
 		},
 	
-		_updateGroupRenderer: function(renderer, item, level){
+		updateGroupRenderer: function(renderer, item, level){
+			//	summary:
+			//		Update a group renderer. This creates the renderer if not already created,
+			//		call styleRender for it and recurse into children.
+			//	renderer: DomNode
+			//		The item renderer.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.
+			//	tags
+			//		protected				
 			var forceCreate = renderer == null;
 			if(renderer == null){
 				renderer = this.createRenderer("div", level, "group");
@@ -533,21 +544,30 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 			this.styleRenderer(renderer, item, level, "group");
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
-			header = this._updateHeaderRenderer(header, item, level);
+			header = this.updateHeaderRenderer(header, item, level);
 			if(forceCreate){
 				renderer.appendChild(header);
 			}
-	
 			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
-			content = this._updateGroupContentRenderer(content, item, level);
+			content = this.updateGroupContentRenderer(content, item, level);
 			if(forceCreate){
 				renderer.appendChild(content);
 			}
-	
 			return renderer;
 		},
 	
-		_updateHeaderRenderer: function(renderer, item, level){
+		updateHeaderRenderer: function(renderer, item, level){
+			//	summary:
+			//		Update a leaf renderer. This creates the renderer if not already created,
+			//		call styleRender for it and set the label as its innerHTML.
+			//	renderer: DomNode
+			//		The item renderer.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.
+			//	tags
+			//		protected				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "header");
 				domClass.add(renderer, "dojoxTreeMapHeader");
@@ -562,7 +582,18 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		_updateLeafRenderer: function(renderer, item, level){
+		updateLeafRenderer: function(renderer, item, level){
+			//	summary:
+			//		Update a leaf renderer. This creates the renderer if not already created,
+			//		call styleRender for it and set the label as its innerHTML.
+			//	renderer: DomNode
+			//		The item renderer.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.
+			//	tags
+			//		protected				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "leaf");
 				domClass.add(renderer, "dojoxTreeMapLeaf");
@@ -580,7 +611,18 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		_updateGroupContentRenderer: function(renderer, item, level){
+		updateGroupContentRenderer: function(renderer, item, level){
+			//	summary:
+			//		Update a group content renderer. This creates the renderer if not already created,
+			//		and call styleRender for it.
+			//	renderer:
+			//		The item renderer.
+			//	item: Object
+			//		The data item.
+			//	level: Number
+			//		The item depth level.
+			//	tags
+			//		protected				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "content");
 				domClass.add(renderer, "dojoxTreeMapGroupContent");
