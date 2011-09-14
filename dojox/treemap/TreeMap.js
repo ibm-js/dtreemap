@@ -777,7 +777,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 			
 			if(selected || this._hoveredItem == item){
-				domStyle.set(renderer, "zIndex", 10000);
+				domStyle.set(renderer, "zIndex", 20);
 			}else{
 				domStyle.set(renderer, "zIndex", (has("ie")<=7)?0:"auto");
 			}
