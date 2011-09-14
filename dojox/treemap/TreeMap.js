@@ -322,10 +322,20 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	kind: String
 			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
 			//	tags
-			//		protected				
-			if(kind == "leaf"){
-				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
-			}
+			//		protected
+			switch(kind){
+				case "leaf":
+					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+				case "header":
+					if(isNaN(this.labelThreshold) || level < this.labelThreshold){
+						renderer.innerHTML = this.getLabelForItem(item);
+					}else{
+						renderer.innerHTML = null;
+					}
+					break;
+				default:
+				
+			}				
 		},
 		
 		_updateTreeMapHierarchy: function(){
@@ -580,11 +590,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domClass.add(renderer, "dojoxTreeMapHeader_" + level);				
 			}
 			this.styleRenderer(renderer, item, level, "header");
-			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-				renderer.innerHTML = this.getLabelForItem(item);
-			}else{
-				renderer.innerHTML = null;
-			}
 			return renderer;
 		},
 	
@@ -606,11 +611,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
-			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-				renderer.innerHTML = this.getLabelForItem(item);
-			}else{
-				renderer.innerHTML = null;
-			}
 			renderer.title = this.tooltipFunc(item, this.store);
 			return renderer;
 		},
