@@ -735,13 +735,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseOver: function(e){
 			var item = e.currentTarget.item;
 			this._hoveredItem = item;
-			this.updateRenderer(item);
+			this.updateRenderers(item);
 		},
 	
 		_onMouseOut: function(e){
 			var item = e.currentTarget.item;
 			this._hoveredItem = null;
-			this.updateRenderer(item);
+			this.updateRenderers(item);
 		},
 		
 		_onMouseUp: function(e){
@@ -752,34 +752,30 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		updateRenderers: function(items){
-			for(var i=0; i<items.length;i++){
-				this.updateRenderer(items[i]);
-			}
-		},
-		
-		updateRenderer: function(item){
 			//	summary:
-			//		Updates the renderer that represents the specified item.
-			//	item: Object
-			//		The item.
-			
-			if(item == null){
+			//		Updates the renderer(s) that represent the specified item(s).
+			//	item: Object|Array
+			//		The item(s).
+			if(!items){
 				return;
+			}			
+			if(!lang.isArray(items)){
+				items = [items];
 			}
-			
-			var renderer = this._getRenderer(item);
-			
-			var selected = this.isItemSelected(item);
-			if(selected){
-				domClass.add(renderer, "dojoxTreeMapSelected")
-			}else{
-				domClass.remove(renderer, "dojoxTreeMapSelected");
-			}
-			
-			if(selected || this._hoveredItem == item){
-				domStyle.set(renderer, "zIndex", 20);
-			}else{
-				domStyle.set(renderer, "zIndex", (has("ie")<=7)?0:"auto");
+			for(var i=0; i<items.length;i++){
+				var item = items[i];
+				var renderer = this._getRenderer(item);
+				var selected = this.isItemSelected(item);
+				if(selected){
+					domClass.add(renderer, "dojoxTreeMapSelected")
+				}else{
+					domClass.remove(renderer, "dojoxTreeMapSelected");
+				}
+				if(selected || this._hoveredItem == item){
+					domStyle.set(renderer, "zIndex", 20);
+				}else{
+					domStyle.set(renderer, "zIndex", (has("ie")<=7)?0:"auto");
+				}
 			}
 		}
 	});
