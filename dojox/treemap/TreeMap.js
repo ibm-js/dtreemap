@@ -505,11 +505,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			domGeom.setMarginBox(renderer, {
 				l: x, t: y, w: w, h: h
 			});
-	
+			
 			if(!isLeaf){
 				var box = domGeom.getContentBox(renderer);
 				this._layoutGroupContent(renderer, box.w, box.h, level + 1, forceCreate, anim);
 			}
+			
+			this.onRendererUpdated({ renderer: renderer, item: child, kind: isLeaf?"leaf":"group", level: level });		
 		},
 	
 		_layoutGroupContent: function(renderer, width, height, level, forceCreate, anim){
@@ -736,12 +738,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var item = e.currentTarget.item;
 			this._hoveredItem = item;
 			this.updateRenderers(item);
+			this.onItemRollOver({renderer: e.currentTarget, item : item, triggerEvent: e});
 		},
 	
 		_onMouseOut: function(e){
 			var item = e.currentTarget.item;
 			this._hoveredItem = null;
 			this.updateRenderers(item);
+			this.onItemRollOut({renderer: e.currentTarget, item : item, triggerEvent: e});
 		},
 		
 		_onMouseUp: function(e){
@@ -750,6 +754,29 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.selectFromEvent(e, item, e.currentTarget, true);
 			event.stop(e);
 		},
+		
+		onRendererUpdated: function(){
+			// summary:
+			//		Called when a renderer has been updated. This is called after creation, styling and sizing for 
+			//		each group and leaf renderers. For group renders this is also called after creation of children
+			//		renderers. 
+			// tags:
+			//		callback			
+		},
+		
+		onItemRollOver: function(){
+			// summary:
+			//		Called when an item renderer has been hovered.
+			// tags:
+			//		callback			
+		},
+		
+		onItemRollOut: function(){
+			// summary:
+			//		Called when an item renderer has been rolled out.
+			// tags:
+			//		callback			
+		},		
 		
 		updateRenderers: function(items){
 			//	summary:
