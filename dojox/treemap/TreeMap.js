@@ -287,7 +287,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		
 		createRenderer: function(item, level, kind){
 			//	summary: 
-			//		Creates an item renderer of the specified kind. Default implementation always create div nodes.
+			//		Creates an item renderer of the specified kind. This is called only when the treemap
+			//		is created. Default implementation always create div nodes. It also sets overflow
+			//		to hidden and position to absolute on non-header renderers.
 			//	item: Object
 			//		The data item.
 			//	level: Number
@@ -298,13 +300,19 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		The renderer use for the specified kind.
 			//	tags
 			//		protected					
-			return domConstruct.create("div");
+			var div = domConstruct.create("div");
+			if(kind!="header"){
+				domStyle.set(div, "overflow", "hidden");
+				domStyle.set(div, "position", "absolute");					
+			}
+			return div;
 		},
 		
 		styleRenderer: function(renderer, item, level, kind){
 			//	summary:
-			//		Style the item renderer. For leaf items it colors them with the color
-			//		computed from the color model. For other items it does nothing.
+			//		Style the item renderer. This is called each time the treemap is refreshed.
+			//		For leaf items it colors them with the color computed from the color model. 
+			//		For other items it does nothing.
 			//	renderer: DomNode
 			//		The item renderer.
 			//	item: Object
@@ -454,7 +462,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_buildItemRenderer: function(container, parent, child, rect, level, forceCreate, anim){
 			var isLeaf = this._isLeaf(child);
 			var renderer = !forceCreate ? this._getRenderer(child, anim, container) : null;
-			renderer = isLeaf ? this.updateLeafRenderer(renderer, child, level) : this.updateGroupRenderer(renderer,
+			renderer = isLeaf ? this._updateLeafRenderer(renderer, child, level) : this._updateGroupRenderer(renderer,
 					child, level);
 			if(forceCreate){
 				renderer.level = level;
@@ -523,7 +531,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			});
 		},
 	
-		updateGroupRenderer: function(renderer, item, level){
+		_updateGroupRenderer: function(renderer, item, level){
 			//	summary:
 			//		Update a group renderer. This creates the renderer if not already created,
 			//		call styleRender for it and recurse into children.
@@ -534,29 +542,27 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	level: Number
 			//		The item depth level.
 			//	tags
-			//		protected				
+			//		private				
 			var forceCreate = renderer == null;
 			if(renderer == null){
 				renderer = this.createRenderer("div", level, "group");
 				domClass.add(renderer, "dojoxTreeMapGroup");
-				domStyle.set(renderer, "overflow", "hidden");
-				domStyle.set(renderer, "position", "absolute");				
 			}
 			this.styleRenderer(renderer, item, level, "group");
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
-			header = this.updateHeaderRenderer(header, item, level);
+			header = this._updateHeaderRenderer(header, item, level);
 			if(forceCreate){
 				renderer.appendChild(header);
 			}
 			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
-			content = this.updateGroupContentRenderer(content, item, level);
+			content = this._updateGroupContentRenderer(content, item, level);
 			if(forceCreate){
 				renderer.appendChild(content);
 			}
 			return renderer;
 		},
 	
-		updateHeaderRenderer: function(renderer, item, level){
+		_updateHeaderRenderer: function(renderer, item, level){
 			//	summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
@@ -567,7 +573,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	level: Number
 			//		The item depth level.
 			//	tags
-			//		protected				
+			//		private			
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "header");
 				domClass.add(renderer, "dojoxTreeMapHeader");
@@ -582,7 +588,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		updateLeafRenderer: function(renderer, item, level){
+		_updateLeafRenderer: function(renderer, item, level){
 			//	summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
@@ -593,13 +599,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	level: Number
 			//		The item depth level.
 			//	tags
-			//		protected				
+			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "leaf");
 				domClass.add(renderer, "dojoxTreeMapLeaf");
 				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
-				domStyle.set(renderer, "overflow", "hidden");
-				domStyle.set(renderer, "position", "absolute");	
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
 			if(isNaN(this.labelThreshold) || level < this.labelThreshold){
@@ -611,7 +615,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			return renderer;
 		},
 	
-		updateGroupContentRenderer: function(renderer, item, level){
+		_updateGroupContentRenderer: function(renderer, item, level){
 			//	summary:
 			//		Update a group content renderer. This creates the renderer if not already created,
 			//		and call styleRender for it.
@@ -622,13 +626,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	level: Number
 			//		The item depth level.
 			//	tags
-			//		protected				
+			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "content");
 				domClass.add(renderer, "dojoxTreeMapGroupContent");
 				domClass.add(renderer, "dojoxTreeMapGroupContent_" + level);
-				domStyle.set(renderer, "overflow", "hidden");
-				domStyle.set(renderer, "position", "absolute");
 			}
 			this.styleRenderer(renderer, item, level, "content");
 			return renderer;
