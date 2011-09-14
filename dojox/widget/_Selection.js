@@ -54,11 +54,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			this.selectedItem = null;
 			
 			if(oldSelectedItems != null && oldSelectedItems.length>0){
-				this.updateItemsRenderers(oldSelectedItems, true);
+				this.updateRenderers(oldSelectedItems, true);
 			}
 			if(this.selectedItems && this.selectedItems.length>0){
 				this.selectedItem = this.selectedItems[0];
-				this.updateItemsRenderers(this.selectedItems, true);
+				this.updateRenderers(this.selectedItems, true);
 			}
 		},
 		

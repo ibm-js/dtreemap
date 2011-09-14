@@ -164,7 +164,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 
 			var box = domGeom.getMarginBox(this.domNode);
 			if(rootItem != null){
-				this._buildItemRenderer(this.domNode, null, rootItem, {
+				this._buildRenderer(this.domNode, null, rootItem, {
 					x: box.l, y: box.t, w: box.w, h: box.h
 				}, 0, forceCreate);
 			}else{
@@ -433,7 +433,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var rectangle;
 			for(var j = 0; j < children.length; ++j){
 				rectangle = rectangles[j];
-				this._buildItemRenderer(domNode, item, children[j], rectangle, level, forceCreate, anim);
+				this._buildRenderer(domNode, item, children[j], rectangle, level, forceCreate, anim);
 			}
 		},
 		
@@ -459,7 +459,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 		},
 
-		_buildItemRenderer: function(container, parent, child, rect, level, forceCreate, anim){
+		_buildRenderer: function(container, parent, child, rect, level, forceCreate, anim){
 			var isLeaf = this._isLeaf(child);
 			var renderer = !forceCreate ? this._getRenderer(child, anim, container) : null;
 			renderer = isLeaf ? this._updateLeafRenderer(renderer, child, level) : this._updateGroupRenderer(renderer,
@@ -735,13 +735,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseOver: function(e){
 			var item = e.currentTarget.item;
 			this._hoveredItem = item;
-			this.updateItemRenderer(item);
+			this.updateRenderer(item);
 		},
 	
 		_onMouseOut: function(e){
 			var item = e.currentTarget.item;
 			this._hoveredItem = null;
-			this.updateItemRenderer(item);
+			this.updateRenderer(item);
 		},
 		
 		_onMouseUp: function(e){
@@ -751,13 +751,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			event.stop(e);
 		},
 		
-		updateItemsRenderers: function(items){
+		updateRenderers: function(items){
 			for(var i=0; i<items.length;i++){
-				this.updateItemRenderer(items[i]);
+				this.updateRenderer(items[i]);
 			}
 		},
 		
-		updateItemRenderer: function(item){
+		updateRenderer: function(item){
 			//	summary:
 			//		Updates the renderer that represents the specified item.
 			//	item: Object
