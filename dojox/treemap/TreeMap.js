@@ -98,6 +98,17 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 		},
 		
+		postCreate: function(){
+			this.inherited(arguments);
+			this.connect(this.domNode, "mouseover", this._onMouseOver);
+			this.connect(this.domNode, "mouseout", this._onMouseOut);
+			this.connect(this.domNode, "dblclick", this._onDoubleClick);
+			if(tap){
+				this.connect(this.domNode, tap.doubletap, this._onDoubleClick);
+			}
+			this.connect(this.domNode, "mouseup", this._onMouseUp);	
+		},
+		
 		buildRendering: function(){
 			this.inherited(arguments);
 			this.refreshRendering();
@@ -145,12 +156,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			if(forceCreate){
 				while(this.domNode.hasChildNodes()){
 					this.domNode.removeChild(this.domNode.firstChild);
-				}
-				// we also have listeners to remove...
-				// TODO: this is working if no subclass registered its own listeners...
-				var c;
-				while(c = this._connects.pop()){
-					c.remove();
 				}
 			}
 	
@@ -479,13 +484,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				renderer.item = child;
 				renderer.parentItem = parent;
 				this.itemToRenderer[this.getIdentity(child)] = renderer;
-				this.connect(renderer, "mouseover", lang.hitch(this, this._onMouseOver));
-				this.connect(renderer, "mouseout", lang.hitch(this, this._onMouseOut));
-				this.connect(renderer, "dblclick", lang.hitch(this, this._onDoubleClick));
-				if(tap){
-					this.connect(renderer, tap.doubletap, lang.hitch(this, this._onDoubleClick));
-				}
-				this.connect(renderer, "mouseup", lang.hitch(this, this._onMouseUp));
 			}
 	
 			// in some cases the computation might be slightly incorrect (0.0000...1)
@@ -637,11 +635,24 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.styleRenderer(renderer, item, level, "content");
 			return renderer;
 		},
+		
+		_getRendererFromTarget: function(target){
+			var renderer = target;
+			while(renderer != this.domNode && !renderer.item){
+				renderer = renderer.parentNode;
+			}			
+			return renderer;
+		},
 	
 		_onDoubleClick: function(e){
-			var renderer = e.currentTarget;
-			var item = renderer.item;
-			if(!this._isLeaf(item)){
+			var renderer = this._getRendererFromTarget(e.target);
+			if(renderer.item){
+				var item = renderer.item;
+				if(this._isLeaf(item)){
+					// walk up
+					item = renderer.parentItem;
+					renderer = this.itemToRenderer[this.getIdentity(item)];
+				}
 				// Drill up
 				if(this.rootItem == item){
 					this.drillUp(renderer);
@@ -650,8 +661,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}
 				event.stop(e);
 			}
-			// the event is bubbling if nobody interested (i.e. stopping it)
-			// this will drill down/up from parent
 		},
 		
 		drillUp: function(renderer){
@@ -735,24 +744,30 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 
 		_onMouseOver: function(e){
-			var item = e.currentTarget.item;
-			this._hoveredItem = item;
-			this.updateRenderers(item);
-			this.onItemRollOver({renderer: e.currentTarget, item : item, triggerEvent: e});
+			var renderer = this._getRendererFromTarget(e.target);
+			if(renderer.item){	
+				var item = e.item;
+				this._hoveredItem = item;
+				this.updateRenderers(item);
+				this.onItemRollOver({renderer: e.currentTarget, item : item, triggerEvent: e});
+			}
 		},
 	
 		_onMouseOut: function(e){
-			var item = e.currentTarget.item;
-			this._hoveredItem = null;
-			this.updateRenderers(item);
-			this.onItemRollOut({renderer: e.currentTarget, item : item, triggerEvent: e});
+			var renderer = this._getRendererFromTarget(e.target);
+			if(renderer.item){	
+				this._hoveredItem = null;
+				this.updateRenderers(item);
+				this.onItemRollOut({renderer: e.currentTarget, item : item, triggerEvent: e});
+			}
 		},
 		
 		_onMouseUp: function(e){
-			this.domNode.focus();
-			var item = e.currentTarget.item;
-			this.selectFromEvent(e, item, e.currentTarget, true);
-			event.stop(e);
+			var renderer = this._getRendererFromTarget(e.target);
+			if(renderer.item){	
+				this.selectFromEvent(e, item, e.currentTarget, true);
+				event.stop(e);
+			}
 		},
 		
 		onRendererUpdated: function(){
