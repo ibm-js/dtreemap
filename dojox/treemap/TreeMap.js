@@ -1,8 +1,8 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/fx", "dojo/_base/event", "dojo/_base/Color", 
-		"dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/_Selection", 
 		"dojo/has!touch?dojox/gesture/tap", "dojo/has", "dojo/_base/sniff"],
-	function(arr, lang, declare, fx, event, Color, on, query, domConstruct, domGeom, domClass, domStyle,
+	function(arr, lang, declare, fx, event, Color, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, _Selection, tap, has){
 
 	/*=====
@@ -189,11 +189,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					// user asked us to observe the store
 					results.observe(lang.hitch(this, this._updateItem), true);
 				}				
-				if(results.then){
-					results.then(lang.hitch(this, this._initItems));
-				}else{
-					this._initItems(items);
-				}
+				Deferred.when(results, lang.hitch(this, this._initItems));
 			}else{
 				this._initItems([]);
 			}
@@ -756,6 +752,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseOut: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
 			if(renderer.item){	
+				var item = renderer.item;
 				this._hoveredItem = null;
 				this.updateRenderers(item);
 				this.onItemRollOut({renderer: e.currentTarget, item : item, triggerEvent: e});
@@ -765,7 +762,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseUp: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
 			if(renderer.item){	
-				this.selectFromEvent(e, item, e.currentTarget, true);
+				this.selectFromEvent(e, renderer.item, e.currentTarget, true);
 				event.stop(e);
 			}
 		},
