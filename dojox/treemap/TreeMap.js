@@ -32,7 +32,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		itemToRenderer: {},
 		
 		// Data
-		_storeChanged: false,
 		_dataChanged: false,
 	
 		//	rootItem: Object
