@@ -44,11 +44,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 			// we also need items to be sorted out
 			if(e.keyCode != keys.UP_ARROW && e.keyCode != keys.NUMPAD_MINUS &&
 				e.keyCode != keys.NUMPAD_PLUS){
-				var children = (e.keyCode == keys.DOWN_ARROW)?selected.children:parent.children;
+				children = (e.keyCode == keys.DOWN_ARROW)?selected.children:parent.children;
 				if(children){
-					var childrenI = utils.initElements(children, lang.hitch(this,
+					childrenI = utils.initElements(children, lang.hitch(this,
 						this._computeAreaForItem)).elements;
-					var selectedI = childrenI[arr.indexOf(children, selected)];
+					selectedI = childrenI[arr.indexOf(children, selected)];
 					childrenI.sort(function(a, b){
 						return b.size - a.size;
 					});
