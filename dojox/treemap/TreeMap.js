@@ -677,6 +677,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			// re-add the old renderer to show the animation
 			this.domNode.appendChild(renderer);
 
+			domStyle.set(renderer, "zIndex", 40);
+
 			var finalBox = domGeom.position(this._getRenderer(item), true);
 			var corner = domGeom.getMarginBox(this.domNode);
 
@@ -717,6 +719,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			domStyle.set(renderer, {
 				left: (spanInfo.x - box.l)+ "px", top: (spanInfo.y - box.t)+ "px"
 			});
+			var zIndex = domStyle.get(renderer, "zIndex");
+			domStyle.set(renderer, "zIndex", 40);
 
 			fx.animateProperty({
 				node: renderer, duration: 500, properties: {
@@ -733,6 +737,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					var box2 = domGeom.getContentBox(renderer);
 					this._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
 				}), onEnd: lang.hitch(this, function(){
+					domStyle.set(renderer, "zIndex", zIndex);
 					this.set("rootItem", item);
 				})
 			}).play();
