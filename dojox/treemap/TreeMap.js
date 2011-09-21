@@ -647,6 +647,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					// walk up
 					item = renderer.parentItem;
 					renderer = this.itemToRenderer[this.getIdentity(item)];
+					// our leaft parent is the root, we can't do much...
+					if(renderer == null){
+						return;
+					}
 				}
 				// Drill up
 				if(this.rootItem == item){
