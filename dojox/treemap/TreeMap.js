@@ -301,7 +301,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//	tags
 			//		protected					
 			var div = domConstruct.create("div");
-			if(kind!="header"){
+			if(kind != "header"){
 				domStyle.set(div, "overflow", "hidden");
 				domStyle.set(div, "position", "absolute");					
 			}
