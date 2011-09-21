@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/dom-construct", "dojo/dom-style"],
 	function(declare, domConstruct, domStyle) {
 
-	return declare("dojox.treemap.GroupLabelPolicy", null, {
+	return declare("dojox.treemap.GroupLabel", null, {
 		//	summary:
 		//		Specialize TreeMap to remove leaf labels and display group labels centered on group
 		//		content instead of display them in headers.
