@@ -1,7 +1,7 @@
 define(["dojo/_base/array", "dojo/_base/declare", "./_SimpleColorModel"], 
-	function(arr, declare, _SimpleColorModel){
+	function(arr, declare, SimpleColorModel){
 	
-	return declare("dojox.color._NeutralColorModel", _SimpleColorModel, {
+	return declare("dojox.color.NeutralColorModel", SimpleColorModel, {
 		// summary:
 		//		Base class for color models that return a color from a data value
 		//		using an interpolation between two extremum colors around a neutral value.

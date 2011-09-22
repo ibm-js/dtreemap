@@ -33,17 +33,17 @@
 			"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojox/treemap/TreeMap",
 			"dojox/color/MeanColorModel", "dojox/data/CsvStore", "dojo/store/DataStore",
 			"dojo/store/Observable",
-			"dijit/form/RadioButton", "dijit/form/ComboBox", "dijit/form/Button", "dojox/treemap/_KeyNavTreeMapMixin",
+			"dijit/form/RadioButton", "dijit/form/ComboBox", "dijit/form/Button", "dojox/treemap/Keyboard",
 			"dojox/treemap/GroupLabel"],
 			function(ready, dom, Color, declare, parser, registry, BorderContainer, ContentPane, TreeMap,
-					 MeanColorModel, CsvStore, DataStore, Observable, RadioButton, ComboBox, Button, _KeyNavTreeMapMixin,
+					 MeanColorModel, CsvStore, DataStore, Observable, RadioButton, ComboBox, Button, Keyboard,
 					 GroupLabel) {
 
 				var colorModel = new MeanColorModel(new Color(Color.named.green), new Color(Color.named.red));
 				var store = new DataStore({ store: new CsvStore({url: "freight.csv"}) });
 
 				ready(function(){
-					MyTreeMap = declare([TreeMap, _KeyNavTreeMapMixin, GroupLabel]);
+					MyTreeMap = declare([TreeMap, Keyboard, GroupLabel]);
 					parser.parse();
 					var treeMap = registry.byId("treeMap");
 					treeMap.set("colorModel", colorModel);

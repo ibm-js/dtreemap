@@ -6,7 +6,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 	var _FocusMixin = dijit._FocusMixin;
 	=====*/
 	
-	return declare("dojox.treemap._KeyNavTreeMapMixin", _FocusMixin, {
+	return declare("dojox.treemap.Keyboard", _FocusMixin, {
 		
 		// tabIndex: Integer
 		//		Order fields are traversed when user hits the tab key
