@@ -640,7 +640,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				var item = renderer.item;
 				this._hoveredItem = item;
 				this.updateRenderers(item);
-				this.onItemRollOver({renderer: e.currentTarget, item : item, triggerEvent: e});
+				this.onItemRollOver({renderer: renderer, item : item, triggerEvent: e});
 			}
 		},
 	
@@ -650,7 +650,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				var item = renderer.item;
 				this._hoveredItem = null;
 				this.updateRenderers(item);
-				this.onItemRollOut({renderer: e.currentTarget, item : item, triggerEvent: e});
+				this.onItemRollOut({renderer: renderer, item : item, triggerEvent: e});
 			}
 		},
 		
