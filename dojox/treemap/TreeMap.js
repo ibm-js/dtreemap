@@ -637,7 +637,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseOver: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
 			if(renderer.item){	
-				var item = e.item;
+				var item = renderer.item;
 				this._hoveredItem = item;
 				this.updateRenderers(item);
 				this.onItemRollOver({renderer: e.currentTarget, item : item, triggerEvent: e});
