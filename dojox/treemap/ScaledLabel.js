@@ -8,10 +8,13 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 		onRendererUpdated: function(evt) {
 			if(evt.kind == "leaf"){
 				var renderer = evt.renderer;
+				// start back with default size
+				var oldSize = domStyle.get(renderer, "fontSize");
+				domStyle.set(renderer.firstChild, "fontSize", oldSize);
+				oldSize = parseInt(oldSize);
 				var hRatio = domGeom.getMarginBox(renderer).w / domGeom.getMarginBox(renderer.firstChild).w;
 				var hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 				var vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
-				var oldSize = parseInt(domStyle.get(renderer.firstChild, "fontSize"));
 				var newSize = oldSize * hRatio;
 				while (true) {
 					domStyle.set(renderer.firstChild, "fontSize", newSize + "px");
