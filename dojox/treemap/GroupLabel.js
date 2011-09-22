@@ -18,7 +18,7 @@ define(["dojo/_base/declare", "dojo/dom-construct", "dojo/dom-style"],
 					"top": "50%",
 					"marginTop": "-.5em"
 				});
-				renderer.appendChild(p);
+				domConstruct.place(p, renderer);
 			}
 			return renderer;
 		},

@@ -153,9 +153,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 			
 			if(forceCreate){
-				while(this.domNode.hasChildNodes()){
-					this.domNode.removeChild(this.domNode.firstChild);
-				}
+				domConstruct.empty(this.domNode);
 			}
 	
 			var rootItem = this.rootItem;
@@ -492,7 +490,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			// before sizing put the item inside its parent so that styling
 			// is applied and taken into account
 			if(forceCreate){
-				container.appendChild(renderer);
+				domConstruct.place(renderer, container);
 			}
 
 			domGeom.setMarginBox(renderer, {
@@ -557,12 +555,12 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var header = query(".dojoxTreeMapHeader", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
 			if(forceCreate){
-				renderer.appendChild(header);
+				domConstruct.place(header, renderer);
 			}
 			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
 			content = this._updateGroupContentRenderer(content, item, level);
 			if(forceCreate){
-				renderer.appendChild(content);
+				domConstruct.place(content, renderer);
 			}
 			return renderer;
 		},
@@ -679,7 +677,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.validateRendering(); // Must call this to create the treemap now
 
 			// re-add the old renderer to show the animation
-			this.domNode.appendChild(renderer);
+			domConstruct.place(renderer, this.domNode);
 
 			domStyle.set(renderer, "zIndex", 40);
 
@@ -719,7 +717,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var parentNode = renderer.parentNode;
 			var spanInfo = domGeom.position(renderer, true);
 			parentNode.removeChild(renderer);
-			this.domNode.appendChild(renderer);
+			domConstruct.place(renderer, this.domNode);
 			domStyle.set(renderer, {
 				left: (spanInfo.x - box.l)+ "px", top: (spanInfo.y - box.t)+ "px"
 			});

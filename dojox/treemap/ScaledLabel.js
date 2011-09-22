@@ -36,7 +36,7 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 					"position": "absolute",
 					"width": "auto"
 				});
-				renderer.appendChild(p);
+				domConstruct.place(p, renderer);
 			}
 			return renderer;
 		},
