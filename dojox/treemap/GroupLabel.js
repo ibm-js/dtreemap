@@ -3,7 +3,7 @@ define(["dojo/_base/declare", "dojo/dom-construct", "dojo/dom-style"],
 
 	return declare("dojox.treemap.GroupLabel", null, {
 		//	summary:
-		//		Specialize TreeMap to remove leaf labels and display group labels centered on group
+		//		Specializes TreeMap to remove leaf labels and display group labels centered on group
 		//		content instead of display them in headers.
 
 		createRenderer: function(item, level, kind) {

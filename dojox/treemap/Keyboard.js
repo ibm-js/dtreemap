@@ -7,6 +7,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 	=====*/
 	
 	return declare("dojox.treemap.Keyboard", _FocusMixin, {
+		//	summary:
+		//		Specializes TreeMap to support keyboard navigation and accessibility.
 		
 		// tabIndex: Integer
 		//		Order fields are traversed when user hits the tab key
@@ -73,7 +75,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 				// TODO
 				//case "+":
 				case keys.NUMPAD_PLUS:
-				if(!this._isLeaf(selected)){
+				if(!this._isLeaf(selected) && this.drillDown){
 					this.drillDown(renderer);
 					event.stop(e);
 				}
@@ -81,7 +83,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 				// TODO
 				//case "-":
 				case keys.NUMPAD_MINUS:
-				if(!this._isLeaf(selected)){
+				if(!this._isLeaf(selected) && this.drillUp){
 					this.drillUp(renderer);
 					event.stop(e);
 				}
