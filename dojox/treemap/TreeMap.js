@@ -264,7 +264,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 		//	colorFunc: Function
 		//		A function that returns from a store item the color value of cell or the value used by the 
-		//		ColorModel to compute the cell color.	
+		//		ColorModel to compute the cell color. If a color must be returned it must be in form accepted by the
+		//		dojo/Color constructor. If a value must be returned it must be a Number.
 		//		Default implementation is using colorAttr.
 		colorFunc: function(/*Object*/ item, /*dojo.store.api.Store*/ store){
 			var color = (this.colorAttr && this.colorAttr.length > 0)?item[this.colorAttr]:0;
