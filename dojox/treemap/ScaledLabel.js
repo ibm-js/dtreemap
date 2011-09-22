@@ -3,7 +3,7 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 
 	return declare("dojox.treemap.ScaledLabel", null, {
 		//	summary:
-		//		Specializes TreeMap to display scaled leaf label instead of constant size labels.
+		//		Specializes TreeMap to display scaled leaf labels instead of constant size labels.
 
 		onRendererUpdated: function(evt) {
 			if(evt.kind == "leaf"){
