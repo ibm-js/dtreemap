@@ -701,7 +701,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				var renderer = this._getRenderer(item);
 				var selected = this.isItemSelected(item);
 				if(selected){
-					domClass.add(renderer, "dojoxTreeMapSelected")
+					domClass.add(renderer, "dojoxTreeMapSelected");
 				}else{
 					domClass.remove(renderer, "dojoxTreeMapSelected");
 				}
