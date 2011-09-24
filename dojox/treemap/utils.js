@@ -248,7 +248,6 @@ define(["dojo/_base/array"], function(arr){
 			}
 			return aspect;
 		}
-		
-	}
+	};
 	return utils;
 });
