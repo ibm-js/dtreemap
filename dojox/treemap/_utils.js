@@ -55,7 +55,7 @@ define(["dojo/_base/array"], function(arr){
 			}
 			return null;
 		},
-		solve: function(items, width, height, areaFunc){
+		solve: function(items, width, height, areaFunc, rtl){
 			//
 			// Create temporary TreeMap elements
 			//
@@ -99,7 +99,7 @@ define(["dojo/_base/array"], function(arr){
 	
 			rects = arr.map(elements, function(element){
 				return {
-					x: element.x, y: element.y, w: element.width, h: element.height
+					x: rtl?width - element.x - element.width:element.x, y: element.y, w: element.width, h: element.height
 				};
 			});
 	

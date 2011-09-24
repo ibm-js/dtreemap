@@ -423,7 +423,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var box = domGeom.getMarginBox(domNode);
 
 			var solution = utils.solve(children, box.w, box.h, lang.hitch(this,
-					this._computeAreaForItem));
+					this._computeAreaForItem), !this.isLeftToRight());
 					
 			var rectangles = solution.rectangles;
 			
