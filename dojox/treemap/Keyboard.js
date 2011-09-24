@@ -1,5 +1,5 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys",  
-	"./utils", "dijit/_FocusMixin"],
+	"./_utils", "dijit/_FocusMixin"],
 	function(arr, lang, event, declare, on, keys, utils, _FocusMixin){
 		
 	/*=====
