@@ -122,7 +122,7 @@ var sizeBySeverityFunc = function(item){
 			        }else{
 			          treeMap.set("groupAttrs", null);
 					}
-				}
+				};
 			      
 			    sizeByChanged = function(value){
 			        var treeMap = registry.byId("treeMap");
@@ -131,7 +131,7 @@ var sizeBySeverityFunc = function(item){
 					}else if(dom.byId("s3").checked){
 			         	treeMap.set("areaFunc", sizeBySeverityFunc);
 					}
-				}
+				};
 			      
 			    colorByChanged = function(value){
 					var colorBy = null;
@@ -141,5 +141,5 @@ var sizeBySeverityFunc = function(item){
 			        }else if(dom.byId("c3").checked){
 			         	treeMap.set("colorFunc", colorBySeverityFunc);
 					}
-				}
+				};
 		  });
