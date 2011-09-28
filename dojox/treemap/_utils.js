@@ -20,7 +20,7 @@ define(["dojo/_base/array"], function(arr){
 				// value in response if it does not exist
 				arr.forEach(groupingFields, function(field, j){
 					// actual value for the rowField
-					var data = entry[field.name];
+					var data = entry[field];
 					// create child if undefined
 					var child = utils.find(r.children, function(item){
 						return (item.__treeName == data);
