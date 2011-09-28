@@ -15,7 +15,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//	summary:
 		//		A treemap widget.
 		
-		baseClass: "treeMap",
+		baseClass: "dojoxTreeMap",
 		
 		//	store: dojo.store.Store
 		//		The store that contains the items to display.
