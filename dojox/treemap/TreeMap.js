@@ -166,7 +166,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					x: box.l, y: box.t, w: box.w, h: box.h
 				}, 0, forceCreate);
 			}else{
-				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._items }, 0, forceCreate, box);
+				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._items },
+					0, forceCreate, box);
 			}
 		},
 	
