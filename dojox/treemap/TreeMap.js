@@ -7,7 +7,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
-	var _Selection = dojox.widget._Selection;
+	var Selection = dojox.widget.Selection;
 	var _Invalidating = dojox.widget._Invalidating;
 	=====*/ 	
 	
