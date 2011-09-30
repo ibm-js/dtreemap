@@ -78,10 +78,18 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		An array of data attributes used to group data in the treemap.	
 		//		Default is []. 
 		groupAttrs: [],
+
+        //	groupFuncs: Array
+		//		An array of grouping functions used to group data in the treemap.
+        //      When null, groupAttrs is to compute grouping functions.
+		//		Default is null.
+		groupFuncs: null,
+
+        _groupFuncs: [],
 		_groupingChanged: false,
 	
 		constructor: function(){
-			this.watchedProperties = [ "colorModel", "groupAttrs", "areaAttr", "areaFunc",
+			this.watchedProperties = [ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
 				"colorAttr", "colorFunc", "rootItem" ];
 		},
@@ -216,8 +224,27 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_setGroupAttrsAttr: function(value){
-			this._groupingChanged = true;			
+			this._groupingChanged = true;
+			if(this.groupFuncs == null && value != null){
+				this._groupFuncs = arr.map(value, function(attr){
+					return function(item){
+						return item[attr];
+					};
+				});
+			}
 			this._set("groupAttrs", value);
+		},
+
+        _setGroupFuncsAttr: function(value){
+			this._groupingChanged = true;
+			this._set("groupFuncs", this._groupFuncs = value);
+			if(value == null && this.groupAttrs != null){
+				this._groupFuncs = arr.map(this.groupAttrs, function(attr){
+					return function(item){
+						return item[attr];
+					};
+				});
+			}
 		},
 
 		_setAreaAttrAttr: function(value){
@@ -338,12 +365,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			if(this._data == null){
 				return;
 			}
-			if(this.groupAttrs != null && this.groupAttrs.length > 0){
-				this._items = utils.group(this._data, arr.map(this.groupAttrs, function(attr){
-					return function(item){
-						return item[attr];
-					}
-				}), dojo.hitch(this, this._getAreaForItem)).children;
+			if(this._groupFuncs != null && this._groupFuncs.length > 0){
+				this._items = utils.group(this._data, this._groupFuncs, dojo.hitch(this, this._getAreaForItem)).children;
 			}else{
 				this._items = this._data;
 			}
