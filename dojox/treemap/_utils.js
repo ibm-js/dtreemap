@@ -1,6 +1,6 @@
 define(["dojo/_base/array"], function(arr){
 	var utils = {
-		group: function(items, /*Array*/ groupingFields,  /*Function*/measureFunction){
+		group: function(/*Array*/items, /*Array*/groupingFields,  /*Function*/measureFunction){
 			var response = {
 				children: []
 			};
@@ -8,7 +8,7 @@ define(["dojo/_base/array"], function(arr){
 				if(!obj.__treeValue){
 					obj.__treeValue = 0;
 				}
-				obj.__treeValue += measureFunction(entry, items);
+				obj.__treeValue += measureFunction(entry);
 				return obj;
 			};
 			// we go over each entry in the array
