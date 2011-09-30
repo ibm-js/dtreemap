@@ -1,6 +1,6 @@
 define(["dojo/_base/array"], function(arr){
 	var utils = {
-		group: function(/*Array*/items, /*Array*/groupingFields,  /*Function*/measureFunction){
+		group: function(/*Array*/items, /*Array*/groupingFunctions,  /*Function*/measureFunction){
 			var response = {
 				children: []
 			};
@@ -18,9 +18,9 @@ define(["dojo/_base/array"], function(arr){
 				// look at the actual value for this rowField
 				// and create a holding object for this
 				// value in response if it does not exist
-				arr.forEach(groupingFields, function(field, j){
+				arr.forEach(groupingFunctions, function(groupingFunction, j){
 					// actual value for the rowField
-					var data = entry[field];
+					var data = groupingFunction(entry);
 					// create child if undefined
 					var child = utils.find(r.children, function(item){
 						return (item.__treeName == data);
@@ -33,7 +33,7 @@ define(["dojo/_base/array"], function(arr){
 						});
 					}
 					child = merge(child, entry);
-					if(j != groupingFields.length - 1){
+					if(j != groupingFunctions.length - 1){
 						// branch & prepare response for 
 						// next call
 						r = child;

@@ -339,7 +339,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				return;
 			}
 			if(this.groupAttrs != null && this.groupAttrs.length > 0){
-				this._items = utils.group(this._data, this.groupAttrs, dojo.hitch(this, this._getAreaForItem)).children;
+				this._items = utils.group(this._data, arr.map(this.groupAttrs, function(attr){
+					return function(item){
+						return item[attr];
+					}
+				}), dojo.hitch(this, this._getAreaForItem)).children;
 			}else{
 				this._items = this._data;
 			}
