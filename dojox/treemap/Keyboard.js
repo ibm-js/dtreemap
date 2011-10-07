@@ -97,5 +97,4 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 			}
 		}
 	});
-
 });
