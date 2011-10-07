@@ -81,7 +81,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_groupingChanged: false,
 	
 		constructor: function(){
-			this.watchedProperties = [ "colorModel", "groupAttrs", "areaAttr", "areaFunc",
+			this.invalidatingProperties = [ "colorModel", "groupAttrs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
 				"colorAttr", "colorFunc", "rootItem" ];
 		},
