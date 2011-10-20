@@ -18,12 +18,16 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"],
 		//		Whether the rendering is invalid or not. This is a readonly information, one must call 
 		//		invalidateRendering to modify this flag. 
 		invalidRendering: false,
-		postscript: function(){
-			this.inherited(arguments);		
+		postscript: function(mixin){
+			this.inherited(arguments);
 			if(this.invalidatingProperties){
 				var props = this.invalidatingProperties;
 				for(var i = 0; i < props.length; i++){
 					this.watch(props[i], lang.hitch(this, this.invalidateRendering));
+					if(mixin && props[i] in mixin){
+						// if the prop happens to have been passed in the ctor mixin we are invalidated
+						this.invalidateRendering();
+					}
 				}
 			}
 		},
