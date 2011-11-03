@@ -6,7 +6,7 @@ define(["dojo/_base/declare", "dojo/dom-construct", "dojo/dom-style"],
 		//		Specializes TreeMap to remove leaf labels and display group labels centered on group
 		//		content instead of display them in headers.
 
-		createRenderer: function(item, level, kind) {
+		createRenderer: function(item, level, kind){
 			var renderer = this.inherited(arguments);
 			if(kind == "content" || kind == "leaf"){
 				var p = domConstruct.create("div");
@@ -23,7 +23,7 @@ define(["dojo/_base/declare", "dojo/dom-construct", "dojo/dom-style"],
 			return renderer;
 		},
 
-		styleRenderer: function(renderer, item, level, kind) {
+		styleRenderer: function(renderer, item, level, kind){
 			switch(kind){
 				case "leaf":
 					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());

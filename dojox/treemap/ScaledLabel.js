@@ -5,35 +5,36 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 		//	summary:
 		//		Specializes TreeMap to display scaled leaf labels instead of constant size labels.
 
-		onRendererUpdated: function(evt) {
+		onRendererUpdated: function(evt){
 			if(evt.kind == "leaf"){
 				var renderer = evt.renderer;
 				// start back with default size
 				var oldSize = domStyle.get(renderer, "fontSize");
 				domStyle.set(renderer.firstChild, "fontSize", oldSize);
 				oldSize = parseInt(oldSize);
-				var hRatio = domGeom.getMarginBox(renderer).w / domGeom.getMarginBox(renderer.firstChild).w;
+				var hRatio = 0.75 * domGeom.getContentBox(renderer).w / domGeom.getMarginBox(renderer.firstChild).w;
+				var vRatio = domGeom.getContentBox(renderer).h  / domGeom.getMarginBox(renderer.firstChild).h;
 				var hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 				var vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
-				var newSize = oldSize * hRatio;
-				while (true) {
+				var newSize = Math.floor(oldSize * Math.min(hRatio, vRatio));
+				while(true){
 					domStyle.set(renderer.firstChild, "fontSize", newSize + "px");
 					hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 					vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
-					if (vDiff < 0 || hDiff < 0) {
+					if(vDiff < 0 || hDiff < 0){
 						// back track
 						domStyle.set(renderer.firstChild, "fontSize", oldSize + "px");
 						break;
 					}
 					oldSize = newSize;
-					newSize += 0.5;
+					newSize += 1;
 				}
 			}
 		},
 
-		createRenderer: function(item, level, kind) {
+		createRenderer: function(item, level, kind){
 			var renderer = this.inherited(arguments);
-			if (kind == "leaf") {
+			if(kind == "leaf"){
 				var p = domConstruct.create("div");
 				domStyle.set(p, {
 					"position": "absolute",
@@ -44,10 +45,10 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 			return renderer;
 		},
 		
-		styleRenderer: function(renderer, item, level, kind) {
-			if (kind != "leaf") {
+		styleRenderer: function(renderer, item, level, kind){
+			if (kind != "leaf"){
 				this.inherited(arguments);
-			} else {
+			}else{
 				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
 				renderer.firstChild.innerHTML = this.getLabelForItem(item);
 			}
