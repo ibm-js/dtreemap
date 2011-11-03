@@ -29,8 +29,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		The associated array item to renderer list.
 		//	tags
 		//		protected
-		itemToRenderer: {},
-		
+		itemToRenderer: null,
+
 		// Data
 		_dataChanged: false,
 	
@@ -89,6 +89,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_groupingChanged: false,
 	
 		constructor: function(){
+			this.itemToRenderer = {};
 			this.invalidatingProperties = [ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
 				"colorAttr", "colorFunc", "rootItem" ];
