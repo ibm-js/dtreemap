@@ -85,7 +85,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		Default is null.
 		groupFuncs: null,
 
-        _groupFuncs: [],
+        _groupFuncs: null,
 		_groupingChanged: false,
 	
 		constructor: function(){
@@ -226,12 +226,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 		_setGroupAttrsAttr: function(value){
 			this._groupingChanged = true;
-			if(this.groupFuncs == null && value != null){
-				this._groupFuncs = arr.map(value, function(attr){
-					return function(item){
-						return item[attr];
-					};
-				});
+			if(this.groupFuncs == null){
+				if(value !=null){
+					this._groupFuncs = arr.map(value, function(attr){
+						return function(item){
+							return item[attr];
+						};
+					});
+				}else{
+					this._groupFuncs = null;
+				}
 			}
 			this._set("groupAttrs", value);
 		},
