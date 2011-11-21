@@ -1,3 +1,19 @@
-Candidate Treemap widget and utilities for Dojo 1.8
-
-http://www.dojotoolkit.org
+-------------------------------------------------------------------------------
+dojox.treemap
+-------------------------------------------------------------------------------
+Project state: stable
+-------------------------------------------------------------------------------
+Credits:
+	Christophe Jolif
+	Robert Dupuy
+-------------------------------------------------------------------------------
+Project description:
+Candidate Treemap widget and utilities for Dojo 1.8+
+-------------------------------------------------------------------------------
+Dependencies:
+Dojo Core, Dijit, dojox.color, dojox.widget
+-------------------------------------------------------------------------------
+Documentation:
+When available, will reside at:
+    http://docs.dojocampus.org/dojox/treemap
+-------------------------------------------------------------------------------
