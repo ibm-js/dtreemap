@@ -629,7 +629,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
-			renderer.title = this.tooltipFunc(item, this.store);
+			var tooltip = this.tooltipFunc(item, this.store);
+			if(tooltip){
+				renderer.title = tooltip;
+			}
 			return renderer;
 		},
 	
