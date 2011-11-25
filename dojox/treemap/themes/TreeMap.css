@@ -14,28 +14,30 @@
 }
 
 .dojoxTreeMapHeader {
-	background-color: #FFFFFF;
+	background-color: white;
 	border: 1px solid black;
 }
 
 .dojoxTreeMapLeaf:hover {
-	background-color: white;
 	border-width: 1px;
 	border-color: white;
 }
 
 .dojoxTreeMapGroup:hover {
-	background-color: white;
-	border: 1px solid white;
 }
 
 .dojoxTreeMapSelected {
-	background: white;
 	border-width: 1px;
 	border-color: red;
 }
 
-div.dojoxTreeMapGroup.dojoxTreeMapSelected {
-	background: white;
+/* TODO: cause pb in IE <= 8*/
+.dojoxTreeMapGroup.dojoxTreeMapSelected:after {
+	content: '';
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
 	border: 1px solid red;
 }
