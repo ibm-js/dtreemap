@@ -17,7 +17,7 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 				var hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 				var vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
 				var newSize = Math.floor(oldSize * Math.min(hRatio, vRatio));
-				while(vDiff >= 0 && hDiff >= 0){
+				while(vDiff > 0 && hDiff > 0){
 					domStyle.set(renderer.firstChild, "fontSize", newSize + "px");
 					hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 					vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
