@@ -26,8 +26,7 @@
 
 .dojoxTreeMapGroup:hover {
 	background-color: white;
-	border-width: 1px;
-	border-color: white;
+	border: 1px solid white;
 }
 
 .dojoxTreeMapSelected {
@@ -38,6 +37,5 @@
 
 div.dojoxTreeMapGroup.dojoxTreeMapSelected {
 	background: white;
-	border-width: 1px;
-	border-color: red;
+	border: 1px solid red;
 }
