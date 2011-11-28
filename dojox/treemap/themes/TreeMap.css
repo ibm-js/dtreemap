@@ -29,7 +29,7 @@
 	border-color: red;
 }
 
-.dojoxTreeMapGroup.dojoxTreeMapSelected:after {
+.dojoxTreeMapGroup.dojoxTreeMapSelected:before {
 	content: '';
 	position: absolute;
 	left: 1px;
@@ -37,10 +37,13 @@
 	right: 1px;
 	bottom: 1px;
 	border: 1px solid red;
+	pointer-events: none;
+	z-index: 20;
 }
 
-.dj_iequircks .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
-.dj_ie7 .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
-.dj_ie8 .dojoxTreeMapGroup.dojoxTreeMapSelected + div {
+.dj_iequircks .dojoxTreeMapIEHack.dojoxTreeMapSelected,
+.dj_ie7 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div,
+.dj_ie8 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div {
 	border:  1px solid red;
+	z-index: 20;
 }

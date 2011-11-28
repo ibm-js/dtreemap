@@ -1,8 +1,8 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color",
-		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-attr", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
 		"dojo/_base/sniff", "dojo/uacss"],
-	function(arr, lang, declare, event, Color, Deferred, on, query, domAttr, domConstruct, domGeom, domClass, domStyle,
+	function(arr, lang, declare, event, Color, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
 	/*=====
@@ -689,7 +689,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var renderer = this._getRendererFromTarget(e.target);
 			if(renderer.item){	
 				this.selectFromEvent(e, renderer.item, e.currentTarget, true);
-				event.stop(e);
+				//event.stop(e);
 			}
 		},
 		
@@ -736,15 +736,19 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				if(selected){
 					domClass.add(renderer, "dojoxTreeMapSelected");
 					if(ie && (has("quirks") || ie < 9)){
-						div = this.createRenderer(item, -10, "group");
-						domAttr.set(div, "class", "__dojoxTreeMapIEQuircks");
+						// let's do all of this only if not already done
+						div = renderer.previousSibling;
 						var rStyle = domStyle.get(renderer);
-						domStyle.set(div, {
-							position: "absolute",
-							overflow: "hidden",
-							zIndex: 25
-						});
-						domConstruct.place(div, renderer, "after");
+						if(!div || !domClass.contains(div, "dojoxTreeMapIEHack")){
+							div = this.createRenderer(item, -10, "group");
+							domClass.add(div, "dojoxTreeMapIEHack");
+							domClass.add(div, "dojoxTreeMapSelected");
+							domStyle.set(div, {
+								position: "absolute",
+								overflow: "hidden"
+							});
+							domConstruct.place(div, renderer, "before");
+						}
 						// TODO: might fail if different border widths for different sides
 						var bWidth = 2*parseInt(domStyle.get(div, "border-width"));
 						if(this._isLeaf(item)){
@@ -761,8 +765,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					}
 				}else{
 					if(ie && (has("quirks") || ie < 9)){
-						div = renderer.nextSibling;
-						if(div && domAttr.get(div, "class") == "__dojoxTreeMapIEQuircks"){
+						div = renderer.previousSibling;
+						if(div && domClass.contains(div, "dojoxTreeMapIEHack")){
 							div.parentNode.removeChild(div);
 						}
 					}
