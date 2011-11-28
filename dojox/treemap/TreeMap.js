@@ -1,8 +1,8 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color",
-		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-attr", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
-		"dojo/_base/sniff"],
-	function(arr, lang, declare, event, Color, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
+		"dojo/_base/sniff", "dojo/uacss"],
+	function(arr, lang, declare, event, Color, Deferred, on, query, domAttr, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
 	/*=====
@@ -79,7 +79,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		Default is []. 
 		groupAttrs: [],
 
-        //	groupFuncs: Array
+		//	groupFuncs: Array
 		//		An array of grouping functions used to group data in the treemap.
         //      When null, groupAttrs is to compute grouping functions.
 		//		Default is null.
@@ -731,10 +731,43 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				var item = items[i];
 				var renderer = this._getRenderer(item);
 				var selected = this.isItemSelected(item);
+				var ie = has("ie");
+				var div;
 				if(selected){
 					domClass.add(renderer, "dojoxTreeMapSelected");
+					if(ie && (has("quirks") || ie < 9)){
+						div = this.createRenderer(item, -10, "group");
+						domAttr.set(div, "class", "__dojoxTreeMapIEQuircks");
+						var rStyle = domStyle.get(renderer);
+						domStyle.set(div, {
+							position: "absolute",
+							overflow: "hidden",
+							zIndex: 25
+						});
+						domConstruct.place(div, renderer, "after");
+						// TODO: might fail if different border widths for different sides
+						var bWidth = 2*parseInt(domStyle.get(div, "border-width"));
+						if(this._isLeaf(item)){
+							bWidth -= 1;
+						}else{
+							bWidth += 1;
+						}
+						domStyle.set(div, {
+							left: (parseInt(rStyle["left"])+1)+"px",
+							top: (parseInt(rStyle["top"])+1)+"px",
+							width: (parseInt(rStyle["width"])-bWidth)+"px",
+							height: (parseInt(rStyle["height"])-bWidth)+"px"
+						});
+					}
 				}else{
+					if(ie && (has("quirks") || ie < 9)){
+						div = renderer.nextSibling;
+						if(div && domAttr.get(div, "class") == "__dojoxTreeMapIEQuircks"){
+							div.parentNode.removeChild(div);
+						}
+					}
 					domClass.remove(renderer, "dojoxTreeMapSelected");
+
 				}
 				if(selected || this._hoveredItem == item){
 					domStyle.set(renderer, "zIndex", 20);

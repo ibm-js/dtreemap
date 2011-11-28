@@ -19,7 +19,6 @@
 }
 
 .dojoxTreeMapLeaf:hover {
-	border-width: 1px;
 	border-color: white;
 }
 
@@ -27,11 +26,9 @@
 }
 
 .dojoxTreeMapSelected {
-	border-width: 1px;
 	border-color: red;
 }
 
-/* TODO: cause pb in IE <= 8*/
 .dojoxTreeMapGroup.dojoxTreeMapSelected:after {
 	content: '';
 	position: absolute;
@@ -40,4 +37,10 @@
 	right: 1px;
 	bottom: 1px;
 	border: 1px solid red;
+}
+
+.dj_iequircks .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
+.dj_ie7 .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
+.dj_ie8 .dojoxTreeMapGroup.dojoxTreeMapSelected + div {
+	border:  1px solid red;
 }
