@@ -8,6 +8,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 	return declare("dojox.widget.Selection", Stateful, {
 		// summary:
 		//		Base class for widgets that manage a list of selected data items.
+
+		constructor: function(){
+			this.selectedItems = [];
+		},
 		
 		//	selectionMode: String
 		//		Valid values are "none", "single", "multiple".
@@ -45,7 +49,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		//	selectedItems: Object[]
 		//		The list of selected items.
 		//		Warning: Do not use this property directly, make sure to call set() or get() methods.
-		selectedItems: [],
+		selectedItems: null,
 		
 		_setSelectedItemsAttr: function(value){
 			var oldSelectedItems = this.selectedItems;
