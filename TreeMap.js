@@ -9,7 +9,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		// summary:
 		//		A treemap widget.
 		
-		baseClass: "dojoxTreeMap",
+		baseClass: "dtreemap",
 		
 		// store: dojo/store/api/Store
 		//		The store that contains the items to display.
@@ -530,8 +530,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_layoutGroupContent: function(renderer, width, height, level, forceCreate, anim){
-			var header = query(".dojoxTreeMapHeader", renderer)[0];
-			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
+			var header = query(".dtreemap-header", renderer)[0];
+			var content = query(".dtreemap-groupcontent", renderer)[0];
 			if(header == null || content == null){
 				return;
 			}
@@ -573,15 +573,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var forceCreate = renderer == null;
 			if(renderer == null){
 				renderer = this.createRenderer("div", level, "group");
-				domClass.add(renderer, "dojoxTreeMapGroup");
+				domClass.add(renderer, "dtreemap-group");
 			}
 			this.styleRenderer(renderer, item, level, "group");
-			var header = query(".dojoxTreeMapHeader", renderer)[0];
+			var header = query(".dtreemap-header", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
 			if(forceCreate){
 				domConstruct.place(header, renderer);
 			}
-			var content = query(".dojoxTreeMapGroupContent", renderer)[0];
+			var content = query(".dtreemap-groupcontent", renderer)[0];
 			content = this._updateGroupContentRenderer(content, item, level);
 			if(forceCreate){
 				domConstruct.place(content, renderer);
@@ -603,8 +603,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		private			
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "header");
-				domClass.add(renderer, "dojoxTreeMapHeader");
-				domClass.add(renderer, "dojoxTreeMapHeader_" + level);				
+				domClass.add(renderer, "dtreemap-header");
+				domClass.add(renderer, "dtreemap-header_" + level);
 			}
 			this.styleRenderer(renderer, item, level, "header");
 			return renderer;
@@ -624,8 +624,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "leaf");
-				domClass.add(renderer, "dojoxTreeMapLeaf");
-				domClass.add(renderer, "dojoxTreeMapLeaf_" + level);
+				domClass.add(renderer, "dtreemap-leaf");
+				domClass.add(renderer, "dtreemap-leaf_" + level);
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
 			var tooltip = this.tooltipFunc(item, this.store);
@@ -649,8 +649,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "content");
-				domClass.add(renderer, "dojoxTreeMapGroupContent");
-				domClass.add(renderer, "dojoxTreeMapGroupContent_" + level);
+				domClass.add(renderer, "dtreemap-groupcontent");
+				domClass.add(renderer, "dtreemap-groupcontent_" + level);
 			}
 			this.styleRenderer(renderer, item, level, "content");
 			return renderer;
@@ -737,15 +737,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				var ie = has("ie");
 				var div;
 				if(selected){
-					domClass.add(renderer, "dojoxTreeMapSelected");
+					domClass.add(renderer, "dtreemap-selected");
 					if(ie && (has("quirks") || ie < 9)){
 						// let's do all of this only if not already done
 						div = renderer.previousSibling;
 						var rStyle = domStyle.get(renderer);
-						if(!div || !domClass.contains(div, "dojoxTreeMapIEHack")){
+						if(!div || !domClass.contains(div, "dtreemap-IEHack")){
 							div = this.createRenderer(item, -10, "group");
-							domClass.add(div, "dojoxTreeMapIEHack");
-							domClass.add(div, "dojoxTreeMapSelected");
+							domClass.add(div, "dtreemap-IEHack");
+							domClass.add(div, "dtreemap-selected");
 							domStyle.set(div, {
 								position: "absolute",
 								overflow: "hidden"
@@ -772,17 +772,17 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}else{
 					if(ie && (has("quirks") || ie < 9)){
 						div = renderer.previousSibling;
-						if(div && domClass.contains(div, "dojoxTreeMapIEHack")){
+						if(div && domClass.contains(div, "dtreemap-IEHack")){
 							div.parentNode.removeChild(div);
 						}
 					}
-					domClass.remove(renderer, "dojoxTreeMapSelected");
+					domClass.remove(renderer, "dtreemap-selected");
 
 				}
 				if(this._hoveredItem == item){
-					domClass.add(renderer, "dojoxTreeMapHovered");
+					domClass.add(renderer, "dtreemap-hovered");
 				}else{
-					domClass.remove(renderer, "dojoxTreeMapHovered");
+					domClass.remove(renderer, "dtreemap-hovered");
 				}
 				if(selected || this._hoveredItem == item){
 					domStyle.set(renderer, "zIndex", 20);

@@ -1,28 +1,28 @@
-.dojoxTreeMap {
+.dtreemap {
 	background-color: #EBEADB;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 }
 
-.dojoxTreeMapLeaf {
+.dtreeamap-leaf {
 	border: 1px solid black;
 }
 
-.dojoxTreeMapGroup {
+.dtreeamap-group {
 }
 
-.dojoxTreeMapGroupContent {
+.dtreemap-groupcontent {
 }
 
-.dojoxTreeMapHeader {
+.dtreemap-header {
 	background-color: white;
 	border: 1px solid black;
 }
 
-.dojoxTreeMapSelected {
+.dtreeamap-selected {
 	border-color: red;
 }
 
-.dojoxTreeMapGroup.dojoxTreeMapSelected:before {
+.dtreeamap-group.dtreeamap-selected:before {
 	content: '';
 	position: absolute;
 	left: 1px;

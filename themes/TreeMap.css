@@ -1,39 +1,39 @@
-.dojoxTreeMap {
+.dtreemap {
 	background-color: #EBEADB;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 }
 
-.dojoxTreeMapLeaf {
+.dtreemap-leaf {
 	border: 1px solid black;
 	padding: 3px;
 }
 
-.dojoxTreeMapGroup {
+.dtreemap-group {
 }
 
-.dojoxTreeMapGroupContent {
+.dtreemap-groupcontent {
 }
 
-.dojoxTreeMapHeader {
+.dtreemap-header {
 	background-color: white;
 	border: 1px solid black;
 }
 
 /* on desktop recent browsers you may prefer to use :hover pseudo-class instead
-   of dojoxTreeMapHovered */
+   of dtreemap-hovered */
 
-.dojoxTreeMapLeaf.dojoxTreeMapHovered {
+.dtreemap-leaf.dtreemap-hovered {
 	border-color: white;
 }
 
-.dojoxTreeMapGroup.dojoxTreeMapHovered {
+.dtreemap-group.dtreemap-hovered {
 }
 
-.dojoxTreeMapSelected {
+.dtreemap-selected {
 	border-color: red;
 }
 
-.dojoxTreeMapSelected:before {
+.dtreemap-selected:before {
 	content: '';
 	position: absolute;
 	left: 0px;
@@ -45,7 +45,7 @@
 	z-index: 20;
 }
 
-.dojoxTreeMapGroup.dojoxTreeMapSelected:before {
+.dtreemap-group.dtreemap-selected:before {
 	content: '';
 	position: absolute;
 	left: 1px;
@@ -57,7 +57,7 @@
 	z-index: 20;
 }
 
-.dojoxTreeMapSelected:before {
+.dtreemap-selected:before {
 	content: '';
 	position: absolute;
 	left: 0px;
@@ -69,13 +69,13 @@
 	z-index: 20;
 }
 
-.dojoxTreeMapGroup.dojoxTreeMapSelected{
+.dtreemap-group.dtreemap-selected{
 	border:2px dashed red;
 }
 
-.dj_iequircks .dojoxTreeMapIEHack.dojoxTreeMapSelected,
-.dj_ie7 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div,
-.dj_ie8 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div {
+.dj_iequircks .dtreemap-IEHack.dtreemap-selected,
+.dj_ie7 .dtreemap-IEHack.dtreemap-selected + div,
+.dj_ie8 .dtreemap-IEHack.dtreemap-selected + div {
 	border:  1px solid red;
 	z-index: 20;
 }
