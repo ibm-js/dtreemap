@@ -1,3 +1,3 @@
 define([
-	"dojox/treemap/tests/Store",
+	"dtreemap/tests/Store"
 ], 1);

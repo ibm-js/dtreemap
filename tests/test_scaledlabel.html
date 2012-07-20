@@ -3,17 +3,17 @@
 
 <head>
 	<style type="text/css">
-		@import "../../../dojo/resources/dojo.css";
+		@import "../../dojo/resources/dojo.css";
 		@import "../themes/TreeMap.css";
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true">
+	<script type="text/javascript" src="../../dojo/dojo.js" data-dojo-config="async: true">
 	</script>
 
 	<script type="text/javascript">
 
-		require(["dojo/ready", "dojo/dom", "dojo/_base/declare", "dojox/treemap/TreeMap",
-			"dojo/store/Memory", "dojox/color/MeanColorModel", "dojo/_base/Color", "dojox/treemap/ScaledLabel"],
+		require(["dojo/ready", "dojo/dom", "dojo/_base/declare", "dtreemap/TreeMap",
+			"dojo/store/Memory", "dojox/color/MeanColorModel", "dojo/_base/Color", "dtreemap/ScaledLabel"],
 			function(ready, dom, declare, TreeMap, Memory, MeanColorModel, Color, ScaledLabel) {
 				ready(function(){
 					var dataStore = new Memory({idProperty: "label", data:

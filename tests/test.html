@@ -8,10 +8,10 @@
 	</style>
 
 	<style type="text/css">
-		@import "../../../dojo/resources/dojo.css";
+		@import "../../dojo/resources/dojo.css";
 		@import "../themes/TreeMap.css";
 		@import "../themes/DrillDownUp.css";
-		@import "../../../dijit/themes/claro/claro.css";
+		@import "../../dijit/themes/claro/claro.css";
 	</style>
 
 	<script type="text/javascript">
@@ -21,7 +21,7 @@
 		}
 	</script>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js">
+	<script type="text/javascript" src="../../dojo/dojo.js">
 	</script>
 
 	<script type="text/javascript">
@@ -31,11 +31,11 @@
 
 		require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser",
 			"dijit/registry",
-			"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojox/treemap/TreeMap",
+			"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dtreemap/TreeMap",
 			"dojox/color/MeanColorModel", "dojox/data/CsvStore", "dojo/store/DataStore",
 			"dojo/store/Observable",
-			"dijit/form/RadioButton", "dijit/form/ComboBox", "dijit/form/Button", "dojox/treemap/Keyboard",
-			"dojox/treemap/DrillDownUp"],
+			"dijit/form/RadioButton", "dijit/form/ComboBox", "dijit/form/Button", "dtreemap/Keyboard",
+			"dtreemap/DrillDownUp"],
 			function(ready, dom, Color, declare, parser, registry, BorderContainer, ContentPane, TreeMap,
 					 MeanColorModel, CsvStore, DataStore, Observable, RadioButton, ComboBox, Button, Keyboard,
 					 DrillDownUp) {
