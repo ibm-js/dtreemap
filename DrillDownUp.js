@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/dom-g
 	"dojo/dom-style", "dojo/_base/fx", "dojo/has!touch?dojox/gesture/tap"],
 	function(lang, event, declare, domGeom, domConstruct, domStyle, fx, tap){
 
-	return declare("dojox.treemap.DrillDownUp", null, {
+	return declare(null, {
 		// summary:
 		//		Specializes TreeMap to support drill down and up operations.
 

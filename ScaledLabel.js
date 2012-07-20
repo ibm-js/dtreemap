@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 	function(declare, domGeom, domConstruct, domStyle) {
 
-	return declare("dojox.treemap.ScaledLabel", null, {
+	return declare(null, {
 		// summary:
 		//		Specializes TreeMap to display scaled leaf labels instead of constant size labels.
 
