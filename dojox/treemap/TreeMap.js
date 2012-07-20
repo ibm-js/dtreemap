@@ -1,23 +1,17 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color",
-		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
+		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
 		"dojo/_base/sniff", "dojo/uacss"],
-	function(arr, lang, declare, event, Color, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
+	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
-	/*=====
-	var _WidgetBase = dijit._WidgetBase;
-	var Selection = dojox.widget.Selection;
-	var _Invalidating = dojox.widget._Invalidating;
-	=====*/ 	
-	
 	return declare("dojox.treemap.TreeMap", [_WidgetBase, _Invalidating, Selection], {
-		//	summary:
+		// summary:
 		//		A treemap widget.
 		
 		baseClass: "dojoxTreeMap",
 		
-		//	store: dojo.store.Store
+		// store: dojo/store/api/Store
 		//		The store that contains the items to display.
 		store: null,
 		
@@ -25,63 +19,61 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		A query that can be passed to when querying the store.
 		query: {},
 		
-		//	itemToRenderer: Object
+		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
-		//	tags
-		//		protected
 		itemToRenderer: null,
 
 		// Data
 		_dataChanged: false,
 	
-		//	rootItem: Object
+		// rootItem: Object
 		//		The root item of the treemap, that is the first visible item.
 		//		If null the entire treemap hierarchy is shown.	
 		//		Default is null.
 		rootItem: null,
 		_rootItemChanged: false,
 	
-		//	tooltipAttr: String
+		// tooltipAttr: String
 		//		The attribute of the store item that contains the tooltip text of a treemap cell.	
 		//		Default is "". 
 		tooltipAttr: "",
 	
-		//	areaAttr: String
+		// areaAttr: String
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
 		//		Default is "". 
 		areaAttr: "",
 		_areaChanged: false,
 	
-		//	labelAttr: String
+		// labelAttr: String
 		//		The attribute of the store item that contains the label of a treemap cell.	
 		//		Default is "label". 
 		labelAttr: "label",
 		
-		//	labelThreshold: Number
+		// labelThreshold: Number
 		//		The starting depth level at which the labels are not displayed anymore on cells.  
 		//		If NaN no threshold is applied. The depth is the visual depth of the items on the screen not
 		//		in the data (i.e. after drill down the depth of an item might change).
 		//		Default is NaN.
 		labelThreshold: NaN, 
 		
-		//	colorAttr: String
+		// colorAttr: String
 		//		The attribute of the store item that contains the data used to compute the color of a treemap cell.
 		//		Default is "". 
 		colorAttr: "",
-		//	colorModel: dojox.color.api.ColorModel
+		// colorModel: dojox/color/api/ColorModel
 		//		The optional color model that converts data to color.	
 		//		Default is null.
 		colorModel: null,
 		_coloringChanged: false,
 		
-		//	groupAttrs: Array
+		// groupAttrs: Array
 		//		An array of data attributes used to group data in the treemap.	
 		//		Default is []. 
 		groupAttrs: [],
 
-		//	groupFuncs: Array
+		// groupFuncs: Array
 		//		An array of grouping functions used to group data in the treemap.
-        //      When null, groupAttrs is to compute grouping functions.
+		//		When null, groupAttrs is to compute grouping functions.
 		//		Default is null.
 		groupFuncs: null,
 
@@ -110,7 +102,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.inherited(arguments);
 			this.connect(this.domNode, "mouseover", this._onMouseOver);
 			this.connect(this.domNode, "mouseout", this._onMouseOut);
-			this.connect(this.domNode, "mouseup", this._onMouseUp);	
+			this.connect(this.domNode, touch.release, this._onMouseUp);
+			this.domNode.setAttribute("role", "presentation");
+			this.domNode.setAttribute("aria-label", "treemap");
 		},
 		
 		buildRendering: function(){
@@ -186,25 +180,28 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_setStoreAttr: function(value){
+			var r;
 			if(value != null){
 				var results = value.query(this.query);
 				if(results.observe){
 					// user asked us to observe the store
 					results.observe(lang.hitch(this, this._updateItem), true);
 				}				
-				Deferred.when(results, lang.hitch(this, this._initItems));
+				r = when(results, lang.hitch(this, this._initItems));
 			}else{
-				this._initItems([]);
+				r = this._initItems([]);
 			}
 			this._set("store", value);
+			return r;
 		},
 	
 		_initItems: function(items){
 			this._dataChanged = true;
 			this._data = items;
 			this.invalidateRendering();
+			return items;
 		},
-		
+
 		_updateItem: function(item, previousIndex, newIndex){
 			if(previousIndex!=-1){
 				if(newIndex!=previousIndex){
@@ -212,7 +209,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					this._data.splice(previousIndex, 1);
 				}else{
 					// this is a put, previous and new index identical
-					// we don't now what has change exactly with store API
+					// we don't know what has change exactly with store API
 					this._data[newIndex] = item;
 				}
 			}else if(newIndex!=-1){
@@ -257,10 +254,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._set("areaAttr", value);
 		},
 	
-		//	areaFunc: Function
-		//		A function that returns the value use to compute the area of cell from a store item.	
+		// areaFunc: Function
+		//		A function that returns the value use to compute the area of cell from a store item.
 		//		Default implementation is using areaAttr.	
-		areaFunc: function(/*Object*/ item, /*dojo.store.api.Store*/ store){
+		areaFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
 			return (this.areaAttr && this.areaAttr.length > 0)?parseFloat(item[this.areaAttr]):1;
 		},
 		
@@ -269,18 +266,18 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._set("areaFunc", value);
 		},
 
-		//	labelFunc: Function
+		// labelFunc: Function
 		//		A function that returns the label of cell from a store item.	
 		//		Default implementation is using labelAttr.
-		labelFunc: function(/*Object*/ item, /*dojo.store.api.Store*/ store){
+		labelFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
 			var label = (this.labelAttr && this.labelAttr.length > 0)?item[this.labelAttr]:null;
 			return label?label.toString():null;
 		},
 	
-		//	tooltipFunc: Function
+		// tooltipFunc: Function
 		//		A function that returns the tooltip of cell from a store item.	
 		//		Default implementation is using tooltipAttr.
-		tooltipFunc: function(/*Object*/ item, /*dojo.store.api.Store*/ store){
+		tooltipFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
 			var tooltip = (this.tooltipAttr && this.tooltipAttr.length > 0)?item[this.tooltipAttr]:null;
 			return tooltip?tooltip.toString():null;
 		},
@@ -295,12 +292,12 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._set("colorAttr", value);
 		},
 	
-		//	colorFunc: Function
+		// colorFunc: Function
 		//		A function that returns from a store item the color value of cell or the value used by the 
 		//		ColorModel to compute the cell color. If a color must be returned it must be in form accepted by the
-		//		dojo/Color constructor. If a value must be returned it must be a Number.
+		//		dojo/_base/Color constructor. If a value must be returned it must be a Number.
 		//		Default implementation is using colorAttr.
-		colorFunc: function(/*Object*/ item, /*dojo.store.api.Store*/ store){
+		colorFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
 			var color = (this.colorAttr && this.colorAttr.length > 0)?item[this.colorAttr]:0;
 			if(color == null){
 				color = 0;
@@ -314,19 +311,19 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		createRenderer: function(item, level, kind){
-			//	summary: 
+			// summary:
 			//		Creates an item renderer of the specified kind. This is called only when the treemap
 			//		is created. Default implementation always create div nodes. It also sets overflow
 			//		to hidden and position to absolute on non-header renderers.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.		
-			//	kind: String
+			// kind: String
 			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
-			//	returns: DomNode
+			// returns: DomNode
 			//		The renderer use for the specified kind.
-			//	tags
+			// tags:
 			//		protected					
 			var div = domConstruct.create("div");
 			if(kind != "header"){
@@ -337,28 +334,29 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		styleRenderer: function(renderer, item, level, kind){
-			//	summary:
+			// summary:
 			//		Style the item renderer. This is called each time the treemap is refreshed.
 			//		For leaf items it colors them with the color computed from the color model. 
 			//		For other items it does nothing.
-			//	renderer: DomNode
+			// renderer: DomNode
 			//		The item renderer.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.
-			//	kind: String
+			// kind: String
 			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
-			//	tags
+			// tags:
 			//		protected
 			switch(kind){
 				case "leaf":
 					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
 				case "header":
-					if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-						renderer.innerHTML = this.getLabelForItem(item);
+					var label = this.getLabelForItem(item);
+					if(label && (isNaN(this.labelThreshold) || level < this.labelThreshold)){
+						renderer.innerHTML = label;
 					}else{
-						renderer.innerHTML = null;
+						domConstruct.empty(renderer);
 					}
 					break;
 				default:
@@ -371,7 +369,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				return;
 			}
 			if(this._groupFuncs != null && this._groupFuncs.length > 0){
-				this._items = utils.group(this._data, this._groupFuncs, dojo.hitch(this, this._getAreaForItem)).children;
+				this._items = utils.group(this._data, this._groupFuncs, lang.hitch(this, this._getAreaForItem)).children;
 			}else{
 				this._items = this._data;
 			}
@@ -421,12 +419,12 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		getColorForItem: function(item){
-			//	summary:
+			// summary:
 			//		Returns the color for a given item. This either use the colorModel if not null
 			//		or just the result of the colorFunc.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	tags
+			// tags:
 			//		protected	
 			var value = this.colorFunc(item, this.store);
 			if(this.colorModel != null){
@@ -437,11 +435,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		getLabelForItem: function(item){
-			//	summary:
+			// summary:
 			//		Returns the label for a given item.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	tags
+			// tags:
 			//		protected	
 			return item.__treeName?item.__treeName:this.labelFunc(item, this.store);
 		},
@@ -487,9 +485,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	            		return parent.children[i];
 	                }
 				}	
-			}else{
-				return this.itemToRenderer[this.getIdentity(item)];
 			}
+			return this.itemToRenderer[this.getIdentity(item)];
 		},
 
 		_buildRenderer: function(container, parent, child, rect, level, forceCreate, anim){
@@ -502,6 +499,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				renderer.item = child;
 				renderer.parentItem = parent;
 				this.itemToRenderer[this.getIdentity(child)] = renderer;
+				// update its selection status
+				this.updateRenderers(child);
 			}
 	
 			// in some cases the computation might be slightly incorrect (0.0000...1)
@@ -560,16 +559,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_updateGroupRenderer: function(renderer, item, level){
-			//	summary:
+			// summary:
 			//		Update a group renderer. This creates the renderer if not already created,
 			//		call styleRender for it and recurse into children.
-			//	renderer: DomNode
+			// renderer: DomNode
 			//		The item renderer.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.
-			//	tags
+			// tags:
 			//		private				
 			var forceCreate = renderer == null;
 			if(renderer == null){
@@ -591,16 +590,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_updateHeaderRenderer: function(renderer, item, level){
-			//	summary:
+			// summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
-			//	renderer: DomNode
+			// renderer: DomNode
 			//		The item renderer.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.
-			//	tags
+			// tags:
 			//		private			
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "header");
@@ -612,16 +611,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_updateLeafRenderer: function(renderer, item, level){
-			//	summary:
+			// summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
-			//	renderer: DomNode
+			// renderer: DomNode
 			//		The item renderer.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.
-			//	tags
+			// tags:
 			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "leaf");
@@ -637,16 +636,16 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_updateGroupContentRenderer: function(renderer, item, level){
-			//	summary:
+			// summary:
 			//		Update a group content renderer. This creates the renderer if not already created,
 			//		and call styleRender for it.
-			//	renderer:
+			// renderer:
 			//		The item renderer.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	level: Number
+			// level: Number
 			//		The item depth level.
-			//	tags
+			// tags:
 			//		private				
 			if(renderer == null){
 				renderer = this.createRenderer(item, level, "content");
@@ -687,7 +686,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		
 		_onMouseUp: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
-			if(renderer.item){	
+			if(renderer.item){
 				this.selectFromEvent(e, renderer.item, e.currentTarget, true);
 				//event.stop(e);
 			}
@@ -717,9 +716,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},		
 		
 		updateRenderers: function(items){
-			//	summary:
+			// summary:
 			//		Updates the renderer(s) that represent the specified item(s).
-			//	item: Object|Array
+			// item: Object|Array
 			//		The item(s).
 			if(!items){
 				return;
@@ -730,6 +729,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			for(var i=0; i<items.length;i++){
 				var item = items[i];
 				var renderer = this._getRenderer(item);
+				// at init time the renderer might not be ready
+				if(!renderer){
+					continue;
+				}
 				var selected = this.isItemSelected(item);
 				var ie = has("ie");
 				var div;
@@ -756,12 +759,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 						}else{
 							bWidth += 1;
 						}
-						domStyle.set(div, {
-							left: (parseInt(rStyle["left"])+1)+"px",
-							top: (parseInt(rStyle["top"])+1)+"px",
-							width: (parseInt(rStyle["width"])-bWidth)+"px",
-							height: (parseInt(rStyle["height"])-bWidth)+"px"
-						});
+						// if we just drill down some renders might not be laid out?
+						if(rStyle["left"] != "auto"){
+							domStyle.set(div, {
+								left: (parseInt(rStyle["left"])+1)+"px",
+								top: (parseInt(rStyle["top"])+1)+"px",
+								width: (parseInt(rStyle["width"])-bWidth)+"px",
+								height: (parseInt(rStyle["height"])-bWidth)+"px"
+							});
+						}
 					}
 				}else{
 					if(ie && (has("quirks") || ie < 9)){
@@ -772,6 +778,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					}
 					domClass.remove(renderer, "dojoxTreeMapSelected");
 
+				}
+				if(this._hoveredItem == item){
+					domClass.add(renderer, "dojoxTreeMapHovered");
+				}else{
+					domClass.remove(renderer, "dojoxTreeMapHovered");
 				}
 				if(selected || this._hoveredItem == item){
 					domStyle.set(renderer, "zIndex", 20);
