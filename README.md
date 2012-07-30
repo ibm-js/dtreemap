@@ -2,7 +2,14 @@
 
 This project provides a TreeMap widget for Dojo 1.8 and higher.
 
-This is the former dojox/treemap project, see [MIGRATION.md](dojo-treemap/blob/master/MIGRATION.md) for migration details.
+## Migration
+
+This is the former dojox/treemap project.
+
+Migration steps from dojox/treemap to dtreemap:
+
+* replace any use of "dojo/treemap" AMD module path by "dtreemap"
+* replace any use of .dojoxTreeMapXSomething CSS classes by .dtreemap-xsomething
 
 ## Licensing
 
