@@ -2,7 +2,7 @@
 
 This project provides a TreeMap widget for Dojo 1.8 and higher.
 
-This is the former dojox/treemap project, see [MIGRATION.md](MIGRATION.md) for migration details.
+This is the former dojox/treemap project, see [MIGRATION.md](dojo-treemap/MIGRATION.md) for migration details.
 
 ## Licensing
 
