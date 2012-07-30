@@ -2,7 +2,7 @@
 
 This project provides a TreeMap widget for Dojo 1.8 and higher.
 
-This is the former dojox/treemap project, see MIGRATION.md for migration details.
+This is the former dojox/treemap project, see [MIGRATION.md](MIGRATION.md) for migration details.
 
 ## Licensing
 
@@ -26,6 +26,6 @@ http://livedocs.dojotoolkit.org/dojox/treemap
 
 ## Credits
 
-Christophe Jolif (IBM CCLA, committer)
-Robert Dupuy (IBM CCLA, contributor)
+* Christophe Jolif (IBM CCLA, committer)
+* Robert Dupuy (IBM CCLA, contributor)
 
