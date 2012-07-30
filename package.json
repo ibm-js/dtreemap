@@ -1,7 +1,8 @@
 {
-  "name": "dojo-treemap",
+  "name": "dtreemap",
   "author": "Christophe Jolif",
-  "description": "",
+  "contributors": ["Robert Dupuy"],
+  "description": "Treemap widget",
   "licenses": [
      {
          "type": "AFLv2.1",
@@ -13,14 +14,12 @@
      }
   ],
   "repository": {
-    "type":"git",
-    "url":"http://github.com/cjolif/dojo-treemap"
+    "type": "git",
+    "url": "http://github.com/cjolif/dojo-treemap"
   },
   "dependencies": {
-    "dojo": "1.8.0"
-  },
-  "directories": {
-    "lib": "."
+    "dojo": "1.8.0",
+	"dijit": "1.8.0"
   },
   "main": "./TreeMap"
 }
