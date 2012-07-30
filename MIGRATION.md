@@ -1,4 +1,4 @@
 Migration from dojox/treemap to dtreemap:
 
-- use "dtreemap" package instead of "dojox/treemap"
-- use .dtreemap-xsomething instead of .dojoxTreeMapXsomething for CSS classses
+- replace any use of "dojo/treemap" package by "dtreemap" instead
+- replace any use of .dojoxTreeMapXSomething CSS classes by .dtreemap-xsomething instead
