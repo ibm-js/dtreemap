@@ -19,12 +19,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 			this.own(on(this.domNode, "keydown", lang.hitch(this, this._onKeyDown)));
 			this.own(on(this.domNode, "mousedown", lang.hitch(this, this._onMouseDown)));
 		},
-		
-		destroy: function(){
-			this.inherited(arguments);
-			this._keyDownHandle.remove();
-			this._mouseDownHandle.remove();
-		},
 
 		createRenderer: function(item, level, kind){
 			var renderer = this.inherited(arguments);
