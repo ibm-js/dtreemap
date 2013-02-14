@@ -16,8 +16,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 		
 		postCreate: function(){
 			this.inherited(arguments);
-			this._keyDownHandle = on(this.domNode, "keydown", lang.hitch(this, this._onKeyDown));
-			this._mouseDownHandle = on(this.domNode, "mousedown", lang.hitch(this, this._onMouseDown));
+			this.own(on(this.domNode, "keydown", lang.hitch(this, this._onKeyDown)));
+			this.own(on(this.domNode, "mousedown", lang.hitch(this, this._onMouseDown)));
 		},
 		
 		destroy: function(){
