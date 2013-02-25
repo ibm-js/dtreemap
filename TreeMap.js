@@ -1,7 +1,7 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
-		"dojo/_base/sniff", "dojo/uacss"],
+		"dojo/sniff", "dojo/uacss"],
 	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
