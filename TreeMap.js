@@ -81,7 +81,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		//		Default is null.
 		groupFuncs: null,
 
-        _groupFuncs: null,
+		_groupFuncs: null,
 		_groupingChanged: false,
 	
 		constructor: function(){
@@ -425,7 +425,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			}
 			return value;
 		},
-	
+
 		getColorForItem: function(item){
 			// summary:
 			//		Returns the color for a given item. This either use the colorModel if not null
