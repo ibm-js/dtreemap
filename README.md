@@ -35,7 +35,7 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
  To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
 
- git clone git://github.com/cjolif/dojo-treemap.git dtreemap
+ git clone git://github.com/ibm-dojo/dojo-treemap.git dtreemap
 
 ## Documentation
 
