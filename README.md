@@ -2,13 +2,17 @@
 
 This project provides a TreeMap widget for Dojo 1.8 and higher.
 
+## Status
+
+No official release yet.
+
 ## Migration
 
 This is the former dojox/treemap project.
 
 Migration steps from dojox/treemap to dtreemap:
 
-* replace any use of "dojo/treemap" AMD module path by "dtreemap"
+* replace any use of "dojox/treemap" AMD module path by "dtreemap"
 * replace any use of .dojoxTreeMapXSomething CSS classes by .dtreemap-xsomething
 
 ## Licensing
@@ -18,14 +22,20 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
 ## Installation
 
+<!---
 * [CPM](https://github.com/kriszyp/cpm) installation with the following command:
 
     ``cpm install dtreemap``
+-->
 
-* Manual installation by putting dtreemap as a sibling of the top level dojo modules:
+* Manual installation of by dropping dtreemap as a sibling of the top level Dojo modules:
  * dojo
  * dijit
  * dtreemap
+
+ To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
+
+ git clone git://github.com/cjolif/dojo-treemap.git dtreemap
 
 ## Documentation
 
