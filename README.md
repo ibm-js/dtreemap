@@ -41,7 +41,7 @@ This project requires the following other projects to run:
 
  To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
 
- git clone git://github.com/ibm-dojo/dojo-treemap.git dtreemap
+ git clone git://github.com/ibm-dojo/dtreemap.git
 
 ## Documentation
 
@@ -49,6 +49,6 @@ http://livedocs.dojotoolkit.org/dojox/treemap
 
 ## Credits
 
-* Christophe Jolif (IBM CCLA, committer)
-* Robert Dupuy (IBM CCLA, contributor)
+* Christophe Jolif (IBM CCLA)
+* Robert Dupuy (IBM CCLA)
 
