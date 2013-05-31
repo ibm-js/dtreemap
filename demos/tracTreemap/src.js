@@ -52,19 +52,19 @@ var sizeByCcFunc = function(item){
 
 require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser",
 	"dijit/registry", "dijit/Tooltip", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
-	"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojox/treemap/TreeMap",
-	"dijit/form/RadioButton", "dojox/treemap/Keyboard",
-	"dojox/treemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
-	"dojo/io/script", "dojo/when"],
-	function(ready, dom, Color, declare, parser, registry, Tooltip,
-			domStyle, domAttr, domConstruct, 
+	"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dtreemap/TreeMap",
+	"dijit/form/RadioButton", "dtreemap/Keyboard",
+	"dtreemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
+	"dojo/io/script", "dojo/when", "dojo/_base/array"],
+	function(ready, dom, Color, declare, parser, registry, Tooltip, 
+			domStyle, domAttr, domConstruct,
 			BorderContainer, ContentPane, TreeMap, RadioButton, Keyboard, DrillDownUp,
 			Memory, Observable, script, when){
 
 	//var store = new DataStore({ store: new CsvStore({url: "http://trac.dojotoolkit.org/report/132?asc=1&format=csv"}) });
 	//var store = new DataStore({ store: new CsvStore({url: "report_132.csv"}) });
 
-	var query = 'select * from csv where url="http://trac.dojotoolkit.org/report/132?asc=1&format=csv"';
+	var query = 'select * from csv where url="http://trac.dojotoolkit.org/report/179?asc=1&format=csv"';
 	var request = script.get({
 		url: "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json",
 		jsonp: "callback"
