@@ -32,11 +32,12 @@
 					var treeMap = new TreeMap({store: dataStore,
 								areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
 								colorModel: colorModel }, dom.byId("treeMap"));
-					treeMap.on("change", function(e){
+					treeMap.on("selection-change", function(e){
 						if(e.newValue){
-							dom.byId("output").innerHTML = e.newValue.label;
+							dom.byId("output").innerHTML = treeMap.getLabelForItem(e.newValue);
 						}
 					});
+					treeMap.startup();
 				});
 			}
 		);

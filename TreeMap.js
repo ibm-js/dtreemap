@@ -1,11 +1,11 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
+		"./_utils", "dijit/_WidgetBase", "dijit/mixins/_Invalidating", "dijit/mixins/Selection", "dijit/mixins/Map",
 		"dojo/sniff", "dojo/uacss"],
-	function(lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, Selection, has){
+	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
+		utils, _WidgetBase, _Invalidating, Selection, Map, has){
 
-	return declare([_WidgetBase, _Invalidating, Selection], {
+	return declare([_WidgetBase, _Invalidating, Selection, Map], {
 		// summary:
 		//		A treemap widget.
 		
@@ -41,17 +41,32 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//		The attribute of the store item that contains the tooltip text of a treemap cell.	
 		//		Default is "". 
 		tooltipAttr: "",
+
+		// tooltipFunc: Function
+		//		A function that returns the tooltip text of a treemap cell from a store item. If specified takes
+		//		precedence over tooltipAttr.
+		tooltipFunc: null,
 	
 		// areaAttr: String
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
 		//		Default is "". 
 		areaAttr: "",
 		_areaChanged: false,
+
+		// areaFunc: Function
+		//		A function that returns the value use to compute the area of cell from a store item. If specified takes
+		//		precedence over areaAttr.
+		areaFunc: null,
 	
 		// labelAttr: String
 		//		The attribute of the store item that contains the label of a treemap cell.	
 		//		Default is "label". 
 		labelAttr: "label",
+
+		// labelFunc: Function
+		//		A function that returns the label of a treemap cell from a store item. If specified takes
+		//		precedence over labelAttr.
+		labelFunc: null,
 		
 		// labelThreshold: Number
 		//		The starting depth level at which the labels are not displayed anymore on cells.  
@@ -81,18 +96,33 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//		Default is null.
 		groupFuncs: null,
 
-		_groupFuncs: null,
+        _groupFuncs: null,
 		_groupingChanged: false,
+
+		mapAtInit: false,
+
+		mappedKeys: ["tooltip", "area", "label", "color"],
 	
 		constructor: function(){
 			this.itemToRenderer = {};
-			this.invalidatingProperties = [ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
+			this.addInvalidatingProperties([ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem" ];
+				"colorAttr", "colorFunc", "rootItem" ]);
 		},
 		
 		getIdentity: function(item){
 			return item.__treeID?item.__treeID:this.store.getIdentity(item);
+		},
+
+		itemToRenderItem: function(item, store){
+			var renderItem = this.inherited(arguments);
+			// copy all props
+			for(var key in item){
+				if(this.mappedKeys.indexOf(key) == -1){
+					renderItem[key] = item[key];
+				}
+			}
+			return renderItem;
 		},
 	
 		resize: function(box){
@@ -117,6 +147,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 	
 		refreshRendering: function(){
+			this.inherited(arguments);
+
 			var forceCreate = false;
 	
 			if(this._dataChanged){
@@ -139,9 +171,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	
 			if(this._coloringChanged){
 				this._coloringChanged = false;			
-				if(this.colorModel != null && this._data != null && this.colorModel.initialize){
-					this.colorModel.initialize(this._data, lang.hitch(this, function(item){
-						return this.colorFunc(item, this.store);
+				if(this.colorModel != null && this.get("items") != null && this.colorModel.initialize){
+					this.colorModel.initialize(this.get("items"), lang.hitch(this, function(item){
+						return this._colorFunc(item);
 					}));
 				}
 			}
@@ -151,7 +183,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				this._removeAreaForGroup();
 			}
 	
-			if(this.domNode == undefined || this._items == null){
+			if(this.domNode == undefined || this._groupeditems == null){
 				return;
 			}
 			
@@ -160,7 +192,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			}
 	
 			var rootItem = this.rootItem, rootParentItem;
-	
+
 			if(rootItem != null){
 				var rootItemRenderer = this._getRenderer(rootItem);
 				if(rootItemRenderer){
@@ -177,7 +209,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 					x: box.l, y: box.t, w: box.w, h: box.h
 				}, 0, forceCreate);
 			}else{
-				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._items },
+				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._groupeditems },
 					0, forceCreate, box);
 			}
 		},
@@ -186,53 +218,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			this._rootItemChanged = true;
 			this._set("rootItem", value);
 		},
-	
-		_setStoreAttr: function(value){
-			var r;
-			if(this._observeHandler){
-				this._observeHandler.remove();
-				this._observeHandler = null;
-			}
-			if(value != null){
-				var results = value.query(this.query, this.queryOptions);
-				if(results.observe){
-					// user asked us to observe the store
-					this._observeHandler = results.observe(lang.hitch(this, this._updateItem), true);
-				}				
-				r = when(results, lang.hitch(this, this._initItems));
-			}else{
-				r = this._initItems([]);
-			}
-			this._set("store", value);
-			return r;
-		},
-	
-		_initItems: function(items){
+
+		_setItemsAttr: function(value){
+			this._set("items", value);
 			this._dataChanged = true;
-			this._data = items;
 			this.invalidateRendering();
-			return items;
 		},
 
-		_updateItem: function(item, previousIndex, newIndex){
-			if(previousIndex!=-1){
-				if(newIndex!=previousIndex){
-					// this is a remove or a move
-					this._data.splice(previousIndex, 1);
-				}else{
-					// this is a put, previous and new index identical
-					// we don't know what has change exactly with store API
-					this._data[newIndex] = item;
-				}
-			}else if(newIndex!=-1){
-				// this is a add 
-				this._data.splice(newIndex, 0, item);
-			}
-			// as we have no details let's refresh everything...
-			this._dataChanged = true;			
-			this.invalidateRendering();
-		},
-	
 		_setGroupAttrsAttr: function(value){
 			this._groupingChanged = true;
 			if(this.groupFuncs == null){
@@ -265,33 +257,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			this._areaChanged = true;
 			this._set("areaAttr", value);
 		},
-	
-		// areaFunc: Function
-		//		A function that returns the value use to compute the area of cell from a store item.
-		//		Default implementation is using areaAttr.	
-		areaFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
-			return (this.areaAttr && this.areaAttr.length > 0)?parseFloat(item[this.areaAttr]):1;
-		},
-		
+
 		_setAreaFuncAttr: function(value){
 			this._areaChanged = true;
 			this._set("areaFunc", value);
-		},
-
-		// labelFunc: Function
-		//		A function that returns the label of cell from a store item.	
-		//		Default implementation is using labelAttr.
-		labelFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
-			var label = (this.labelAttr && this.labelAttr.length > 0)?item[this.labelAttr]:null;
-			return label?label.toString():null;
-		},
-	
-		// tooltipFunc: Function
-		//		A function that returns the tooltip of cell from a store item.	
-		//		Default implementation is using tooltipAttr.
-		tooltipFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
-			var tooltip = (this.tooltipAttr && this.tooltipAttr.length > 0)?item[this.tooltipAttr]:null;
-			return tooltip?tooltip.toString():null;
 		},
 
 		_setColorModelAttr: function(value){
@@ -309,9 +278,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//		ColorModel to compute the cell color. If a color must be returned it must be in form accepted by the
 		//		dojo/_base/Color constructor. If a value must be returned it must be a Number.
 		//		Default implementation is using colorAttr.
-		colorFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
-			var color = (this.colorAttr && this.colorAttr.length > 0)?item[this.colorAttr]:0;
-			if(color == null){
+		_colorFunc: function(/*Object*/ item){
+			var color = item.color;
+			if(!color){
 				color = 0;
 			}
 			return parseFloat(color);
@@ -377,13 +346,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 		
 		_updateTreeMapHierarchy: function(){
-			if(this._data == null){
+			var items = this.get("items");
+			if(items == null){
 				return;
 			}
 			if(this._groupFuncs != null && this._groupFuncs.length > 0){
-				this._items = utils.group(this._data, this._groupFuncs, lang.hitch(this, this._getAreaForItem)).children;
+				this._groupeditems = utils.group(items, this._groupFuncs, lang.hitch(this, this._getAreaForItem)).children;
 			}else{
-				this._items = this._data;
+				this._groupeditems = items;
 			}
 		},
 	
@@ -398,7 +368,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 					return;
 				}
 			}else{
-				children = this._items;
+				children = this._groupeditems;
 			}
 			if(children){
 				for(var i = 0; i < children.length; ++i){
@@ -408,7 +378,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 	
 		_getAreaForItem: function(item){
-			var area = this.areaFunc(item, this.store);
+			var area = parseFloat(item.area);
 			return isNaN(area) ? 0 : area;
 		},
 
@@ -429,7 +399,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			}
 			return value;
 		},
-
+	
 		getColorForItem: function(item){
 			// summary:
 			//		Returns the color for a given item. This either use the colorModel if not null
@@ -438,7 +408,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			//		The data item.
 			// tags:
 			//		protected	
-			var value = this.colorFunc(item, this.store);
+			var value = this._colorFunc(item);
 			if(this.colorModel != null){
 				return this.colorModel.getColor(value);
 			}else{
@@ -452,8 +422,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			// item: Object
 			//		The data item.
 			// tags:
-			//		protected	
-			return item.__treeName?item.__treeName:this.labelFunc(item, this.store);
+			//		protected
+			return item.__treeName?item.__treeName:item.label.toString();
 		},
 	
 		_buildChildrenRenderers: function(domNode, item, level, forceCreate, delta, anim){
@@ -640,9 +610,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				domClass.add(renderer, "dtreemap-leaf_" + level);
 			}		
 			this.styleRenderer(renderer, item, level, "leaf");
-			var tooltip = this.tooltipFunc(item, this.store);
-			if(tooltip){
-				renderer.title = tooltip;
+			if(item.tooltip){
+				renderer.title = item.tooltip;
 			}
 			return renderer;
 		},
