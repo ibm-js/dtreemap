@@ -11,7 +11,7 @@
 		@import "../../dojo/resources/dojo.css";
 		@import "../themes/TreeMap.css";
 		@import "../themes/DrillDownUp.css";
-		@import "../../dijit/themes/claro/claro.css";
+		@import "../../dui/dijit/themes/claro/claro.css";
 	</style>
 
 	<script type="text/javascript">
@@ -29,14 +29,14 @@
 		var groupByChanged, sizeByChanged, colorByChanged,
 				thresholdChanged, neutralChanged, MyTreeMap, refreshData;
 
-		require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser",
-			"dijit/registry",
-			"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dtreemap/TreeMap",
+		require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser", "dojo/when",
+			"dui/registry",
+			"dui/layout/BorderContainer", "dui/layout/ContentPane", "dtreemap/TreeMap",
 			"dojox/color/MeanColorModel", "dojox/data/CsvStore", "dojo/store/DataStore",
 			"dojo/store/Observable",
-			"dijit/form/RadioButton", "dijit/form/ComboBox", "dijit/form/Button", "dtreemap/Keyboard",
+			"dui/form/RadioButton", "dui/form/ComboBox", "dui/form/Button", "dtreemap/Keyboard",
 			"dtreemap/DrillDownUp"],
-			function(ready, dom, Color, declare, parser, registry, BorderContainer, ContentPane, TreeMap,
+			function(ready, dom, Color, declare, parser, when, registry, BorderContainer, ContentPane, TreeMap,
 					 MeanColorModel, CsvStore, DataStore, Observable, RadioButton, ComboBox, Button, Keyboard,
 					 DrillDownUp) {
 
@@ -45,14 +45,15 @@
 
 				ready(function(){
 					MyTreeMap = declare([TreeMap, Keyboard, DrillDownUp]);
-					parser.parse();
-					var treeMap = registry.byId("treeMap");
-					treeMap.set("colorModel", colorModel);
-					treeMap.set("tooltipFunc",
+					when(parser.parse(), function(){
+						var treeMap = registry.byId("treeMap");
+						treeMap.set("colorModel", colorModel);
+						treeMap.set("tooltipFunc",
 							function(data, store) { return "Total Trade:" + data["Trade"]; });
-					treeMap.set("store", Observable(store));
-					treeMap.on("change", function(){
-						console.log("toto");
+						treeMap.set("store", Observable(store));
+						treeMap.on("change", function(){
+							console.log("change");
+						});
 					});
 				});
 
@@ -123,64 +124,64 @@
 
 <body class="claro">
 
-<div dojoType="dijit.layout.BorderContainer" design="sidebar" gutters="true" liveSplitters="true" id="borderContainer">
-	<div dojoType="dijit.layout.ContentPane" splitter="true" region="center">
-		<div id="treeMap" dojoType="MyTreeMap" labelAttr="Name" selectionMode="multiple"
+<div data-dojo-type="dui/layout/BorderContainer" design="sidebar" gutters="true" liveSplitters="true" id="borderContainer">
+	<div data-dojo-type="dui/layout/ContentPane" splitter="true" region="center">
+		<div id="treeMap" data-dojo-type="MyTreeMap" labelAttr="Name" selectionMode="multiple"
 			 style="width: 100%; height: 100%;">
 		</div>
 	</div>
-	<div dojoType="dijit.layout.ContentPane" splitter="true" region="trailing"  style="width: 200px;">
+	<div data-dojo-type="dui/layout/ContentPane" splitter="true" region="trailing"  style="width: 200px;">
 		<label>Group by:</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="groupBy" id="g1" checked value="none" onChange="groupByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="groupBy" id="g1" checked value="none" onChange="groupByChanged" />
 		<label for="g1">None</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="groupBy" id="g2" value="continent" onChange="groupByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="groupBy" id="g2" value="continent" onChange="groupByChanged" />
 		<label for="g2">Mode</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="groupBy" id="g3" value="government" onChange="groupByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="groupBy" id="g3" value="government" onChange="groupByChanged" />
 		<label for="g3">State</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="groupBy" id="g4" value="government" onChange="groupByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="groupBy" id="g4" value="government" onChange="groupByChanged" />
 		<label for="g4">Mode then State</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Size by:</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="sizeBy" id="s1" checked value="none" onChange="sizeByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="sizeBy" id="s1" checked value="none" onChange="sizeByChanged" />
 		<label for="s1">None</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="sizeBy" id="s2" onChange="sizeByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="sizeBy" id="s2" onChange="sizeByChanged" />
 		<label for="s2">Trade</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="sizeBy" id="s3" onChange="sizeByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="sizeBy" id="s3" onChange="sizeByChanged" />
 		<label for="s3">Exports</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="sizeBy" id="s4" onChange="sizeByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="sizeBy" id="s4" onChange="sizeByChanged" />
 		<label for="s3">Imports</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Color by:</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="colorBy" id="c1" checked value="none" onChange="colorByChanged"/>
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="colorBy" id="c1" checked value="none" onChange="colorByChanged"/>
 		<label for="c1">None</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="colorBy" id="c2" onChange="colorByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="colorBy" id="c2" onChange="colorByChanged" />
 		<label for="c2">Trade</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="colorBy" id="c3" onChange="colorByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="colorBy" id="c3" onChange="colorByChanged" />
 		<label for="c3">Exports</label>
 		<br/>
-		<input type="radio" dojoType="dijit.form.RadioButton" name="colorBy" id="c4" onChange="colorByChanged" />
+		<input type="radio" data-dojo-type="dui/form/RadioButton" name="colorBy" id="c4" onChange="colorByChanged" />
 		<label for="c4">Imports</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Label threshold</label>
 		<br/>
-		<select id="labelThreshold" dojoType="dijit.form.ComboBox" onChange="thresholdChanged">
+		<select id="labelThreshold" data-dojo-type="dui/form/ComboBox" onChange="thresholdChanged">
 			<option selected>NaN</option>
 			<option>1</option>
 			<option>2</option>
@@ -190,7 +191,7 @@
 		<br/>
 		<label>Mean/Average neutral value</label>
 		<br/>
-		<select id="neutral" dojoType="dijit.form.CheckBox" onChange="neutralChanged">
+		<select id="neutral" data-dojo-type="dui/form/CheckBox" onChange="neutralChanged">
 		</select>
 	</div>
 </div>

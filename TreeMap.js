@@ -1,11 +1,11 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-		"./_utils", "dijit/_WidgetBase", "dijit/mixins/_Invalidating", "dijit/mixins/Selection", "dijit/mixins/Map",
+		"./_utils", "dui/_WidgetBase", "dui/mixins/_Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
 		"dojo/sniff", "dojo/uacss"],
 	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, Selection, Map, has){
+		utils, _WidgetBase, _Invalidating, Selection, StoreMap, has){
 
-	return declare([_WidgetBase, _Invalidating, Selection, Map], {
+	return declare([_WidgetBase, _Invalidating, Selection, StoreMap], {
 		// summary:
 		//		A treemap widget.
 		
@@ -102,7 +102,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		mapAtInit: false,
 
 		mappedKeys: ["tooltip", "area", "label", "color"],
-	
+
+		copyAllItemProps: true,
+
 		constructor: function(){
 			this.itemToRenderer = {};
 			this.addInvalidatingProperties([ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
@@ -114,17 +116,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			return item.__treeID?item.__treeID:this.store.getIdentity(item);
 		},
 
-		itemToRenderItem: function(item, store){
-			var renderItem = this.inherited(arguments);
-			// copy all props
-			for(var key in item){
-				if(this.mappedKeys.indexOf(key) == -1){
-					renderItem[key] = item[key];
-				}
-			}
-			return renderItem;
-		},
-	
 		resize: function(box){
 			if(box){
 				domGeom.setMarginBox(this.domNode, box);

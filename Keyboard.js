@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
+define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
 	"./_utils", "dui/_FocusMixin"],
-	function(lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
+	function(arr, lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
 
 	return declare(_FocusMixin, {
 		// summary:
