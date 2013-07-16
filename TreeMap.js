@@ -705,7 +705,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				if(!renderer){
 					continue;
 				}
-				var selected = this.isItemSelected(item);
+				var selected = this.isSelected(item);
 				var ie = has("ie");
 				var div;
 				if(selected){
