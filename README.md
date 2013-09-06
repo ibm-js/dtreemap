@@ -1,6 +1,6 @@
 # dtreemap
 
-This project provides a TreeMap widget for Dojo 1.8 and higher.
+This project provides globalization utilities for JavaScript/AMD/Dojo Applications
 
 ## Status
 
@@ -17,26 +17,20 @@ Migration steps from dojox/treemap to dtreemap:
 
 ## Licensing
 
-This project is distributed by the Dojo Foundation and licensed under the Dojo dual license [BSD/AFLv2 license](http://dojotoolkit.org/license).
+This project is distributed by the Dojo Foundation and licensed under the ["New" BSD License](https://github.com/dojo/dojo/blob/master/LICENSE#L13-L41).
 All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/about/claForm).
 
 ## Dependencies
 
 This project requires the following other projects to run:
  * dojo
- * dijit
+ * dui
 
 ## Installation
 
-<!---
-* [CPM](https://github.com/kriszyp/cpm) installation with the following command:
-
-    ``cpm install dtreemap``
--->
-
 * Manual installation of by dropping dtreemap as a sibling of the top level Dojo modules:
  * dojo
- * dijit
+ * dui
  * dtreemap
 
  To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
