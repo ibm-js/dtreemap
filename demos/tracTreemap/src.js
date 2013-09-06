@@ -51,9 +51,9 @@ var sizeByCcFunc = function(item){
 }
 
 require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser",
-	"dijit/registry", "dijit/Tooltip", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
-	"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dtreemap/TreeMap",
-	"dijit/form/RadioButton", "dtreemap/Keyboard",
+	"dui/registry", "dui/dijit/Tooltip", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
+	"dui/layout/BorderContainer", "dui/layout/ContentPane", "dtreemap/TreeMap",
+	"dui/form/RadioButton", "dtreemap/Keyboard",
 	"dtreemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
 	"dojo/io/script", "dojo/when", "dojo/_base/array"],
 	function(ready, dom, Color, declare, parser, registry, Tooltip, 

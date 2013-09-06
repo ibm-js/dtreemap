@@ -79,7 +79,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//		The attribute of the store item that contains the data used to compute the color of a treemap cell.
 		//		Default is "". 
 		colorAttr: "",
-		// colorModel: dojox/color/api/ColorModel
+		// colorModel: dcolor/api/ColorModel
 		//		The optional color model that converts data to color.	
 		//		Default is null.
 		colorModel: null,
