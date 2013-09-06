@@ -107,9 +107,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 
 		constructor: function(){
 			this.itemToRenderer = {};
-			this.addInvalidatingProperties([ "colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
+			this.addInvalidatingProperties("colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem" ]);
+				"colorAttr", "colorFunc", "rootItem");
 		},
 		
 		getIdentity: function(item){
