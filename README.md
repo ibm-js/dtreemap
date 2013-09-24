@@ -1,6 +1,6 @@
 # dtreemap
 
-This project provides globalization utilities for JavaScript/AMD/Dojo Applications
+This project provides a dui-based TreeMap widget.
 
 ## Status
 
