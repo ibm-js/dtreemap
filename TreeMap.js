@@ -1,8 +1,8 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
 		"dojo/sniff", "dojo/uacss"],
-	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
+	function(lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
 	return declare([_WidgetBase, _Invalidating, Selection], {
@@ -237,7 +237,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._groupingChanged = true;
 			if(this.groupFuncs == null){
 				if(value !=null){
-					this._groupFuncs = arr.map(value, function(attr){
+					this._groupFuncs = value.map(function(attr){
 						return function(item){
 							return item[attr];
 						};
@@ -253,7 +253,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this._groupingChanged = true;
 			this._set("groupFuncs", this._groupFuncs = value);
 			if(value == null && this.groupAttrs != null){
-				this._groupFuncs = arr.map(this.groupAttrs, function(attr){
+				this._groupFuncs = this.groupAttrs.map(function(attr){
 					return function(item){
 						return item[attr];
 					};
@@ -466,7 +466,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			var rectangles = solution.rectangles;
 			
 			if(delta){
-				rectangles = arr.map(rectangles, function(item){
+				rectangles = rectangles.map(function(item){
 					item.x += delta.l;
 					item.y += delta.t;
 					return item;

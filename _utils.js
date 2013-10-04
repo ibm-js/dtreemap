@@ -1,4 +1,4 @@
-define(["dojo/_base/array"], function(arr){
+define(function(){
 	var utils = {
 		group: function(/*Array*/items, /*Array*/groupingFunctions,  /*Function*/measureFunction){
 			var response = {
@@ -12,13 +12,13 @@ define(["dojo/_base/array"], function(arr){
 				return obj;
 			};
 			// we go over each entry in the array
-			arr.forEach(items, function(entry){
+			items.forEach(function(entry){
 				var r = response;
 				// for this entry, for each rowField we
 				// look at the actual value for this rowField
 				// and create a holding object for this
 				// value in response if it does not exist
-				arr.forEach(groupingFunctions, function(groupingFunction, j){
+				groupingFunctions.forEach(function(groupingFunction, j){
 					// actual value for the rowField
 					var data = groupingFunction(entry);
 					// create child if undefined
@@ -71,7 +71,7 @@ define(["dojo/_base/array"], function(arr){
 						items: items, rects: [], total: 0
 					};
 				}
-				arr.forEach(elements, function(element){
+				elements.forEach(function(element){
 					element.size = element.sizeTmp = 100;
 				});
 				dataTotal = elements.length * 100;
@@ -97,7 +97,7 @@ define(["dojo/_base/array"], function(arr){
 			result.elements = elements;
 			result.size = realSize;
 	
-			rects = arr.map(elements, function(element){
+			rects = elements.map(function(element){
 				return {
 					x: rtl?width - element.x - element.width:element.x, y: element.y, w: element.width, h: element.height
 				};
@@ -109,7 +109,7 @@ define(["dojo/_base/array"], function(arr){
 		},
 		initElements: function(items, areaFunc){
 			var total = 0;
-			var elements = arr.map(items, function(item, index){
+			var elements = items.map(function(item, index){
 				var size = areaFunc != null ? areaFunc(item) : 0;
 				if(size < 0){
 					throw new Error("item size dimension must be positive");
@@ -126,7 +126,7 @@ define(["dojo/_base/array"], function(arr){
 		_compute: function(width, height, elements, total){
 			var valueScale = ((width * height) / total) / 100;
 	
-			arr.forEach(elements, function(element){
+			elements.forEach(function(element){
 				element.sizeTmp *= valueScale;
 			});
 	

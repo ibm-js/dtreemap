@@ -55,11 +55,11 @@ require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "do
 	"dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojox/treemap/TreeMap",
 	"dijit/form/RadioButton", "dojox/treemap/Keyboard",
 	"dojox/treemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
-	"dojo/io/script", "dojo/when", "dojo/_base/array"],
-	function(ready, dom, Color, declare, parser, registry, Tooltip, 
+	"dojo/io/script", "dojo/when"],
+	function(ready, dom, Color, declare, parser, registry, Tooltip,
 			domStyle, domAttr, domConstruct, 
 			BorderContainer, ContentPane, TreeMap, RadioButton, Keyboard, DrillDownUp,
-			Memory, Observable, script, when, array){
+			Memory, Observable, script, when){
 
 	//var store = new DataStore({ store: new CsvStore({url: "http://trac.dojotoolkit.org/report/132?asc=1&format=csv"}) });
 	//var store = new DataStore({ store: new CsvStore({url: "report_132.csv"}) });
@@ -75,7 +75,7 @@ require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "do
 		var results = response.query.results.row;
 		var header = results[0];
 		var rows = results.slice(1);
-		var data = array.map(rows, function (row) {
+		var data = rows.map(function (row) {
 			var ticket = {};
 			for(var prop in row){
 				ticket[header[prop]] = row[prop];

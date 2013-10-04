@@ -1,6 +1,6 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
-	"./_utils", "dijit/_FocusMixin"],
-	function(arr, lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
+define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
+	"./_utils", "dui/_FocusMixin"],
+	function(lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
 
 	return declare(_FocusMixin, {
 		// summary:
@@ -48,7 +48,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 				if(children){
 					childrenI = utils.initElements(children, lang.hitch(this,
 						this._computeAreaForItem)).elements;
-					selectedI = childrenI[arr.indexOf(children, selected)];
+					selectedI = childrenI[children.indexOf(selected)];
 					childrenI.sort(function(a, b){
 						return b.size - a.size;
 					});
@@ -59,10 +59,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 			var newSelected;
 			switch(e.keyCode){
 				case keys.LEFT_ARROW:
-				newSelected = children[childrenI[Math.max(0, arr.indexOf(childrenI, selectedI)-1)].index];				
+				newSelected = children[childrenI[Math.max(0, childrenI.index(selectedI)-1)].index];
 				break;
 				case keys.RIGHT_ARROW:
-				newSelected = children[childrenI[Math.min(childrenI.length-1, arr.indexOf(childrenI, selectedI)+1)].index];								
+				newSelected = children[childrenI[Math.min(childrenI.length-1, childrenI.indexOf(selectedI)+1)].index];
 				break;
 				case keys.DOWN_ARROW:
 				newSelected = children[childrenI[0].index];
