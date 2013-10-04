@@ -55,7 +55,7 @@ require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "do
 	"dui/layout/BorderContainer", "dui/layout/ContentPane", "dtreemap/TreeMap",
 	"dui/form/RadioButton", "dtreemap/Keyboard",
 	"dtreemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
-	"dojo/io/script", "dojo/when", "dojo/_base/array"],
+	"dojo/io/script", "dojo/when"],
 	function(ready, dom, Color, declare, parser, registry, Tooltip, 
 			domStyle, domAttr, domConstruct,
 			BorderContainer, ContentPane, TreeMap, RadioButton, Keyboard, DrillDownUp,
