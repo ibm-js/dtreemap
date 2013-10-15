@@ -1,7 +1,7 @@
-define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
-	function(declare, domGeom, domConstruct, domStyle) {
+define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
+	function(dcl, domGeom, domConstruct, domStyle) {
 
-	return declare(null, {
+	return dcl(null, {
 		// summary:
 		//		Specializes TreeMap to display scaled leaf labels instead of constant size labels.
 
@@ -31,26 +31,30 @@ define(["dojo/_base/declare", "dojo/dom-geometry", "dojo/dom-construct", "dojo/d
 			}
 		},
 
-		createRenderer: function(item, level, kind){
-			var renderer = this.inherited(arguments);
-			if(kind == "leaf"){
-				var p = domConstruct.create("div");
-				domStyle.set(p, {
-					"position": "absolute",
-					"width": "auto"
-				});
-				domConstruct.place(p, renderer);
+		createRenderer: dcl.superCall(function(sup){
+			return function(item, level, kind){
+				var render = sup.call(this, item, level, kind);
+				if(kind == "leaf"){
+					var p = domConstruct.create("div");
+					domStyle.set(p, {
+						"position": "absolute",
+						"width": "auto"
+					});
+					domConstruct.place(p, renderer);
+				}
+				return renderer;
 			}
-			return renderer;
-		},
+		}),
 		
-		styleRenderer: function(renderer, item, level, kind){
-			if (kind != "leaf"){
-				this.inherited(arguments);
-			}else{
-				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
-				renderer.firstChild.innerHTML = this.getLabelForItem(item);
+		styleRenderer: dcl.superCall(function(sup){
+			return function(renderer, item, level, kind){
+				if (kind != "leaf"){
+					sup.call(this, renderer, item, level, kind);
+				}else{
+					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+					renderer.firstChild.innerHTML = this.getLabelForItem(item);
+				}
 			}
-		}
+		})
 	});
 });

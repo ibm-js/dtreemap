@@ -1,11 +1,11 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
+define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dui/_WidgetBase", "dui/mixins/_Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
-		"dojo/sniff", "dojo/uacss"],
-	function(lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, Selection, StoreMap, has){
+		"dojo/uacss"],
+	function(lang, dcl, register, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
+		utils, _WidgetBase, _Invalidating, Selection, StoreMap){
 
-	return declare([_WidgetBase, _Invalidating, Selection, StoreMap], {
+	return register("d-treemap", [HTMLElement, _WidgetBase, _Invalidating, Selection, StoreMap], {
 		// summary:
 		//		A treemap widget.
 		
@@ -105,7 +105,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 
 		copyAllItemProps: true,
 
-		constructor: function(){
+		preCreate: function(){
 			this.itemToRenderer = {};
 			this.addInvalidatingProperties("colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
@@ -118,92 +118,88 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 
 		resize: function(box){
 			if(box){
-				domGeom.setMarginBox(this.domNode, box);
+				domGeom.setMarginBox(this, box);
 				this.invalidateRendering();						
 			}
 		},
 		
 		postCreate: function(){
-			this.inherited(arguments);
-			this.own(on(this.domNode, "mouseover", lang.hitch(this, this._onMouseOver)));
-			this.own(on(this.domNode, "mouseout", lang.hitch(this, this._onMouseOut)));
-			this.own(on(this.domNode, touch.release, lang.hitch(this, this._onMouseUp)));
-			this.domNode.setAttribute("role", "presentation");
-			this.domNode.setAttribute("aria-label", "treemap");
+			this.own(on(this, "mouseover", lang.hitch(this, this._onMouseOver)));
+			this.own(on(this, "mouseout", lang.hitch(this, this._onMouseOut)));
+			this.own(on(this, touch.release, lang.hitch(this, this._onMouseUp)));
+			this.setAttribute("role", "presentation");
+			this.setAttribute("aria-label", "treemap");
 		},
 		
-		buildRendering: function(){
-			this.inherited(arguments);
-			this.refreshRendering();
-		},
-	
-		refreshRendering: function(){
-			this.inherited(arguments);
+		// we need to call Store.refreshRendering
+		refreshRendering: dcl.superCall(function(sup){
+			return function(){
+				sup.call(this);
 
-			var forceCreate = false;
-	
-			if(this._dataChanged){
-				this._dataChanged = false;
-				this._groupingChanged = true;
-				this._coloringChanged = true;
-			}
-	
-			if(this._groupingChanged){
-				this._groupingChanged = false;
-				this._set("rootItem", null);
-				this._updateTreeMapHierarchy();
-				forceCreate = true;
-			}
-	
-			if(this._rootItemChanged){
-				this._rootItemChanged = false;
-				forceCreate = true;
-			}
-	
-			if(this._coloringChanged){
-				this._coloringChanged = false;			
-				if(this.colorModel != null && this.get("items") != null && this.colorModel.initialize){
-					this.colorModel.initialize(this.get("items"), lang.hitch(this, function(item){
-						return this._colorFunc(item);
-					}));
+				var forceCreate = false;
+
+				if(this._dataChanged){
+					this._dataChanged = false;
+					this._groupingChanged = true;
+					this._coloringChanged = true;
 				}
-			}
-	
-			if(this._areaChanged){
-				this._areaChanged = false;
-				this._removeAreaForGroup();
-			}
-	
-			if(this.domNode == undefined || this._groupeditems == null){
-				return;
-			}
-			
-			if(forceCreate){
-				domConstruct.empty(this.domNode);
-			}
-	
-			var rootItem = this.rootItem, rootParentItem;
 
-			if(rootItem != null){
-				var rootItemRenderer = this._getRenderer(rootItem);
-				if(rootItemRenderer){
-					if(this._isLeaf(rootItem)){
-						rootItem = rootItemRenderer.parentItem;
+				if(this._groupingChanged){
+					this._groupingChanged = false;
+					this._updateTreeMapHierarchy();
+					forceCreate = true;
+				}
+
+				if(this._rootItemChanged){
+					this._rootItemChanged = false;
+					forceCreate = true;
+				}
+
+				if(this._coloringChanged){
+					this._coloringChanged = false;
+					if(this.colorModel != null && this.items != null && this.colorModel.initialize){
+						this.colorModel.initialize(this.items, lang.hitch(this, function(item){
+							return this._colorFunc(item);
+						}));
 					}
-					rootParentItem = rootItemRenderer.parentItem;
+				}
+
+				if(this._areaChanged){
+					this._areaChanged = false;
+					this._removeAreaForGroup();
+				}
+
+				if(this._groupeditems == null){
+					return;
+				}
+
+				if(forceCreate){
+					domConstruct.empty(this);
+				}
+
+				var rootItem = this.rootItem, rootParentItem;
+
+				if(rootItem != null){
+					var rootItemRenderer = this._getRenderer(rootItem);
+					if(rootItemRenderer){
+						if(this._isLeaf(rootItem)){
+							rootItem = rootItemRenderer.parentItem;
+						}
+						rootParentItem = rootItemRenderer.parentItem;
+					}
+				}
+
+				var box = domGeom.getMarginBox(this);
+				if(rootItem != null && !this._isRoot(rootItem)){
+					this._buildRenderer(this, rootParentItem, rootItem, {
+						x: box.l, y: box.t, w: box.w, h: box.h
+					}, 0, forceCreate);
+				}else{
+					this._buildChildrenRenderers(this, rootItem?rootItem:{ __treeRoot: true, children : this._groupeditems },
+						0, forceCreate, box);
 				}
 			}
-
-			var box = domGeom.getMarginBox(this.domNode);
-			if(rootItem != null){
-				this._buildRenderer(this.domNode, rootParentItem, rootItem, {
-					x: box.l, y: box.t, w: box.w, h: box.h
-				}, 0, forceCreate);
-			}else{
-				this._buildChildrenRenderers(this.domNode, rootItem?rootItem:{ __treeRoot: true, children : this._groupeditems },
-					0, forceCreate, box);
-			}
-		},
+		}),
 	
 		_setRootItemAttr: function(value){
 			this._rootItemChanged = true;
@@ -213,11 +209,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		_setItemsAttr: function(value){
 			this._set("items", value);
 			this._dataChanged = true;
+			this._set("rootItem", null);
 			this.invalidateRendering();
 		},
 
 		_setGroupAttrsAttr: function(value){
 			this._groupingChanged = true;
+			this._set("rootItem", null);
 			if(this.groupFuncs == null){
 				if(value !=null){
 					this._groupFuncs = value.map(function(attr){
@@ -234,6 +232,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 
         _setGroupFuncsAttr: function(value){
 			this._groupingChanged = true;
+			this._set("rootItem", null);
 			this._set("groupFuncs", this._groupFuncs = value);
 			if(value == null && this.groupAttrs != null){
 				this._groupFuncs = this.groupAttrs.map(function(attr){
@@ -337,7 +336,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 		
 		_updateTreeMapHierarchy: function(){
-			var items = this.get("items");
+			var items = this.items;
 			if(items == null){
 				return;
 			}
@@ -630,7 +629,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		
 		_getRendererFromTarget: function(target){
 			var renderer = target;
-			while(renderer != this.domNode && !renderer.item){
+			while(renderer != this && !renderer.item){
 				renderer = renderer.parentNode;
 			}			
 			return renderer;
@@ -706,48 +705,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 					continue;
 				}
 				var selected = this.isSelected(item);
-				var ie = has("ie");
 				var div;
 				if(selected){
 					domClass.add(renderer, "dtreemap-selected");
-					if(ie && (has("quirks") || ie < 9)){
-						// let's do all of this only if not already done
-						div = renderer.previousSibling;
-						var rStyle = domStyle.get(renderer);
-						if(!div || !domClass.contains(div, "dtreemap-IEHack")){
-							div = this.createRenderer(item, -10, "group");
-							domClass.add(div, "dtreemap-IEHack");
-							domClass.add(div, "dtreemap-selected");
-							domStyle.set(div, {
-								position: "absolute",
-								overflow: "hidden"
-							});
-							domConstruct.place(div, renderer, "before");
-						}
-						// TODO: might fail if different border widths for different sides
-						var bWidth = 2*parseInt(domStyle.get(div, "border-width"));
-						if(this._isLeaf(item)){
-							bWidth -= 1;
-						}else{
-							bWidth += 1;
-						}
-						// if we just drill down some renders might not be laid out?
-						if(rStyle["left"] != "auto"){
-							domStyle.set(div, {
-								left: (parseInt(rStyle["left"])+1)+"px",
-								top: (parseInt(rStyle["top"])+1)+"px",
-								width: (parseInt(rStyle["width"])-bWidth)+"px",
-								height: (parseInt(rStyle["height"])-bWidth)+"px"
-							});
-						}
-					}
 				}else{
-					if(ie && (has("quirks") || ie < 9)){
-						div = renderer.previousSibling;
-						if(div && domClass.contains(div, "dtreemap-IEHack")){
-							div.parentNode.removeChild(div);
-						}
-					}
 					domClass.remove(renderer, "dtreemap-selected");
 
 				}
@@ -759,7 +720,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				if(selected || this._hoveredItem == item){
 					domStyle.set(renderer, "zIndex", 20);
 				}else{
-					domStyle.set(renderer, "zIndex", (has("ie")<=7)?0:"auto");
+					domStyle.set(renderer, "zIndex", "auto");
 				}
 			}
 		}

@@ -1,8 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
+define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
 	"./_utils", "dui/_FocusMixin"],
-	function(lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
+	function(lang, event, dcl, on, keys, domAttr, utils, _FocusMixin){
 
-	return declare(_FocusMixin, {
+	return dcl(_FocusMixin, {
 		// summary:
 		//		Specializes TreeMap to support keyboard navigation and accessibility.
 		
@@ -15,25 +15,26 @@ define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", 
 		},
 		
 		postCreate: function(){
-			this.inherited(arguments);
-			this.own(on(this.domNode, "keydown", lang.hitch(this, this._onKeyDown)));
-			this.own(on(this.domNode, "mousedown", lang.hitch(this, this._onMouseDown)));
+			this.own(on(this, "keydown", lang.hitch(this, this._onKeyDown)));
+			this.own(on(this, "mousedown", lang.hitch(this, this._onMouseDown)));
 		},
 
-		createRenderer: function(item, level, kind){
-			var renderer = this.inherited(arguments);
-			// on Firefox we need a tabindex on sub divs to let the keyboard event be dispatched
-			// put -1 so that it is not tablable
-			domAttr.set(renderer, "tabindex", "-1");
-			return renderer;
-		},
+		createRenderer: dcl.superCall(function(sup){
+			return function(item, level, kind){
+				var renderer = sup.call(this, item, level, kind);
+				// on Firefox we need a tabindex on sub divs to let the keyboard event be dispatched
+				// put -1 so that it is not tablable
+				domAttr.set(renderer, "tabindex", "-1");
+				return renderer;
+			}
+		}),
 		
 		_onMouseDown: function(e){
-			this.domNode.focus();
+			this.focus();
 		},
 	
 		_onKeyDown: function(e){
-			var selected = this.get("selectedItem");
+			var selected = this.selectedItem;
 			if(!selected){
 				// nothing selected selected we can't navigate
 				return;
@@ -89,7 +90,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", 
 			}
 			if(newSelected){
 				if(!this._isRoot(newSelected)){
-					this.set("selectedItem", newSelected);
+					this.selectedItem = newSelected;
 					event.stop(e);
 				}
 			}

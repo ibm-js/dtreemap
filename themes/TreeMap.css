@@ -1,6 +1,7 @@
 .dtreemap {
 	background-color: #EBEADB;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
+	display: block;
 }
 
 .dtreemap-leaf {
@@ -71,11 +72,4 @@
 
 .dtreemap-group.dtreemap-selected{
 	border:2px dashed red;
-}
-
-.dj_iequircks .dtreemap-IEHack.dtreemap-selected,
-.dj_ie7 .dtreemap-IEHack.dtreemap-selected + div,
-.dj_ie8 .dtreemap-IEHack.dtreemap-selected + div {
-	border:  1px solid red;
-	z-index: 20;
 }

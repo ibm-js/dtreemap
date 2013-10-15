@@ -3,7 +3,6 @@
 
 <head>
 	<style type="text/css">
-		@import "../../dojo/resources/dojo.css";
 		@import "../themes/TreeMap.css";
 	</style>
 
@@ -12,9 +11,9 @@
 
 	<script type="text/javascript">
 
-		require(["dojo/ready", "dojo/dom", "dojo/_base/declare", "dtreemap/TreeMap",
+		require(["dojo/domReady", "dojo/dom", "dui/register", "dtreemap/TreeMap",
 			"dojo/store/Memory", "dcolor/MeanColorModel", "dojo/_base/Color", "dtreemap/ScaledLabel"],
-			function(ready, dom, declare, TreeMap, Memory, MeanColorModel, Color, ScaledLabel) {
+			function(ready, dom, register, TreeMap, Memory, MeanColorModel, Color, ScaledLabel) {
 				ready(function(){
 					var dataStore = new Memory({idProperty: "label", data:
 							[
@@ -29,7 +28,7 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					new declare([TreeMap, ScaledLabel])({store: dataStore,
+					register("c-treemap", [TreeMap, ScaledLabel])({store: dataStore,
 								areaAttr: "sales", colorAttr: "profit", tooltipAttr: "label", groupAttrs: ["region"],
 								colorModel: colorModel }, dom.byId("treeMap"));
 				});
@@ -38,6 +37,6 @@
 	</script>
 </head>
 <body>
-	<div id="treeMap" style="width:640px;height:640px"></div>
+	<c-treemap id="treeMap" style="width:640px;height:640px"></c-treemap>
 </body>
 </html>

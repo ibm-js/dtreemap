@@ -1,13 +1,16 @@
-define(["doh", "dojo/_base/declare", "../TreeMap", "dojo/store/JsonRest", "dojo/when"],
-	function(doh, declare, TreeMap, JsonRest, when){
+define(["doh", "../TreeMap", "dojo/store/JsonRest"],
+	function(doh, TreeMap, JsonRest){
 	doh.register("dojox.treemap.tests.Store", [
 		function test_Error(t){
 			var treeMap = new TreeMap();
-			var d = when(treeMap.set("store", new JsonRest({ target: "/" }), function(){
+			treeMap.on("query-success", function(){
 				t.f(true, "ok fct must not have been called");
-			}, function(){
+			});
+			treeMap.on("query-error", function(){
 				t.t(true, "failure fct must have been called");
-			}));
+			});
+			treeMap.store = new JsonRest({ target: "/" });
+
 			treeMap.startup();
 		}
 	]);

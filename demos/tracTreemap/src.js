@@ -50,14 +50,14 @@ var sizeByCcFunc = function(item){
 	return item.cc?item.cc.split(",").length:1;
 }
 
-require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "dojo/parser",
+require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dcl/dcl", "dojo/parser",
 	"dui/registry", "dui/dijit/Tooltip", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
 	"dui/layout/BorderContainer", "dui/layout/ContentPane", "dtreemap/TreeMap",
 	"dui/form/RadioButton", "dtreemap/Keyboard",
 	"dtreemap/DrillDownUp", "dojo/store/Memory", "dojo/store/Observable",
 	"dojo/io/script", "dojo/when"],
-	function(ready, dom, Color, declare, parser, registry, Tooltip, 
-			domStyle, domAttr, domConstruct,
+	function(ready, dom, Color, dcl, parser, registry, Tooltip,
+			domStyle, domAttr, domConstruct, 
 			BorderContainer, ContentPane, TreeMap, RadioButton, Keyboard, DrillDownUp,
 			Memory, Observable, script, when){
 
@@ -95,7 +95,7 @@ require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dojo/_base/declare", "do
 	});		
 		
 	ready(function(){
-		MyTreeMap = declare([TreeMap, Keyboard, DrillDownUp], {
+		MyTreeMap = dcl([TreeMap, Keyboard, DrillDownUp], {
 			createRenderer: function(item, level, kind){
 				if(kind == "leaf"){
 					var div = domConstruct.create("a");
