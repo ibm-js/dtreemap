@@ -33,7 +33,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 
 		createRenderer: dcl.superCall(function(sup){
 			return function(item, level, kind){
-				var render = sup.call(this, item, level, kind);
+				var renderer = sup.call(this, item, level, kind);
 				if(kind == "leaf"){
 					var p = domConstruct.create("div");
 					domStyle.set(p, {
