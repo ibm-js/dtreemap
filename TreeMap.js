@@ -27,16 +27,12 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		//		The associated array item to renderer list.
 		itemToRenderer: null,
 
-		// Data
-		_dataChanged: false,
-	
 		// rootItem: Object
 		//		The root item of the treemap, that is the first visible item.
 		//		If null the entire treemap hierarchy is shown.	
 		//		Default is null.
 		rootItem: null,
-		_rootItemChanged: false,
-	
+
 		// tooltipAttr: String
 		//		The attribute of the store item that contains the tooltip text of a treemap cell.	
 		//		Default is "". 
@@ -49,9 +45,9 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 	
 		// areaAttr: String
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
-		//		Default is "". 
+		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.
+		//		Default is "".
 		areaAttr: "",
-		_areaChanged: false,
 
 		// areaFunc: Function
 		//		A function that returns the value use to compute the area of cell from a store item. If specified takes
@@ -79,12 +75,17 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		//		The attribute of the store item that contains the data used to compute the color of a treemap cell.
 		//		Default is "". 
 		colorAttr: "",
+
+		// colorFunc: Function
+		//		A function that returns from a store item the data used to compute the color of a treemap cell. If specificied
+		//		takes precedence over colorAttr.
+		colorFunc: null,
+
 		// colorModel: dcolor/api/ColorModel
-		//		The optional color model that converts data to color.	
+		//		The optional color model that converts data to color.
 		//		Default is null.
 		colorModel: null,
-		_coloringChanged: false,
-		
+
 		// groupAttrs: Array
 		//		An array of data attributes used to group data in the treemap.	
 		//		Default is []. 
@@ -96,8 +97,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		//		Default is null.
 		groupFuncs: null,
 
-        _groupFuncs: null,
-		_groupingChanged: false,
+		_groupFuncs: null,
 
 		mapAtInit: false,
 
@@ -109,7 +109,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.itemToRenderer = {};
 			this.addInvalidatingProperties("colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem");
+				"colorAttr", "colorFunc", "rootItem", "items");
 		},
 		
 		getIdentity: function(item){
@@ -138,25 +138,21 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 				var forceCreate = false;
 
-				if(this._dataChanged){
-					this._dataChanged = false;
-					this._groupingChanged = true;
-					this._coloringChanged = true;
+				if(this.invalidatedProperties["items"]){
+					this.invalidatedProperties["groupAttrs"] = true;
+					this.invalidatedProperties["colorAttr"] = true;
 				}
 
-				if(this._groupingChanged){
-					this._groupingChanged = false;
+				if(this.invalidatedProperties["groupAttrs"] ||this.invalidatedProperties["groupFuncs"]){
 					this._updateTreeMapHierarchy();
 					forceCreate = true;
 				}
 
-				if(this._rootItemChanged){
-					this._rootItemChanged = false;
+				if(this.invalidatedProperties["rootItem"]){
 					forceCreate = true;
 				}
 
-				if(this._coloringChanged){
-					this._coloringChanged = false;
+				if(this.invalidatedProperties["colorAttr"] || this.invalidatedProperties["colorFunc"] || this.invalidatedProperties["colorModel"]){
 					if(this.colorModel != null && this.items != null && this.colorModel.initialize){
 						this.colorModel.initialize(this.items, lang.hitch(this, function(item){
 							return this._colorFunc(item);
@@ -164,8 +160,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 					}
 				}
 
-				if(this._areaChanged){
-					this._areaChanged = false;
+				if(this.invalidatedProperties["areaAttr"] || this.invalidatedProperties["areaFunc"]){
 					this._removeAreaForGroup();
 				}
 
@@ -201,20 +196,12 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			}
 		}),
 	
-		_setRootItemAttr: function(value){
-			this._rootItemChanged = true;
-			this._set("rootItem", value);
-		},
-
 		_setItemsAttr: function(value){
 			this._set("items", value);
-			this._dataChanged = true;
 			this._set("rootItem", null);
-			this.invalidateRendering();
 		},
 
 		_setGroupAttrsAttr: function(value){
-			this._groupingChanged = true;
 			this._set("rootItem", null);
 			if(this.groupFuncs == null){
 				if(value !=null){
@@ -230,8 +217,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this._set("groupAttrs", value);
 		},
 
-        _setGroupFuncsAttr: function(value){
-			this._groupingChanged = true;
+		_setGroupFuncsAttr: function(value){
 			this._set("rootItem", null);
 			this._set("groupFuncs", this._groupFuncs = value);
 			if(value == null && this.groupAttrs != null){
@@ -243,42 +229,12 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			}
 		},
 
-		_setAreaAttrAttr: function(value){
-			this._areaChanged = true;
-			this._set("areaAttr", value);
-		},
-
-		_setAreaFuncAttr: function(value){
-			this._areaChanged = true;
-			this._set("areaFunc", value);
-		},
-
-		_setColorModelAttr: function(value){
-			this._coloringChanged = true;
-			this._set("colorModel", value);
-		},
-	
-		_setColorAttrAttr: function(value){
-			this._coloringChanged = true;
-			this._set("colorAttr", value);
-		},
-	
-		// colorFunc: Function
-		//		A function that returns from a store item the color value of cell or the value used by the 
-		//		ColorModel to compute the cell color. If a color must be returned it must be in form accepted by the
-		//		dojo/_base/Color constructor. If a value must be returned it must be a Number.
-		//		Default implementation is using colorAttr.
 		_colorFunc: function(/*Object*/ item){
 			var color = item.color;
 			if(!color){
 				color = 0;
 			}
 			return parseFloat(color);
-		},
-		
-		_setColorFuncAttr: function(value){
-			this._coloringChanged = true;
-			this._set("colorFunc", value);
 		},
 		
 		createRenderer: function(item, level, kind){
