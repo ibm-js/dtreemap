@@ -50,7 +50,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 			this.removeChild(renderer);
 			var parent = this._getRenderer(item).parentItem;
 			this.rootItem = parent;
-			this.validateRendering(); // Must call this to create the treemap now
+			this.validate();
 
 			// re-add the old renderer to show the animation
 			domConstruct.place(renderer, this);

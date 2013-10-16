@@ -107,9 +107,10 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 		preCreate: function () {
 			this.itemToRenderer = {};
-			this.addInvalidatingProperties("colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
+			this.addInvalidatingProperties("colorModel", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem", "items");
+				"colorAttr", "colorFunc", "rootItem", {"items": "invalidateProperties",
+					"groupAttrs": "invalidateProperties", "groupFuncs": "invalidateProperties"});
 		},
 
 		getIdentity: function (item) {
@@ -131,6 +132,17 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.setAttribute("aria-label", "treemap");
 		},
 
+		refreshProperties: function () {
+			if (this.invalidatedProperties.items || this.invalidatedProperties.groupAttrs ||
+				this.invalidatedProperties.groupFuncs) {
+				this._set("rootItem", null);
+			}
+			if (this.invalidatedProperties.items) {
+				this.invalidatedProperties.groupAttrs = true;
+				this.invalidatedProperties.colorAttr = true;
+			}
+		},
+		
 		// we need to call Store.refreshRendering
 		/* jshint -W074 */
 		refreshRendering: dcl.superCall(function (sup) {
@@ -139,14 +151,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 				var forceCreate = false;
 
-				if (this.invalidatedProperties.items) {
-					this.invalidatedProperties.groupAttrs = true;
-					this.invalidatedProperties.colorAttr = true;
-				}
-
 				if (this.invalidatedProperties.groupAttrs || this.invalidatedProperties.groupFuncs) {
 					this._updateTreeMapHierarchy();
-					forceCreate = true;
 				}
 
 				if (this.invalidatedProperties.rootItem) {
@@ -202,13 +208,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			};
 		}),
 
-		_setItemsAttr: function (value) {
-			this._set("items", value);
-			this._set("rootItem", null);
-		},
-
 		_setGroupAttrsAttr: function (value) {
-			this._set("rootItem", null);
 			if (this.groupFuncs == null) {
 				if (value != null) {
 					this._groupFuncs = value.map(function (attr) {
@@ -224,7 +224,6 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		},
 
 		_setGroupFuncsAttr: function (value) {
-			this._set("rootItem", null);
 			this._set("groupFuncs", this._groupFuncs = value);
 			if (value == null && this.groupAttrs != null) {
 				this._groupFuncs = this.groupAttrs.map(function (attr) {
@@ -668,7 +667,6 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 					domClass.add(renderer, "dtreemap-selected");
 				} else {
 					domClass.remove(renderer, "dtreemap-selected");
-
 				}
 				if (this._hoveredItem === item) {
 					domClass.add(renderer, "dtreemap-hovered");
