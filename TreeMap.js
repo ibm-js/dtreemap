@@ -111,7 +111,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
 				"colorAttr", "colorFunc", "rootItem", "items");
 		},
-		
+
 		getIdentity: function(item){
 			return item.__treeID?item.__treeID:this.store.getIdentity(item);
 		},
@@ -138,21 +138,21 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 				var forceCreate = false;
 
-				if(this.invalidatedProperties["items"]){
-					this.invalidatedProperties["groupAttrs"] = true;
-					this.invalidatedProperties["colorAttr"] = true;
+				if(this.invalidatedProperties.items){
+					this.invalidatedProperties.groupAttrs = true;
+					this.invalidatedProperties.colorAttr = true;
 				}
 
-				if(this.invalidatedProperties["groupAttrs"] ||this.invalidatedProperties["groupFuncs"]){
+				if(this.invalidatedProperties.groupAttrs ||this.invalidatedProperties.groupFuncs){
 					this._updateTreeMapHierarchy();
 					forceCreate = true;
 				}
 
-				if(this.invalidatedProperties["rootItem"]){
+				if(this.invalidatedProperties.rootItem){
 					forceCreate = true;
 				}
 
-				if(this.invalidatedProperties["colorAttr"] || this.invalidatedProperties["colorFunc"] || this.invalidatedProperties["colorModel"]){
+				if(this.invalidatedProperties.colorAttr || this.invalidatedProperties.colorFunc || this.invalidatedProperties.colorModel){
 					if(this.colorModel != null && this.items != null && this.colorModel.initialize){
 						this.colorModel.initialize(this.items, lang.hitch(this, function(item){
 							return this._colorFunc(item);
@@ -160,7 +160,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 					}
 				}
 
-				if(this.invalidatedProperties["areaAttr"] || this.invalidatedProperties["areaFunc"]){
+				if(this.invalidatedProperties.areaAttr || this.invalidatedProperties.areaFunc){
 					this._removeAreaForGroup();
 				}
 
