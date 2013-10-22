@@ -1,43 +1,43 @@
-define(function(){
+define(function () {
 	var utils = {
-		group: function(/*Array*/items, /*Array*/groupingFunctions,  /*Function*/measureFunction){
+		group: function (/*Array*/items, /*Array*/groupingFunctions, /*Function*/measureFunction) {
 			var response = {
 				children: []
 			};
-			var merge = function(obj, entry){
-				if(!obj.__treeValue){
+			var merge = function (obj, entry) {
+				if (!obj.__treeValue) {
 					obj.__treeValue = 0;
 				}
 				obj.__treeValue += measureFunction(entry);
 				return obj;
 			};
 			// we go over each entry in the array
-			items.forEach(function(entry){
+			items.forEach(function (entry) {
 				var r = response;
 				// for this entry, for each rowField we
 				// look at the actual value for this rowField
 				// and create a holding object for this
 				// value in response if it does not exist
-				groupingFunctions.forEach(function(groupingFunction, j){
+				groupingFunctions.forEach(function (groupingFunction, j) {
 					// actual value for the rowField
 					var data = groupingFunction(entry);
 					// create child if undefined
-					var child = utils.find(r.children, function(item){
-						return (item.__treeName == data);
+					var child = utils.find(r.children, function (item) {
+						return (item.__treeName === data);
 					});
-					if(!child){
+					if (!child) {
 						r.children.push(child = {
 							__treeName: data,
-							__treeID: data+Math.random(),
+							__treeID: data + Math.random(),
 							children: []
 						});
 					}
 					child = merge(child, entry);
-					if(j != groupingFunctions.length - 1){
+					if (j !== groupingFunctions.length - 1) {
 						// branch & prepare response for 
 						// next call
 						r = child;
-					}else{
+					} else {
 						// add the entry to the leaf!
 						child.children.push(entry);
 					}
@@ -46,136 +46,141 @@ define(function(){
 			});
 			return response;
 		},
-		find: function(/*Array*/array, /*Function*/callback){
+		find: function (/*Array*/array, /*Function*/callback) {
 			var l = array.length;
 			for (var i = 0; i < l; ++i) {
-				if (callback.call(null, array[i])){ 					
+				if (callback.call(null, array[i])) {
 					return array[i];
 				}
 			}
 			return null;
 		},
-		solve: function(items, width, height, areaFunc, rtl){
+		solve: function (items, width, height, areaFunc, rtl) {
 			//
 			// Create temporary TreeMap elements
 			//
 			var treeMapElements = utils.initElements(items, areaFunc);
 			var dataTotal = treeMapElements.total;
 			var elements = treeMapElements.elements;
-	
+
 			var realSize = dataTotal;
-	
-			if(dataTotal == 0){
-				if(elements.length == 0){
+
+			if (dataTotal === 0) {
+				if (elements.length === 0) {
 					return {
-						items: items, rects: [], total: 0
+						items: items,
+						rects: [],
+						total: 0
 					};
 				}
-				elements.forEach(function(element){
+				elements.forEach(function (element) {
 					element.size = element.sizeTmp = 100;
 				});
 				dataTotal = elements.length * 100;
 			}
-	
+
 			//
 			// 	Sort the TreeMap elements
 			//
-			elements.sort(function(b, a){
+			elements.sort(function (b, a) {
 				return a.size - b.size;
 			});
-	
+
 			utils._compute(width, height, elements, dataTotal);
-	
+
 			//
 			// Restore initial Sort order
 			// 
-			elements.sort(function(a, b){
+			elements.sort(function (a, b) {
 				return a.index - b.index;
 			});
-	
+
 			var result = {};
 			result.elements = elements;
 			result.size = realSize;
-	
-			rects = elements.map(function(element){
+			result.rectangles = elements.map(function (element) {
 				return {
-					x: rtl?width - element.x - element.width:element.x, y: element.y, w: element.width, h: element.height
+					x: rtl ? width - element.x - element.width : element.x,
+					y: element.y,
+					w: element.width,
+					h: element.height
 				};
 			});
-	
-			result.rectangles = rects;
-	
+
 			return result;
 		},
-		initElements: function(items, areaFunc){
+		initElements: function (items, areaFunc) {
 			var total = 0;
-			var elements = items.map(function(item, index){
+			var elements = items.map(function (item, index) {
 				var size = areaFunc != null ? areaFunc(item) : 0;
-				if(size < 0){
+				if (size < 0) {
 					throw new Error("item size dimension must be positive");
 				}
 				total += size;
 				return {
-					index: index, size: size, sizeTmp: size
+					index: index,
+					size: size,
+					sizeTmp: size
 				};
 			});
 			return {
-				elements: elements, total: total
+				elements: elements,
+				total: total
 			};
 		},
-		_compute: function(width, height, elements, total){
+		_compute: function (width, height, elements, total) {
 			var valueScale = ((width * height) / total) / 100;
-	
-			elements.forEach(function(element){
+
+			elements.forEach(function (element) {
 				element.sizeTmp *= valueScale;
 			});
-	
+
 			var start = 0;
 			var end = 0;
 			var aspectCurr = -1 >>> 1; // int.MaxValue;
 			var aspectLast;
 			var offsetX = 0;
 			var offsetY = 0;
-			var tmp_width = width;
-			var tmp_height = height;
-	
-			var vert = tmp_width > tmp_height;
-	
-			while(end != elements.length){
-				aspectLast = utils._trySolution(elements, start, end, vert, tmp_width, tmp_height);
-	
-				if((aspectLast > aspectCurr) || (aspectLast < 1)){
+			var tmpWidth = width;
+			var tmpHeight = height;
+
+			var vert = tmpWidth > tmpHeight, n;
+
+			while (end !== elements.length) {
+				aspectLast = utils._trySolution(elements, start, end, vert, tmpWidth, tmpHeight);
+
+				if ((aspectLast > aspectCurr) || (aspectLast < 1)) {
 					var currX = 0;
 					var currY = 0;
-	
-					for(var n = start; n < end; n++){
+
+					for (n = start; n < end; n++) {
 						elements[n].x = offsetX + currX;
 						elements[n].y = offsetY + currY;
-						if(vert){
+						if (vert) {
 							currY += elements[n].height;
-						}else{
+						} else {
 							currX += elements[n].width;
 						}
 					}
-	
-					if(vert){
+
+					if (vert) {
 						offsetX += elements[start].width;
-					}else{
+					} else {
 						offsetY += elements[start].height;
 					}
-	
-					tmp_width = width - offsetX;
-					tmp_height = height - offsetY;
-	
-					vert = tmp_width > tmp_height;
-	
+
+					tmpWidth = width - offsetX;
+					tmpHeight = height - offsetY;
+
+					vert = tmpWidth > tmpHeight;
+
 					start = end;
 					end = start;
-	
+
 					aspectCurr = -1 >>> 1; // int.MaxValue;
 					continue;
-				}else{
-					for(var n = start; n <= end; n++){
+				} else {
+					for (n = start; n <= end; n++) {
 						elements[n].width = elements[n].widthTmp;
 						elements[n].height = elements[n].heightTmp;
 					}
@@ -183,67 +188,68 @@ define(function(){
 				}
 				end++;
 			}
-	
+
 			var currX1 = 0;
 			var currY1 = 0;
-	
-			for(var n = start; n < end; n++){
+
+			for (n = start; n < end; n++) {
 				elements[n].x = offsetX + currX1;
 				elements[n].y = offsetY + currY1;
-				if(vert){
+				if (vert) {
 					currY1 += elements[n].height;
-				}else{
+				} else {
 					currX1 += elements[n].width;
 				}
 			}
-	
+
 		},
-		_trySolution: function(elements, start, end, vert, tmp_width, tmp_height){
+		_trySolution: function (elements, start, end, vert, tmpWidth, tmpHeight) {
 			var total = 0;
 			var aspect = 0;
 			var localWidth = 0;
 			var localHeight = 0;
-	
-			for(var n = start; n <= end; n++){
+			var n;
+
+			for (n = start; n <= end; n++) {
 				total += elements[n].sizeTmp;
 			}
-	
-			if(vert){
-				if(tmp_height == 0){
+
+			if (vert) {
+				if (tmpHeight === 0) {
 					localWidth = localHeight = 0;
-				}else{
-					localWidth = total / tmp_height * 100;
-					localHeight = tmp_height;
+				} else {
+					localWidth = total / tmpHeight * 100;
+					localHeight = tmpHeight;
 				}
-			}else{
-				if(tmp_width == 0){
+			} else {
+				if (tmpWidth === 0) {
 					localWidth = localHeight = 0;
-				}else{
-					localHeight = total / tmp_width * 100;
-					localWidth = tmp_width;
+				} else {
+					localHeight = total / tmpWidth * 100;
+					localWidth = tmpWidth;
 				}
 			}
-	
-			for(var n = start; n <= end; n++){
-				if(vert){
+
+			for (n = start; n <= end; n++) {
+				if (vert) {
 					elements[n].widthTmp = localWidth;
-					if(total == 0){
+					if (total === 0) {
 						elements[n].heightTmp = 0;
-					}else{
+					} else {
 						elements[n].heightTmp = localHeight * elements[n].sizeTmp / total;
 					}
-				}else{
-					if(total == 0){
+				} else {
+					if (total === 0) {
 						elements[n].widthTmp = 0;
-					}else{
+					} else {
 						elements[n].widthTmp = localWidth * elements[n].sizeTmp / total;
 					}
 					elements[n].heightTmp = localHeight;
 				}
 			}
 			aspect = Math.max(elements[end].heightTmp / elements[end].widthTmp, elements[end].widthTmp
-					/ elements[end].heightTmp);
-			if(aspect == undefined){
+				/ elements[end].heightTmp);
+			if (aspect === undefined) {
 				return 1;
 			}
 			return aspect;

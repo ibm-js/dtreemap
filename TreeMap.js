@@ -1,20 +1,20 @@
 define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
-		"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-		"./_utils", "dui/_WidgetBase", "dui/mixins/_Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
-		"dojo/uacss"],
-	function(lang, dcl, register, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-		utils, _WidgetBase, _Invalidating, Selection, StoreMap){
+	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+	"./_utils", "dui/_WidgetBase", "dui/mixins/_Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
+	"dojo/uacss"],
+	function (lang, dcl, register, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
+			  utils, _WidgetBase, _Invalidating, Selection, StoreMap) {
 
 	return register("d-treemap", [HTMLElement, _WidgetBase, _Invalidating, Selection, StoreMap], {
 		// summary:
 		//		A treemap widget.
-		
+
 		baseClass: "dtreemap",
-		
+
 		// store: dojo/store/api/Store
 		//		The store that contains the items to display.
 		store: null,
-		
+
 		// query: Object
 		//		A query that can be passed to when querying the store.
 		query: {},
@@ -22,7 +22,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		// queryOptions: dojo/store/api/Store.QueryOptions?
 		//		Options to be applied when querying the store.
 		queryOptions: null,
-		
+
 		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
 		itemToRenderer: null,
@@ -42,7 +42,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		//		A function that returns the tooltip text of a treemap cell from a store item. If specified takes
 		//		precedence over tooltipAttr.
 		tooltipFunc: null,
-	
+
 		// areaAttr: String
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.
@@ -50,10 +50,10 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		areaAttr: "",
 
 		// areaFunc: Function
-		//		A function that returns the value use to compute the area of cell from a store item. If specified takes
-		//		precedence over areaAttr.
+		//		A function that returns the value use to compute the area of cell from a store item. If specified
+		// 		takes precedence over areaAttr.
 		areaFunc: null,
-	
+
 		// labelAttr: String
 		//		The attribute of the store item that contains the label of a treemap cell.	
 		//		Default is "label". 
@@ -63,22 +63,22 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		//		A function that returns the label of a treemap cell from a store item. If specified takes
 		//		precedence over labelAttr.
 		labelFunc: null,
-		
+
 		// labelThreshold: Number
 		//		The starting depth level at which the labels are not displayed anymore on cells.  
 		//		If NaN no threshold is applied. The depth is the visual depth of the items on the screen not
 		//		in the data (i.e. after drill down the depth of an item might change).
 		//		Default is NaN.
-		labelThreshold: NaN, 
-		
+		labelThreshold: NaN,
+
 		// colorAttr: String
 		//		The attribute of the store item that contains the data used to compute the color of a treemap cell.
 		//		Default is "". 
 		colorAttr: "",
 
 		// colorFunc: Function
-		//		A function that returns from a store item the data used to compute the color of a treemap cell. If specificied
-		//		takes precedence over colorAttr.
+		//		A function that returns from a store item the data used to compute the color of a treemap cell.
+		// 		If specificied takes precedence over colorAttr.
 		colorFunc: null,
 
 		// colorModel: dcolor/api/ColorModel
@@ -105,79 +105,81 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 		copyAllItemProps: true,
 
-		preCreate: function(){
+		preCreate: function () {
 			this.itemToRenderer = {};
 			this.addInvalidatingProperties("colorModel", "groupAttrs", "groupFuncs", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
 				"colorAttr", "colorFunc", "rootItem", "items");
 		},
 
-		getIdentity: function(item){
-			return item.__treeID?item.__treeID:this.store.getIdentity(item);
+		getIdentity: function (item) {
+			return item.__treeID ? item.__treeID : this.store.getIdentity(item);
 		},
 
-		resize: function(box){
-			if(box){
+		resize: function (box) {
+			if (box) {
 				domGeom.setMarginBox(this, box);
-				this.invalidateRendering();						
+				this.invalidateRendering();
 			}
 		},
-		
-		postCreate: function(){
+
+		postCreate: function () {
 			this.own(on(this, "mouseover", lang.hitch(this, this._onMouseOver)));
 			this.own(on(this, "mouseout", lang.hitch(this, this._onMouseOut)));
 			this.own(on(this, touch.release, lang.hitch(this, this._onMouseUp)));
 			this.setAttribute("role", "presentation");
 			this.setAttribute("aria-label", "treemap");
 		},
-		
+
 		// we need to call Store.refreshRendering
-		refreshRendering: dcl.superCall(function(sup){
-			return function(){
+		/* jshint -W074 */
+		refreshRendering: dcl.superCall(function (sup) {
+			return function () {
 				sup.call(this);
 
 				var forceCreate = false;
 
-				if(this.invalidatedProperties.items){
+				if (this.invalidatedProperties.items) {
 					this.invalidatedProperties.groupAttrs = true;
 					this.invalidatedProperties.colorAttr = true;
 				}
 
-				if(this.invalidatedProperties.groupAttrs ||this.invalidatedProperties.groupFuncs){
+				if (this.invalidatedProperties.groupAttrs || this.invalidatedProperties.groupFuncs) {
 					this._updateTreeMapHierarchy();
 					forceCreate = true;
 				}
 
-				if(this.invalidatedProperties.rootItem){
+				if (this.invalidatedProperties.rootItem) {
 					forceCreate = true;
 				}
 
-				if(this.invalidatedProperties.colorAttr || this.invalidatedProperties.colorFunc || this.invalidatedProperties.colorModel){
-					if(this.colorModel != null && this.items != null && this.colorModel.initialize){
-						this.colorModel.initialize(this.items, lang.hitch(this, function(item){
+				if (this.invalidatedProperties.colorAttr || this.invalidatedProperties.colorFunc ||
+					this.invalidatedProperties.colorModel) {
+					if (this.colorModel != null && this.items != null && this.colorModel.initialize) {
+						this.colorModel.initialize(this.items, lang.hitch(this, function (item) {
 							return this._colorFunc(item);
 						}));
 					}
 				}
 
-				if(this.invalidatedProperties.areaAttr || this.invalidatedProperties.areaFunc){
+				if (this.invalidatedProperties.areaAttr || this.invalidatedProperties.areaFunc) {
 					this._removeAreaForGroup();
 				}
 
-				if(this._groupeditems == null){
+				if (this._groupeditems == null) {
 					return;
 				}
 
-				if(forceCreate){
+				if (forceCreate) {
 					domConstruct.empty(this);
 				}
 
 				var rootItem = this.rootItem, rootParentItem;
 
-				if(rootItem != null){
+				if (rootItem != null) {
 					var rootItemRenderer = this._getRenderer(rootItem);
-					if(rootItemRenderer){
-						if(this._isLeaf(rootItem)){
+					if (rootItemRenderer) {
+						if (this._isLeaf(rootItem)) {
 							rootItem = rootItemRenderer.parentItem;
 						}
 						rootParentItem = rootItemRenderer.parentItem;
@@ -185,59 +187,59 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				}
 
 				var box = domGeom.getMarginBox(this);
-				if(rootItem != null && !this._isRoot(rootItem)){
+				if (rootItem != null && !this._isRoot(rootItem)) {
 					this._buildRenderer(this, rootParentItem, rootItem, {
 						x: box.l, y: box.t, w: box.w, h: box.h
 					}, 0, forceCreate);
-				}else{
-					this._buildChildrenRenderers(this, rootItem?rootItem:{ __treeRoot: true, children : this._groupeditems },
+				} else {
+					this._buildChildrenRenderers(this, rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
 						0, forceCreate, box);
 				}
-			}
+			};
 		}),
-	
-		_setItemsAttr: function(value){
+
+		_setItemsAttr: function (value) {
 			this._set("items", value);
 			this._set("rootItem", null);
 		},
 
-		_setGroupAttrsAttr: function(value){
+		_setGroupAttrsAttr: function (value) {
 			this._set("rootItem", null);
-			if(this.groupFuncs == null){
-				if(value !=null){
-					this._groupFuncs = value.map(function(attr){
-						return function(item){
+			if (this.groupFuncs == null) {
+				if (value != null) {
+					this._groupFuncs = value.map(function (attr) {
+						return function (item) {
 							return item[attr];
 						};
 					});
-				}else{
+				} else {
 					this._groupFuncs = null;
 				}
 			}
 			this._set("groupAttrs", value);
 		},
 
-		_setGroupFuncsAttr: function(value){
+		_setGroupFuncsAttr: function (value) {
 			this._set("rootItem", null);
 			this._set("groupFuncs", this._groupFuncs = value);
-			if(value == null && this.groupAttrs != null){
-				this._groupFuncs = this.groupAttrs.map(function(attr){
-					return function(item){
+			if (value == null && this.groupAttrs != null) {
+				this._groupFuncs = this.groupAttrs.map(function (attr) {
+					return function (item) {
 						return item[attr];
 					};
 				});
 			}
 		},
 
-		_colorFunc: function(/*Object*/ item){
+		_colorFunc: function (/*Object*/ item) {
 			var color = item.color;
-			if(!color){
+			if (!color) {
 				color = 0;
 			}
 			return parseFloat(color);
 		},
-		
-		createRenderer: function(item, level, kind){
+
+		createRenderer: function (item, level, kind) {
 			// summary:
 			//		Creates an item renderer of the specified kind. This is called only when the treemap
 			//		is created. Default implementation always create div nodes. It also sets overflow
@@ -253,14 +255,14 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			// tags:
 			//		protected					
 			var div = domConstruct.create("div");
-			if(kind != "header"){
+			if (kind !== "header") {
 				domStyle.set(div, "overflow", "hidden");
-				domStyle.set(div, "position", "absolute");					
+				domStyle.set(div, "position", "absolute");
 			}
 			return div;
 		},
-		
-		styleRenderer: function(renderer, item, level, kind){
+
+		styleRenderer: function (renderer, item, level, kind) {
 			// summary:
 			//		Style the item renderer. This is called each time the treemap is refreshed.
 			//		For leaf items it colors them with the color computed from the color model. 
@@ -275,78 +277,81 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
 			// tags:
 			//		protected
-			switch(kind){
-				case "leaf":
-					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
-				case "header":
-					var label = this.getLabelForItem(item);
-					if(label && (isNaN(this.labelThreshold) || level < this.labelThreshold)){
-						renderer.innerHTML = label;
-					}else{
-						domConstruct.empty(renderer);
-					}
-					break;
-				default:
-				
-			}				
+			switch (kind) {
+			case "leaf":
+				/* jshint -W086 */
+				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+			case "header":
+				/* jshint +W086 */
+				var label = this.getLabelForItem(item);
+				if (label && (isNaN(this.labelThreshold) || level < this.labelThreshold)) {
+					renderer.innerHTML = label;
+				} else {
+					domConstruct.empty(renderer);
+				}
+				break;
+			default:
+
+			}
 		},
-		
-		_updateTreeMapHierarchy: function(){
+
+		_updateTreeMapHierarchy: function () {
 			var items = this.items;
-			if(items == null){
+			if (items == null) {
 				return;
 			}
-			if(this._groupFuncs != null && this._groupFuncs.length > 0){
-				this._groupeditems = utils.group(items, this._groupFuncs, lang.hitch(this, this._getAreaForItem)).children;
-			}else{
+			if (this._groupFuncs != null && this._groupFuncs.length > 0) {
+				this._groupeditems = utils.group(items, this._groupFuncs,
+												lang.hitch(this, this._getAreaForItem)).children;
+			} else {
 				this._groupeditems = items;
 			}
 		},
-	
-		_removeAreaForGroup: function(item){
+
+		_removeAreaForGroup: function (item) {
 			var children;
-			if(item != null){
-				if(item.__treeValue){
+			if (item != null) {
+				if (item.__treeValue) {
 					delete item.__treeValue;
 					children = item.children;
-				}else{
+				} else {
 					// not a grouping item
 					return;
 				}
-			}else{
+			} else {
 				children = this._groupeditems;
 			}
-			if(children){
-				for(var i = 0; i < children.length; ++i){
+			if (children) {
+				for (var i = 0; i < children.length; ++i) {
 					this._removeAreaForGroup(children[i]);
 				}
 			}
 		},
-	
-		_getAreaForItem: function(item){
+
+		_getAreaForItem: function (item) {
 			var area = parseFloat(item.area);
 			return isNaN(area) ? 0 : area;
 		},
 
-		_computeAreaForItem: function(item){
+		_computeAreaForItem: function (item) {
 			var value;
-			if(item.__treeID){ // group
+			if (item.__treeID) { // group
 				value = item.__treeValue;
-				if(!value){
+				if (!value) {
 					value = 0;
 					var children = item.children;
-					for(var i = 0; i < children.length; ++i){
+					for (var i = 0; i < children.length; ++i) {
 						value += this._computeAreaForItem(children[i]);
 					}
 					item.__treeValue = value;
 				}
-			}else{
+			} else {
 				value = this._getAreaForItem(item);
 			}
 			return value;
 		},
-	
-		getColorForItem: function(item){
+
+		getColorForItem: function (item) {
 			// summary:
 			//		Returns the color for a given item. This either use the colorModel if not null
 			//		or just the result of the colorFunc.
@@ -355,74 +360,74 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			// tags:
 			//		protected	
 			var value = this._colorFunc(item);
-			if(this.colorModel != null){
+			if (this.colorModel != null) {
 				return this.colorModel.getColor(value);
-			}else{
+			} else {
 				return new Color(value);
 			}
 		},
-	
-		getLabelForItem: function(item){
+
+		getLabelForItem: function (item) {
 			// summary:
 			//		Returns the label for a given item.
 			// item: Object
 			//		The data item.
 			// tags:
 			//		protected
-			return item.__treeName?item.__treeName:item.label.toString();
+			return item.__treeName ? item.__treeName : item.label.toString();
 		},
-	
-		_buildChildrenRenderers: function(domNode, item, level, forceCreate, delta, anim){
+
+		_buildChildrenRenderers: function (domNode, item, level, forceCreate, delta, anim) {
 			var children = item.children;
 			var box = domGeom.getMarginBox(domNode);
 
 			var solution = utils.solve(children, box.w, box.h, lang.hitch(this,
-					this._computeAreaForItem), !this.isLeftToRight());
-					
+				this._computeAreaForItem), !this.isLeftToRight());
+
 			var rectangles = solution.rectangles;
-			
-			if(delta){
-				rectangles = rectangles.map(function(item){
+
+			if (delta) {
+				rectangles = rectangles.map(function (item) {
 					item.x += delta.l;
 					item.y += delta.t;
 					return item;
 				});
 			}
-	
+
 			var rectangle;
-			for(var j = 0; j < children.length; ++j){
+			for (var j = 0; j < children.length; ++j) {
 				rectangle = rectangles[j];
 				this._buildRenderer(domNode, item, children[j], rectangle, level, forceCreate, anim);
 			}
 		},
-		
-		_isLeaf: function(item){
+
+		_isLeaf: function (item) {
 			return !item.children;
 		},
-		
-		_isRoot: function(item){
+
+		_isRoot: function (item) {
 			return item.__treeRoot;
 		},
-		
-		_getRenderer: function(item, anim, parent){
-			if(anim){
+
+		_getRenderer: function (item, anim, parent) {
+			if (anim) {
 				// while animating we do that on a copy of the subtree
 				// so we can use our hash object to get to the renderer
-				for(var i = 0; i < parent.children.length; ++i){
-	        		if(parent.children[i].item == item){
-	            		return parent.children[i];
-	                }
-				}	
+				for (var i = 0; i < parent.children.length; ++i) {
+					if (parent.children[i].item === item) {
+						return parent.children[i];
+					}
+				}
 			}
 			return this.itemToRenderer[this.getIdentity(item)];
 		},
 
-		_buildRenderer: function(container, parent, child, rect, level, forceCreate, anim){
+		_buildRenderer: function (container, parent, child, rect, level, forceCreate, anim) {
 			var isLeaf = this._isLeaf(child);
 			var renderer = !forceCreate ? this._getRenderer(child, anim, container) : null;
 			renderer = isLeaf ? this._updateLeafRenderer(renderer, child, level) : this._updateGroupRenderer(renderer,
-					child, level);
-			if(forceCreate){
+				child, level);
+			if (forceCreate) {
 				renderer.level = level;
 				renderer.item = child;
 				renderer.parentItem = parent;
@@ -430,10 +435,10 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				// update its selection status
 				this.updateRenderers(child);
 			}
-	
+
 			// in some cases the computation might be slightly incorrect (0.0000...1)
 			// and due to the floor this will cause 1px gaps 
-	
+
 			var x = Math.floor(rect.x);
 			var y = Math.floor(rect.y);
 			var w = Math.floor(rect.x + rect.w + 0.00000000001) - x;
@@ -441,52 +446,52 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 			// before sizing put the item inside its parent so that styling
 			// is applied and taken into account
-			if(forceCreate){
+			if (forceCreate) {
 				domConstruct.place(renderer, container);
 			}
 
 			domGeom.setMarginBox(renderer, {
 				l: x, t: y, w: w, h: h
 			});
-			
-			if(!isLeaf){
+
+			if (!isLeaf) {
 				var box = domGeom.getContentBox(renderer);
 				this._layoutGroupContent(renderer, box.w, box.h, level + 1, forceCreate, anim);
 			}
-			
-			this.onRendererUpdated({ renderer: renderer, item: child, kind: isLeaf?"leaf":"group", level: level });		
+
+			this.onRendererUpdated({ renderer: renderer, item: child, kind: isLeaf ? "leaf" : "group", level: level });
 		},
-	
-		_layoutGroupContent: function(renderer, width, height, level, forceCreate, anim){
+
+		_layoutGroupContent: function (renderer, width, height, level, forceCreate, anim) {
 			var header = query(".dtreemap-header", renderer)[0];
 			var content = query(".dtreemap-groupcontent", renderer)[0];
-			if(header == null || content == null){
+			if (header == null || content == null) {
 				return;
 			}
-	
+
 			var box = domGeom.getMarginBox(header);
-	
+
 			// If the header is too high, reduce its area
 			// and don't show the children..
-			if(box.h > height){
+			if (box.h > height) {
 				// TODO: this might cause pb when coming back to visibility later
 				// as the getMarginBox of the header will keep that value?
 				box.h = height;
 				domStyle.set(content, "display", "none");
-			}else{
+			} else {
 				domStyle.set(content, "display", "block");
 				domGeom.setMarginBox(content, {
 					l: 0, t: box.h, w: width, h: (height - box.h)
 				});
 				this._buildChildrenRenderers(content, renderer.item, level, forceCreate, null, anim);
 			}
-	
+
 			domGeom.setMarginBox(header, {
 				l: 0, t: 0, w: width, h: box.h
 			});
 		},
-	
-		_updateGroupRenderer: function(renderer, item, level){
+
+		_updateGroupRenderer: function (renderer, item, level) {
 			// summary:
 			//		Update a group renderer. This creates the renderer if not already created,
 			//		call styleRender for it and recurse into children.
@@ -499,25 +504,25 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			// tags:
 			//		private				
 			var forceCreate = renderer == null;
-			if(renderer == null){
+			if (renderer == null) {
 				renderer = this.createRenderer("div", level, "group");
 				domClass.add(renderer, "dtreemap-group");
 			}
 			this.styleRenderer(renderer, item, level, "group");
 			var header = query(".dtreemap-header", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
-			if(forceCreate){
+			if (forceCreate) {
 				domConstruct.place(header, renderer);
 			}
 			var content = query(".dtreemap-groupcontent", renderer)[0];
 			content = this._updateGroupContentRenderer(content, item, level);
-			if(forceCreate){
+			if (forceCreate) {
 				domConstruct.place(content, renderer);
 			}
 			return renderer;
 		},
-	
-		_updateHeaderRenderer: function(renderer, item, level){
+
+		_updateHeaderRenderer: function (renderer, item, level) {
 			// summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
@@ -529,7 +534,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			//		The item depth level.
 			// tags:
 			//		private			
-			if(renderer == null){
+			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "header");
 				domClass.add(renderer, "dtreemap-header");
 				domClass.add(renderer, "dtreemap-header_" + level);
@@ -537,8 +542,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.styleRenderer(renderer, item, level, "header");
 			return renderer;
 		},
-	
-		_updateLeafRenderer: function(renderer, item, level){
+
+		_updateLeafRenderer: function (renderer, item, level) {
 			// summary:
 			//		Update a leaf renderer. This creates the renderer if not already created,
 			//		call styleRender for it and set the label as its innerHTML.
@@ -550,19 +555,19 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			//		The item depth level.
 			// tags:
 			//		private				
-			if(renderer == null){
+			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "leaf");
 				domClass.add(renderer, "dtreemap-leaf");
 				domClass.add(renderer, "dtreemap-leaf_" + level);
-			}		
+			}
 			this.styleRenderer(renderer, item, level, "leaf");
-			if(item.tooltip){
+			if (item.tooltip) {
 				renderer.title = item.tooltip;
 			}
 			return renderer;
 		},
-	
-		_updateGroupContentRenderer: function(renderer, item, level){
+
+		_updateGroupContentRenderer: function (renderer, item, level) {
 			// summary:
 			//		Update a group content renderer. This creates the renderer if not already created,
 			//		and call styleRender for it.
@@ -574,7 +579,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			//		The item depth level.
 			// tags:
 			//		private				
-			if(renderer == null){
+			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "content");
 				domClass.add(renderer, "dtreemap-groupcontent");
 				domClass.add(renderer, "dtreemap-groupcontent_" + level);
@@ -582,44 +587,44 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.styleRenderer(renderer, item, level, "content");
 			return renderer;
 		},
-		
-		_getRendererFromTarget: function(target){
+
+		_getRendererFromTarget: function (target) {
 			var renderer = target;
-			while(renderer != this && !renderer.item){
+			while (renderer !== this && !renderer.item) {
 				renderer = renderer.parentNode;
-			}			
+			}
 			return renderer;
 		},
 
-		_onMouseOver: function(e){
+		_onMouseOver: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
-			if(renderer.item){	
+			if (renderer.item) {
 				var item = renderer.item;
 				this._hoveredItem = item;
 				this.updateRenderers(item);
-				this.onItemRollOver({renderer: renderer, item : item, triggerEvent: e});
+				this.onItemRollOver({renderer: renderer, item: item, triggerEvent: e});
 			}
 		},
-	
-		_onMouseOut: function(e){
+
+		_onMouseOut: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
-			if(renderer.item){	
+			if (renderer.item) {
 				var item = renderer.item;
 				this._hoveredItem = null;
 				this.updateRenderers(item);
-				this.onItemRollOut({renderer: renderer, item : item, triggerEvent: e});
+				this.onItemRollOut({renderer: renderer, item: item, triggerEvent: e});
 			}
 		},
-		
-		_onMouseUp: function(e){
+
+		_onMouseUp: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
-			if(renderer.item){
+			if (renderer.item) {
 				this.selectFromEvent(e, renderer.item, renderer, true);
 				//event.stop(e);
 			}
 		},
-		
-		onRendererUpdated: function(){
+
+		onRendererUpdated: function () {
 			// summary:
 			//		Called when a renderer has been updated. This is called after creation, styling and sizing for 
 			//		each group and leaf renderers. For group renders this is also called after creation of children
@@ -627,55 +632,54 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			// tags:
 			//		callback			
 		},
-		
-		onItemRollOver: function(){
+
+		onItemRollOver: function () {
 			// summary:
 			//		Called when an item renderer has been hovered.
 			// tags:
 			//		callback			
 		},
-		
-		onItemRollOut: function(){
+
+		onItemRollOut: function () {
 			// summary:
 			//		Called when an item renderer has been rolled out.
 			// tags:
 			//		callback			
-		},		
-		
-		updateRenderers: function(items){
+		},
+
+		updateRenderers: function (items) {
 			// summary:
 			//		Updates the renderer(s) that represent the specified item(s).
 			// item: Object|Array
 			//		The item(s).
-			if(!items){
+			if (!items) {
 				return;
-			}			
-			if(!lang.isArray(items)){
+			}
+			if (!lang.isArray(items)) {
 				items = [items];
 			}
-			for(var i=0; i<items.length;i++){
+			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
 				var renderer = this._getRenderer(item);
 				// at init time the renderer might not be ready
-				if(!renderer){
+				if (!renderer) {
 					continue;
 				}
 				var selected = this.isSelected(item);
-				var div;
-				if(selected){
+				if (selected) {
 					domClass.add(renderer, "dtreemap-selected");
-				}else{
+				} else {
 					domClass.remove(renderer, "dtreemap-selected");
 
 				}
-				if(this._hoveredItem == item){
+				if (this._hoveredItem === item) {
 					domClass.add(renderer, "dtreemap-hovered");
-				}else{
+				} else {
 					domClass.remove(renderer, "dtreemap-hovered");
 				}
-				if(selected || this._hoveredItem == item){
+				if (selected || this._hoveredItem === item) {
 					domStyle.set(renderer, "zIndex", 20);
-				}else{
+				} else {
 					domStyle.set(renderer, "zIndex", "auto");
 				}
 			}
