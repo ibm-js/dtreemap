@@ -109,8 +109,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.itemToRenderer = {};
 			this.addInvalidatingProperties("colorModel", "areaAttr", "areaFunc",
 				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem", {"items": "invalidateProperties",
-					"groupAttrs": "invalidateProperties", "groupFuncs": "invalidateProperties"});
+				"colorAttr", "colorFunc", "rootItem", {"items": "invalidateProperty",
+					"groupAttrs": "invalidateProperty", "groupFuncs": "invalidateProperty"});
 		},
 
 		getIdentity: function (item) {
