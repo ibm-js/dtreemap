@@ -189,10 +189,14 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				var box = domGeom.getMarginBox(this);
 				if (rootItem != null && !this._isRoot(rootItem)) {
 					this._buildRenderer(this, rootParentItem, rootItem, {
-						x: box.l, y: box.t, w: box.w, h: box.h
+						x: box.l,
+						y: box.t,
+						w: box.w,
+						h: box.h
 					}, 0, forceCreate);
 				} else {
-					this._buildChildrenRenderers(this, rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
+					this._buildChildrenRenderers(this,
+						rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
 						0, forceCreate, box);
 				}
 			};
@@ -450,9 +454,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				domConstruct.place(renderer, container);
 			}
 
-			domGeom.setMarginBox(renderer, {
-				l: x, t: y, w: w, h: h
-			});
+			domGeom.setMarginBox(renderer, { l: x, t: y, w: w, h: h	});
 
 			if (!isLeaf) {
 				var box = domGeom.getContentBox(renderer);
@@ -480,15 +482,11 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 				domStyle.set(content, "display", "none");
 			} else {
 				domStyle.set(content, "display", "block");
-				domGeom.setMarginBox(content, {
-					l: 0, t: box.h, w: width, h: (height - box.h)
-				});
+				domGeom.setMarginBox(content, {	l: 0, t: box.h, w: width, h: (height - box.h) });
 				this._buildChildrenRenderers(content, renderer.item, level, forceCreate, null, anim);
 			}
 
-			domGeom.setMarginBox(header, {
-				l: 0, t: 0, w: width, h: box.h
-			});
+			domGeom.setMarginBox(header, { l: 0, t: 0, w: width, h: box.h });
 		},
 
 		_updateGroupRenderer: function (renderer, item, level) {
