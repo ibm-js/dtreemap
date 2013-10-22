@@ -1,4 +1,4 @@
-# dtreemap
+# dtreemap [![Build Status](https://travis-ci.org/ibm-dojo/dtreemap.png?branch=master)](https://travis-ci.org/ibm-dojo/dtreemap)
 
 This project provides a dui-based TreeMap widget.
 
