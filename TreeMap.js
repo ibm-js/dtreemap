@@ -1,11 +1,11 @@
 define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-	"./_utils", "dui/_WidgetBase", "dui/mixins/_Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
+	"./_utils", "dui/Widget", "dui/mixins/Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
 	"dojo/uacss"],
 	function (lang, dcl, register, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-			  utils, _WidgetBase, _Invalidating, Selection, StoreMap) {
+			  utils, Widget, Invalidating, Selection, StoreMap) {
 
-	return register("d-treemap", [HTMLElement, _WidgetBase, _Invalidating, Selection, StoreMap], {
+	return register("d-treemap", [HTMLElement, Widget, Invalidating, Selection, StoreMap], {
 		// summary:
 		//		A treemap widget.
 
@@ -78,7 +78,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 		// colorFunc: Function
 		//		A function that returns from a store item the data used to compute the color of a treemap cell.
-		// 		If specificied takes precedence over colorAttr.
+		// 		If specified takes precedence over colorAttr.
 		colorFunc: null,
 
 		// colorModel: dcolor/api/ColorModel
@@ -132,81 +132,73 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			this.setAttribute("aria-label", "treemap");
 		},
 
-		refreshProperties: function () {
-			if (this.invalidatedProperties.items || this.invalidatedProperties.groupAttrs ||
-				this.invalidatedProperties.groupFuncs) {
-				this._set("rootItem", null);
-			}
-			if (this.invalidatedProperties.items) {
-				this.invalidatedProperties.groupAttrs = true;
-				this.invalidatedProperties.colorAttr = true;
-			}
-		},
-		
-		// we need to call Store.refreshRendering
-		/* jshint -W074 */
-		refreshRendering: dcl.superCall(function (sup) {
-			return function () {
-				sup.call(this);
+		// we need to call Store.refreshProperties
+		refreshProperties: dcl.superCall(function (sup) {
+			return function (props) {
+				sup.call(this, props);
 
-				var forceCreate = false;
-
-				if (this.invalidatedProperties.groupAttrs || this.invalidatedProperties.groupFuncs) {
-					this._updateTreeMapHierarchy();
+				if (props.items || props.groupAttrs || props.groupFuncs) {
+					this._set("rootItem", null);
 				}
-
-				if (this.invalidatedProperties.rootItem) {
-					forceCreate = true;
-				}
-
-				if (this.invalidatedProperties.colorAttr || this.invalidatedProperties.colorFunc ||
-					this.invalidatedProperties.colorModel) {
-					if (this.colorModel != null && this.items != null && this.colorModel.initialize) {
-						this.colorModel.initialize(this.items, lang.hitch(this, function (item) {
-							return this._colorFunc(item);
-						}));
-					}
-				}
-
-				if (this.invalidatedProperties.areaAttr || this.invalidatedProperties.areaFunc) {
-					this._removeAreaForGroup();
-				}
-
-				if (this._groupeditems == null) {
-					return;
-				}
-
-				if (forceCreate) {
-					domConstruct.empty(this);
-				}
-
-				var rootItem = this.rootItem, rootParentItem;
-
-				if (rootItem != null) {
-					var rootItemRenderer = this._getRenderer(rootItem);
-					if (rootItemRenderer) {
-						if (this._isLeaf(rootItem)) {
-							rootItem = rootItemRenderer.parentItem;
-						}
-						rootParentItem = rootItemRenderer.parentItem;
-					}
-				}
-
-				var box = domGeom.getMarginBox(this);
-				if (rootItem != null && !this._isRoot(rootItem)) {
-					this._buildRenderer(this, rootParentItem, rootItem, {
-						x: box.l,
-						y: box.t,
-						w: box.w,
-						h: box.h
-					}, 0, forceCreate);
-				} else {
-					this._buildChildrenRenderers(this,
-						rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
-						0, forceCreate, box);
+				if (props.items) {
+					props.groupAttrs = true;
+					props.colorAttr = true;
 				}
 			};
 		}),
+
+		refreshRendering: function (props) {
+			if (props.groupAttrs || props.groupFuncs) {
+				this._updateTreeMapHierarchy();
+			}
+
+			if ((props.colorAttr || props.colorFunc || props.colorModel) &&
+				(this.colorModel != null && this.items != null && this.colorModel.initialize)) {
+				this.colorModel.initialize(this.items, lang.hitch(this, this._colorFunc));
+			}
+
+			if (props.areaAttr || props.areaFunc) {
+				this._removeAreaForGroup();
+			}
+
+			if (this._groupeditems == null) {
+				return;
+			}
+
+			if (props.rootItem) {
+				domConstruct.empty(this);
+				this._render(true);
+			} else {
+				this._render(false);
+			}
+		},
+
+		_render: function (forceCreate) {
+			var rootItem = this.rootItem, rootParentItem;
+
+			if (rootItem != null) {
+				var rootItemRenderer = this._getRenderer(rootItem);
+				if (rootItemRenderer) {
+					if (this._isLeaf(rootItem)) {
+						rootItem = rootItemRenderer.parentItem;
+					}
+					rootParentItem = rootItemRenderer.parentItem;
+				}
+			}
+			var box = domGeom.getMarginBox(this);
+			if (rootItem != null && !this._isRoot(rootItem)) {
+				this._buildRenderer(this, rootParentItem, rootItem, {
+					x: box.l,
+					y: box.t,
+					w: box.w,
+					h: box.h
+				}, 0, forceCreate);
+			} else {
+				this._buildChildrenRenderers(this,
+					rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
+					0, forceCreate, box);
+			}
+		},
 
 		_setGroupAttrsAttr: function (value) {
 			if (this.groupFuncs == null) {
