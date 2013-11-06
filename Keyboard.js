@@ -61,7 +61,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 			var newSelected;
 			switch (e.keyCode) {
 			case keys.LEFT_ARROW:
-				newSelected = children[childrenI[Math.max(0, childrenI.index(selectedI) - 1)].index];
+				newSelected = children[childrenI[Math.max(0, childrenI.indexOf(selectedI) - 1)].index];
 				break;
 			case keys.RIGHT_ARROW:
 				newSelected = children[childrenI[Math.min(childrenI.length - 1,
