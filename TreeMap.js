@@ -11,18 +11,6 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 		baseClass: "dtreemap",
 
-		// store: dojo/store/api/Store
-		//		The store that contains the items to display.
-		store: null,
-
-		// query: Object
-		//		A query that can be passed to when querying the store.
-		query: {},
-
-		// queryOptions: dojo/store/api/Store.QueryOptions?
-		//		Options to be applied when querying the store.
-		queryOptions: null,
-
 		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
 		itemToRenderer: null,
@@ -101,16 +89,25 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 
 		mapAtInit: false,
 
-		mappedKeys: ["tooltip", "area", "label", "color"],
-
 		copyAllItemProps: true,
 
 		preCreate: function () {
+			this.allowRemap = true;
 			this.itemToRenderer = {};
-			this.addInvalidatingProperties("colorModel", "areaAttr", "areaFunc",
-				"labelAttr", "labelFunc", "labelThreshold", "tooltipAttr", "tooltipFunc",
-				"colorAttr", "colorFunc", "rootItem", {"items": "invalidateProperty",
-					"groupAttrs": "invalidateProperty", "groupFuncs": "invalidateProperty"});
+			this.addInvalidatingProperties("colorModel",  "labelThreshold",  "rootItem",
+				{
+					"areaAttr": "invalidateProperty",
+					"areaFunc": "invalidateProperty",
+					"labelAttr": "invalidateProperty",
+					"labelFunc": "invalidateProperty",
+					"tooltipAttr": "invalidateProperty",
+					"tooltipFunc": "invalidateProperty",
+					"colorAttr": "invalidateProperty",
+					"colorFunc": "invalidateProperty",
+					"items": "invalidateProperty",
+					"groupAttrs": "invalidateProperty",
+					"groupFuncs": "invalidateProperty"
+				});
 		},
 
 		getIdentity: function (item) {
@@ -136,7 +133,11 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		refreshProperties: dcl.superCall(function (sup) {
 			return function (props) {
 				sup.call(this, props);
-
+				if (this.items && this._mappedKeys.some(function (item) {
+					return props[item + "Attr"] || props[item + "Func"];
+				})) {
+					this.remap();
+				}
 				if (props.items || props.groupAttrs || props.groupFuncs) {
 					this._set("rootItem", null);
 				}

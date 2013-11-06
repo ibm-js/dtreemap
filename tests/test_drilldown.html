@@ -15,29 +15,29 @@
 		require(["dojo/domReady", "dojo/dom", "dui/register", "dtreemap/TreeMap",
 			"dojo/store/Memory", "dcolor/MeanColorModel", "dojo/_base/Color", "dtreemap/DrillDownUp"],
 			function(ready, dom, register, TreeMap, Memory, MeanColorModel, Color, DrillDownUp) {
+				dataStore = new Memory({idProperty: "label", data:
+						[
+							{ label: "France", sales: 500, profit: 50, region: "EU" },
+							{ label: "Germany", sales: 450, profit: 48, region: "EU" },
+							{ label: "UK", sales: 700, profit: 60, region: "EU" },
+							{ label: "USA", sales: 2000, profit: 250, region: "America" },
+							{ label: "Canada", sales: 600, profit: 30, region: "America" },
+							{ label: "Brazil", sales: 450, profit: 30, region: "America" },
+							{ label: "China", sales: 500, profit: 40, region: "Asia" },
+							{ label: "Japan", sales: 900, profit: 100, region: "Asia" }
+						]
+				});
+				colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
 				ready(function(){
-					var dataStore = new Memory({idProperty: "label", data:
-							[
-								{ label: "France", sales: 500, profit: 50, region: "EU" },
-								{ label: "Germany", sales: 450, profit: 48, region: "EU" },
-								{ label: "UK", sales: 700, profit: 60, region: "EU" },
-								{ label: "USA", sales: 2000, profit: 250, region: "America" },
-								{ label: "Canada", sales: 600, profit: 30, region: "America" },
-								{ label: "Brazil", sales: 450, profit: 30, region: "America" },
-								{ label: "China", sales: 500, profit: 40, region: "Asia" },
-								{ label: "Japan", sales: 900, profit: 100, region: "Asia" }
-							]
-					});
-					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					register("c-treemap", [TreeMap, DrillDownUp])({store: dataStore,
-								areaAttr: "sales", colorAttr: "profit", tooltipAttr: "label", groupAttrs: ["region"],
-								colorModel: colorModel }, dom.byId("treeMap"));
+					register("c-treemap", [HTMLElement, TreeMap, DrillDownUp]);
+					register.parse();
 				});
 			}
 		);
 	</script>
 </head>
 <body>
-	<c-treemap id="treeMap" style="width:640px;height:640px"></c-treemap>
+	<c-treemap id="treeMap" style="width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" tooltipAttr="label"
+			groupAttrs="['region']" colorModel="colorModel"></c-treemap>
 </body>
 </html>

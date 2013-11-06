@@ -12,9 +12,9 @@
 
 	<script type="text/javascript">
 
-		require(["dojo/domReady", "dojo/dom", "dui/register", "dtreemap/TreeMap",
+		require(["dojo/domReady", "dui/register", "dtreemap/TreeMap",
 			"dojo/store/Memory", "dcolor/MeanColorModel", "dojo/_base/Color", "dtreemap/GroupLabel"],
-			function(ready, dom, register, TreeMap, Memory, MeanColorModel, Color, GroupLabel) {
+			function(ready, register, TreeMap, Memory, MeanColorModel, Color, GroupLabel) {
 				ready(function(){
 					var dataStore = new Memory({idProperty: "label", data:
 							[
@@ -29,15 +29,22 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					register("c-treemap", [TreeMap, GroupLabel])({store: dataStore,
-								areaAttr: "sales", colorAttr: "profit", tooltipAttr: "label", groupAttrs: ["region"],
-								colorModel: colorModel }, dom.byId("treeMap"));
+					var treeMap = new (register("c-treemap", [HTMLElement, TreeMap, GroupLabel]))();
+					treeMap.style.width = "640px";
+					treeMap.style.height = "480px";
+					treeMap.store = dataStore;
+					treeMap.areaAttr = "sales";
+					treeMap.colorAttr = "profit";
+					treeMap.tooltipAttr = "label";
+					treeMap.groupAttrs = ["region"];
+					treeMap.colorModel = colorModel;
+					treeMap.placeAt("main");
+					treeMap.startup();
 				});
 			}
 		);
 	</script>
 </head>
-<body>
-	<c-treemap id="treeMap" style="width:640px;height:640px"></c-treemap>
+<body id="main">
 </body>
 </html>

@@ -28,7 +28,7 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					new TreeMap({store: dataStore,
+					var treeMap = new TreeMap({store: dataStore,
 								areaAttr: "sales",
 								colorFunc: function(item){
 									// use benefit % instead of absolute profit
@@ -39,6 +39,7 @@
 								query: function(item){
 									return item.sales > 500;
 								}}, dom.byId("treeMap"));
+					treeMap.startup();
 				});
 			}
 		);
