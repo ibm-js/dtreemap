@@ -28,7 +28,7 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					var treeMap = new (register("c-treemap", [HTMLElement, TreeMap, Keyboard]))();
+					var treeMap = new (register("c-treemap", [TreeMap, Keyboard]))();
 					treeMap.style.width = "640px";
 					treeMap.style.height = "480px";
 					treeMap.store = dataStore;

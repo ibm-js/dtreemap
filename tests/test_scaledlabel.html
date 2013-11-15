@@ -28,7 +28,7 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					var treeMap = new register("c-treemap", [HTMLElement, TreeMap, ScaledLabel])
+					var treeMap = new register("c-treemap", [TreeMap, ScaledLabel])
 							({ store: dataStore, areaAttr: "sales", colorAttr: "profit",
 						  	   tooltipAttr: "label", groupAttrs: ["region"], colorModel: colorModel },
 							"treeMap");
