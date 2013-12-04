@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-	"./_utils", "dpointer/events", "dui/Widget", "dui/mixins/Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
-	"dojo/uacss"],
+	"./_utils", "dpointer/events", "dui/Widget", "dui/mixins/Invalidating", "dui/mixins/Selection",
+	"dui/mixins/StoreMap", "dojo/uacss"],
 	function (lang, dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
 			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
