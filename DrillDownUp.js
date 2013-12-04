@@ -1,19 +1,16 @@
 define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
-	"dojo/dom-style", "dojo/_base/fx", "dojo/has!touch?dojox/gesture/tap"],
-	function (lang, event, dcl, on, domGeom, domConstruct, domStyle, fx, tap) {
+	"dojo/dom-style", "dojo/_base/fx", "dpointer/events"],
+	function (lang, event, dcl, on, domGeom, domConstruct, domStyle, fx) {
 
 	return dcl(null, {
 		// summary:
 		//		Specializes TreeMap to support drill down and up operations.
 
 		postCreate: function () {
-			this.own(on(this, "dblclick", lang.hitch(this, this._onDoubleClick)));
-			if (tap) {
-				this.own(on(this, tap.doubletap, lang.hitch(this, this._onDoubleClick)));
-			}
+			this.own(on(this, "dblclick", lang.hitch(this, this._dblClickHandler)));
 		},
 
-		_onDoubleClick: function (e) {
+		_dblClickHandler: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				var item = renderer.item;

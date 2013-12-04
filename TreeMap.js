@@ -1,9 +1,9 @@
-define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
+define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
-	"./_utils", "dui/Widget", "dui/mixins/Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
+	"./_utils", "dpointer/events", "dui/Widget", "dui/mixins/Invalidating", "dui/mixins/Selection", "dui/mixins/StoreMap",
 	"dojo/uacss"],
-	function (lang, dcl, register, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
-			  utils, Widget, Invalidating, Selection, StoreMap) {
+	function (lang, dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
+			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
 	return register("d-treemap", [HTMLElement, Widget, Invalidating, Selection, StoreMap], {
 		// summary:
@@ -122,9 +122,9 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 		},
 
 		postCreate: function () {
-			this.own(on(this, "mouseover", lang.hitch(this, this._onMouseOver)));
-			this.own(on(this, "mouseout", lang.hitch(this, this._onMouseOut)));
-			this.own(on(this, touch.release, lang.hitch(this, this._onMouseUp)));
+			this.own(on(this, "pointerover", lang.hitch(this, this._pointerOverHandler)));
+			this.own(on(this, "pointerout", lang.hitch(this, this._pointerOutHandler)));
+			this.own(on(this, "pointerup", lang.hitch(this, this._pointerUpHandler)));
 			this.setAttribute("role", "presentation");
 			this.setAttribute("aria-label", "treemap");
 		},
@@ -586,7 +586,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			return renderer;
 		},
 
-		_onMouseOver: function (e) {
+		_pointerOverHandler: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				var item = renderer.item;
@@ -596,7 +596,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			}
 		},
 
-		_onMouseOut: function (e) {
+		_pointerOutHandler: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				var item = renderer.item;
@@ -606,11 +606,10 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/event", "dojo/
 			}
 		},
 
-		_onMouseUp: function (e) {
+		_pointerUpHandler: function (e) {
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				this.selectFromEvent(e, renderer.item, renderer, true);
-				//event.stop(e);
 			}
 		},
 

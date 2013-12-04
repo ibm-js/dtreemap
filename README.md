@@ -28,6 +28,7 @@ This project requires the following other projects to run:
  * dui
  * dcl
  * dcolor
+ * dpointer
 
 ## Installation
 
@@ -36,6 +37,7 @@ This project requires the following other projects to run:
  * dui
  * dcl
  * dcolor
+ * dpointer
  * dtreemap
 
  To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
