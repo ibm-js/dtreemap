@@ -3,9 +3,8 @@
 	"version": "0.1.0-dev",
 	"dependencies": {
 		"dojo": ">=1.9.1",
-		"dui": ">=0.1.0",
 		"dcl": "1.1",
-		"dcolor": ">=0.1.0",
-		"dpointer": ">=0.1.0"
+		"dcolor": ">=0.1.0-dev",
+		"dpointer": ">=0.1.0-dev"
 	}
 }
