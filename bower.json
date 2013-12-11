@@ -3,7 +3,7 @@
 	"version": "0.1.0-dev",
 	"dependencies": {
 		"dojo": ">=1.9.1",
-		"dcl": "1.1",
+		"dcl": "1.1.x",
 		"dcolor": ">=0.1.0-dev",
 		"dpointer": ">=0.1.0-dev"
 	}

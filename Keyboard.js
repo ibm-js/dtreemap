@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
-	"./_utils", "dui/_FocusMixin"],
+	"./_utils", "dui/_FocusMixin", "dpointer/events"],
 	function (lang, event, dcl, on, keys, domAttr, utils, _FocusMixin) {
 
 	return dcl(_FocusMixin, {
@@ -15,8 +15,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 		},
 
 		postCreate: function () {
-			this.own(on(this, "keydown", lang.hitch(this, this._onKeyDown)));
-			this.own(on(this, "mousedown", lang.hitch(this, this._onMouseDown)));
+			this.own(on(this, "keydown", lang.hitch(this, this._keyDownHandler)));
+			this.own(on(this, "pointerdown", lang.hitch(this, this._pointerDownHandler)));
 		},
 
 		createRenderer: dcl.superCall(function (sup) {
@@ -29,15 +29,13 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 			};
 		}),
 
-		_onMouseDown: function () {
+		_pointerDownHandler: function () {
 			this.focus();
 		},
 
-		/* jshint -W074 */
-		_onKeyDown: function (e) {
+		_keyDownHandler: function (e) {
 			var selected = this.selectedItem;
 			if (!selected) {
-				// nothing selected selected we can't navigate
 				return;
 			}
 			var renderer = this.itemToRenderer[this.getIdentity(selected)];
@@ -58,6 +56,11 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 					return;
 				}
 			}
+			this._navigate(e, renderer, selected, parent, children, childrenI, selectedI);
+
+		},
+
+		_navigate: function (e, renderer, selected, parent, children, childrenI, selectedI) {
 			var newSelected;
 			switch (e.keyCode) {
 			case keys.LEFT_ARROW:
@@ -73,16 +76,16 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 			case keys.UP_ARROW:
 				newSelected = parent;
 				break;
-				// TODO
-				//case "+":
+			// TODO
+			//case "+":
 			case keys.NUMPAD_PLUS:
 				if (!this._isLeaf(selected) && this.drillDown) {
 					this.drillDown(renderer);
 					event.stop(e);
 				}
 				break;
-				// TODO
-				//case "-":
+			// TODO
+			//case "-":
 			case keys.NUMPAD_MINUS:
 				if (!this._isLeaf(selected) && this.drillUp) {
 					this.drillUp(renderer);
@@ -91,10 +94,14 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 				break;
 			}
 			if (newSelected) {
-				if (!this._isRoot(newSelected)) {
-					this.selectedItem = newSelected;
-					event.stop(e);
-				}
+				this._selectItem(e, newSelected);
+			}
+		},
+
+		_selectItem: function (e, selected) {
+			if (!this._isRoot(selected)) {
+				this.selectedItem = selected;
+				event.stop(e);
 			}
 		}
 	});

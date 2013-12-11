@@ -27,10 +27,9 @@ define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style"], function (dcl, domCo
 		styleRenderer: function (renderer, item, level, kind) {
 			switch (kind) {
 			case "leaf":
-				/* jshint -W086 */
 				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+				/* falls through */
 			case "content":
-				/* jshint +W086 */
 				if (level === 0) {
 					renderer.firstChild.innerHTML = this.getLabelForItem(item);
 				} else {

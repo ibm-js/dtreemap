@@ -275,10 +275,9 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			//		protected
 			switch (kind) {
 			case "leaf":
-				/* jshint -W086 */
 				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+				/* falls through */
 			case "header":
-				/* jshint +W086 */
 				var label = this.getLabelForItem(item);
 				if (label && (isNaN(this.labelThreshold) || level < this.labelThreshold)) {
 					renderer.innerHTML = label;
