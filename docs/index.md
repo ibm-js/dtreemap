@@ -1,4 +1,8 @@
-# dtreemap/Treemap
+---
+layout: post
+title: title 
+---
+#dtreemap/Treemap
 
 `dtreemap/Treemap` displays data as a set of colored, potentially nested, rectangular cells. Treemaps can be used to explore large data sets by using convenient drill-down capabilities. They reveal data patterns and trends easily. Treemaps rely on data clustering, using areas and color information to represent the data you want to explore.
 
