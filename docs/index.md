@@ -1,0 +1,246 @@
+# dtreemap/Treemap
+
+`dtreemap/Treemap` displays data as a set of colored, potentially nested, rectangular cells. Treemaps can be used to explore large data sets by using convenient drill-down capabilities. They reveal data patterns and trends easily. Treemaps rely on data clustering, using areas and color information to represent the data you want to explore.
+
+An example of a treemap is shown below. The treemap shows business sectors at the head of the hierarchy and provides the possibility to drill down to country and then company level.
+
+![xx](http://livedocs.dojotoolkit.org/dojox/treemap.png)
+
+`dtreemap/Treemap` supports squarified algorithms for two-dimensional treemaps, and is characterized by the ability to:
+
+* Map the size, color, and label of treemap cells to properties in a data store.
+* Choose either a predefined algorithm for computing the item colors or specify a color using a customizable color function.
+* Specify the treemap levels at which labels are to appear.
+* Get an event when clicking and hovering over treemap items.
+* Navigate within a treemap with visual effects on drill down.
+
+TODO using layer …
+TODO multi channel
+
+##### Table of Contents
+[Element Instantiation](#instantiation)
+[Element Configuration](#configuration)
+[Element Styling](#styling)
+[User Interactions](#interactions)
+[Mixins](#mixins)
+[Element Events](#events)
+
+<a name="instantiation"></a>
+## Element Instantiation
+
+See `delite/Widget`for details for full details on how instantiation lifecycle is working.
+
+### Declarative Instantiation
+
+```js
+var dataStore;
+require(["delite/register", "dtreemap/TreeMap", "dojo/domReady!"], function (register) {
+  dataStore = new Memory({idProperty: "label", data:
+    [
+      { label: "France", sales: 500, profit: 50, region: "EU" },
+      { label: "Germany", sales: 450, profit: 48, region: "EU" },
+      { label: "UK", sales: 700, profit: 60, region: "EU" },
+      { label: "USA", sales: 2000, profit: 250, region: "America" },
+      { label: "Canada", sales: 600, profit: 30, region: "America" },
+      { label: "Brazil", sales: 450, profit: 30, region: "America" },
+      { label: "China", sales: 500, profit: 40, region: "Asia" },
+      { label: "Japan", sales: 900, profit: 100, region: "Asia" }
+  ]});
+  register.parse();
+});
+```
+
+```html
+<html>
+  <d-treemap style="width:640px;height:640px" store="dataStore" areaAttr="sales" 
+    colorAttr="profit" tooltipAttr="label" groupAttrs="region">
+  </d-treemap>
+</html>
+```
+
+### Programmatic Instantiation
+
+```js
+require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
+  var dataStore = new Memory({idProperty: "label", data:
+    [
+      { label: "France", sales: 500, profit: 50, region: "EU" },
+      { label: "Germany", sales: 450, profit: 48, region: "EU" },
+      { label: "UK", sales: 700, profit: 60, region: "EU" },
+      { label: "USA", sales: 2000, profit: 250, region: "America" },
+      { label: "Canada", sales: 600, profit: 30, region: "America" },
+      { label: "Brazil", sales: 450, profit: 30, region: "America" },
+      { label: "China", sales: 500, profit: 40, region: "Asia" },
+      { label: "Japan", sales: 900, profit: 100, region: "Asia" }
+  ]});
+  var treeMap = new TreeMap({store: dataStore, areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"]);
+  treeMap.style.width = "640px";
+  treeMap.style.height = "480px";
+  treeMap.placeAt(document.body);
+  treeMap.startup();
+});
+```
+
+<a name="configuration"></a>
+## Element Configuration
+### Data
+
+`dtreemap/TreeMap` can connect to any implementation of `dojo/store/api/Store` interface that implements the get, query and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
+
+A set of properties are available on the treemap to map the properties from the store to the treemap properties. see `delite/StoreMap`for details on mapping.
+
+#### Mapping using attributes
+
+In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes value in the data.
+
+<iframe width="100%" height="300" src="http://jsfiddle.net/cjolif/gfkJT/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+For the cell colors in the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his one color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dojo/Color` constructor.
+
+Note also that the `groupAttrs` property is of type array instead of just a single attribute. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
+
+XXX
+
+Other binding attributes are available:
+
+* the `labelAttr` that binds the cell labels to a data attribute.
+* the `tooltipAttr` that binds the cell tooltips to a data attribute.
+
+
+#### Mapping using functions
+
+In this example the data are mapped from the data store using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
+
+XXX
+
+The example is very similar to the previous one, except that it is using a function to compute the input value for the cells color. In this case instead of using the absolute profit figure we are computing the profit percentage.
+
+The example is also leveraging the query attribute that allows to reduce the scope of the query made onto the data store in order to extract a subset of the data. Here we are choosing only data items with sales above a given threshold.
+
+Obviously functions are also supported for binding areas, labels or tooltips.
+
+
+
+### Properties
+
+In addition to the mapping properties `dtreemap/TreeMap` provides other useful properties to configure the treemap.
+
+  * The `labelThreshold` property corresponds to the maximum depth level at which labels will be displayed. If you want no labels to be displayed, choose 0, if you want only top level labels choose 1 and so on.
+  * The `selectionMode` property corresponds to the type of selection you want to enable on the treemap, possible values are `"multiple"`, `"single"` or `"none"`. See `delite/Selection` for details.
+  * The `selectedItems` property is the array of selected items. If you want to select only a single item you can alternatively used selectedItem property. See `delite/Selection` for details.
+
+YYYYY
+
+For an exhaustive list of treemap properties see LINK TO API
+
+<a name="styling"></a>
+## Element Styling
+
+`dtreemap/TreeMap` generates HTML markup that can be styled using CSS. The treemap provides a default TreeMap.css that must be included in your application. Alternate rendering can be achieved by overriding some of the CSS rules and using the classes put by the treemap on the HTML elements.
+
+The following example shows how to:
+  * center the labels
+  * change the font size
+  * use rounded corners on treemap cells (HTML5 browsers only)
+  
+  
+XXXXXX
+
+Here is an exhaustive list of CSS classes that can be used to style the treemap:
+
+|class name|applies to|
+|----------|----------|
+|d-treemap |the treemap widget node
+|d-treemap-leaf|a treemap cell leaf node
+|d-treemap-group|a grouping cell top level node
+|d-treemap-header|a grouping cell header node
+|d-treemap-groupcontent|a grouping cell content node
+|d-selected|added to any selected cell node
+|d-treemap-leaf_n|a treemap cell leaf node displayed at n-th depth level
+|d-treemap-header_n|a grouping cell header node displayed at n-th depth level
+|d-treemap-groupcontent_n|a grouping cell content node displayed at n-th level
+
+Standard CSS pseudo classes like `:hover` can also be used to customize the cell rendering under particular conditions.
+
+<a name="interactions"></a>
+## User Interactions
+
+By default the `dtreemap/TreeMap` widget only provide mouse & touch (pointer) selection interaction. In this default configuration the following selection actions are available:
+
+
+|Function|Action|
+|--------|------|
+|Select|Click a cell in the treemap
+|Extend a selection|Hold down the CTRL key an click a cell
+|Reduce a selection|Hold down the CTRL key and click an already selected cell
+
+Other interactions must be explicitly mixed in the treemap in order to be available.
+
+To get drill down ability on double click or double tap include the `dtreemap/DrillDown` mixin:
+
+|Function|Action|
+|--------|------|
+|Drill Down|Double click a cell in the treemap
+|Drill Up|Double click the top level header in the treemap
+
+To get keyboard interaction include the `dtreemap/Keyboard` mixin:
+
+
+|Function|Action|
+|--------|------|
+|Right/left arrow keys|Select a neighboring item that shares the same parent item.
+|Up/down arrow keys	|Move up or down in the hierarchy to select a parent or child item.
+|Plus key (+)|Drill down the treemap
+|Minus key (-)|Drill up the treemap
+
+<a name="mixins"></a>
+## Mixins
+
+By default each treemap cell is drawn with a fixed size label. One can leverage CSS to change the default rendering like changing the font size. However some more complex customization might not be possible with CSS, that's why the `dtreemap/TreeMap` widget conveniently proposes classes that can be mixed in the main class and will provide alternate rendering.
+
+### GroupLabel
+
+The first rendering mixin is the `dtreemap/GroupLabel` mixin. It allows to remove cell labels and only keep group labels centered on the groups:
+
+### ScaledLabel
+
+The second rendering mixin is the `dtreemap/ScaledLabel` mixin. It allows to scale the cell labels so that they fill as much as possible the cells size:
+
+<a name="events"></a>
+## Element Events
+
+The `dtreemap/TreeMap` provides the following events:
+
+|event name|dispatched|cancelable|bubbles|properties|
+|----------|----------|----------|-------|----------|
+|treemap-renderer-updated|after creation, styling and sizing of each group and leaf renderers|No|No|<ul><li>`render`: the updated node</li><li>`item`: the corresponding data item </li><li>`kind`: `"leaf"`or `"group"`depending on the renderer type</li><li>`level`: depth level of the renderer</li></ul>|
+|treemap-item-over|when hovering a treemap cell|No|No|<ul><li>`render`: the hovered cell</li><li>`item`: the corresponding data item </li><li>`triggerEvent`: the pointer event that triggered the treemap event</li></ul>
+|treemap-item-out|when rolling out of a treemap cell|No|No|<ul><li>`render`: the rolled out cell</li><li>`item`: the corresponding data item </li><li>`triggerEvent`: the pointer event that triggered the treemap event</li></ul>
+
+
+In addition on can listen on the treemap to the selection events dispatched when a cell is selected. See `delite/Selection`for details.
+
+## Advanced
+
+### Accessibility
+
+High constrast…
+
+Keyboard accessibility is accomplished through the `dtreemap/Keyboard` mixin. If you want your application be keyboard accessible you'll have to mix it into your widget:
+
+
+### Globalization
+
+`dtreemap/TreeMap` does not provided any harcoded string. The only strings displayed by the treemap are coming from the user data through the `dojo/store`. One can make sure to 
+bidi?
+
+### Security
+
+This widget as no particular security concern.
+
+## See also
+### Samples
+### Blog posts…
+
+
+
