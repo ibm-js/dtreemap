@@ -23,11 +23,13 @@
 /* on desktop recent browsers you may prefer to use :hover pseudo-class instead
    of dtreemap-hovered */
 
-.dtreemap-leaf.dtreemap-hovered {
+.dtreemap-leaf:hover {
 	border-color: white;
+	z-index: 20;
 }
 
-.dtreemap-group.dtreemap-hovered {
+.dtreemap-group:hover {
+	z-index: 20;
 }
 
 .dtreemap-selected {
