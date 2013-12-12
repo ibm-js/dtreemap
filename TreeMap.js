@@ -33,7 +33,6 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 
 		// areaAttr: String
 		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
-		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.
 		//		Default is "".
 		areaAttr: "",
 
@@ -452,7 +451,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 				this._layoutGroupContent(renderer, box.w, box.h, level + 1, forceCreate, anim);
 			}
 
-			this.onRendererUpdated({ renderer: renderer, item: child, kind: isLeaf ? "leaf" : "group", level: level });
+			this.emit("treemap-renderer-updated",
+				{ renderer: renderer, item: child, kind: isLeaf ? "leaf" : "group", level: level });
 		},
 
 		_layoutGroupContent: function (renderer, width, height, level, forceCreate, anim) {
@@ -589,9 +589,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				var item = renderer.item;
-				this._hoveredItem = item;
 				this.updateRenderers(item);
-				this.onItemRollOver({renderer: renderer, item: item, triggerEvent: e});
+				this.emit("treemap-item-over", {renderer: renderer, item: item, triggerEvent: e});
 			}
 		},
 
@@ -599,9 +598,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			var renderer = this._getRendererFromTarget(e.target);
 			if (renderer.item) {
 				var item = renderer.item;
-				this._hoveredItem = null;
 				this.updateRenderers(item);
-				this.onItemRollOut({renderer: renderer, item: item, triggerEvent: e});
+				this.emit("treemap-item-over", {renderer: renderer, item: item, triggerEvent: e});
 			}
 		},
 
@@ -610,29 +608,6 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			if (renderer.item) {
 				this.selectFromEvent(e, renderer.item, renderer, true);
 			}
-		},
-
-		onRendererUpdated: function () {
-			// summary:
-			//		Called when a renderer has been updated. This is called after creation, styling and sizing for 
-			//		each group and leaf renderers. For group renders this is also called after creation of children
-			//		renderers. 
-			// tags:
-			//		callback			
-		},
-
-		onItemRollOver: function () {
-			// summary:
-			//		Called when an item renderer has been hovered.
-			// tags:
-			//		callback			
-		},
-
-		onItemRollOut: function () {
-			// summary:
-			//		Called when an item renderer has been rolled out.
-			// tags:
-			//		callback			
 		},
 
 		updateRenderers: function (items) {
@@ -655,19 +630,9 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 				}
 				var selected = this.isSelected(item);
 				if (selected) {
-					domClass.add(renderer, "dtreemap-selected");
+					domClass.add(renderer, "d-selected");
 				} else {
-					domClass.remove(renderer, "dtreemap-selected");
-				}
-				if (this._hoveredItem === item) {
-					domClass.add(renderer, "dtreemap-hovered");
-				} else {
-					domClass.remove(renderer, "dtreemap-hovered");
-				}
-				if (selected || this._hoveredItem === item) {
-					domStyle.set(renderer, "zIndex", 20);
-				} else {
-					domStyle.set(renderer, "zIndex", "auto");
+					domClass.remove(renderer, "d-selected");
 				}
 			}
 		}
