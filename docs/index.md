@@ -1,6 +1,6 @@
 ---
-layout: post
-title: title 
+layout: default
+title: dtreemap/TreeMap 
 ---
 #dtreemap/Treemap
 
