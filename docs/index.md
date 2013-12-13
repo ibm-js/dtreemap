@@ -1,12 +1,17 @@
-# dtreemap/Treemap
+---
+layout: default
+title: dtreemap/TreeMap
+---
 
-`dtreemap/Treemap` displays data as a set of colored, potentially nested, rectangular cells. Treemaps can be used to explore large data sets by using convenient drill-down capabilities. They reveal data patterns and trends easily. Treemaps rely on data clustering, using areas and color information to represent the data you want to explore.
+# dtreemap/TreeMap
+
+`dtreemap/TreeMap` displays data as a set of colored, potentially nested, rectangular cells. Treemaps can be used to explore large data sets by using convenient drill-down capabilities. They reveal data patterns and trends easily. Treemaps rely on data clustering, using areas and color information to represent the data you want to explore.
 
 An example of a treemap is shown below. The treemap shows business sectors at the head of the hierarchy and provides the possibility to drill down to country and then company level.
 
 ![xx](http://livedocs.dojotoolkit.org/dojox/treemap.png)
 
-`dtreemap/Treemap` supports squarified algorithms for two-dimensional treemaps, and is characterized by the ability to:
+`dtreemap/TreeMap` supports squarified algorithms for two-dimensional treemaps, and is characterized by the ability to:
 
 * Map the size, color, and label of treemap cells to properties in a data store.
 * Choose either a predefined algorithm for computing the item colors or specify a color using a customizable color function.
@@ -93,7 +98,7 @@ A set of properties are available on the treemap to map the properties from the 
 
 In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes value in the data.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/cjolif/gfkJT/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="300" src="http://jsfiddle.net/cjolif/gfkJT/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/cjolif/gfkJT/">checkout the sample on JSFiddle</a></iframe>
 
 For the cell colors in the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his one color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dojo/Color` constructor.
 
