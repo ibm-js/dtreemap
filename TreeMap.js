@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 		// summary:
 		//		A treemap widget.
 
-		baseClass: "dtreemap",
+		baseClass: "d-treemap",
 
 		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
@@ -456,8 +456,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 		},
 
 		_layoutGroupContent: function (renderer, width, height, level, forceCreate, anim) {
-			var header = query(".dtreemap-header", renderer)[0];
-			var content = query(".dtreemap-groupcontent", renderer)[0];
+			var header = query(".d-treemap-header", renderer)[0];
+			var content = query(".d-treemap-groupcontent", renderer)[0];
 			if (header == null || content == null) {
 				return;
 			}
@@ -495,15 +495,15 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			var forceCreate = renderer == null;
 			if (renderer == null) {
 				renderer = this.createRenderer("div", level, "group");
-				domClass.add(renderer, "dtreemap-group");
+				domClass.add(renderer, "d-treemap-group");
 			}
 			this.styleRenderer(renderer, item, level, "group");
-			var header = query(".dtreemap-header", renderer)[0];
+			var header = query(".d-treemap-header", renderer)[0];
 			header = this._updateHeaderRenderer(header, item, level);
 			if (forceCreate) {
 				domConstruct.place(header, renderer);
 			}
-			var content = query(".dtreemap-groupcontent", renderer)[0];
+			var content = query(".d-treemap-groupcontent", renderer)[0];
 			content = this._updateGroupContentRenderer(content, item, level);
 			if (forceCreate) {
 				domConstruct.place(content, renderer);
@@ -525,8 +525,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			//		private			
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "header");
-				domClass.add(renderer, "dtreemap-header");
-				domClass.add(renderer, "dtreemap-header_" + level);
+				domClass.add(renderer, "d-treemap-header");
+				domClass.add(renderer, "d-treemap-header_" + level);
 			}
 			this.styleRenderer(renderer, item, level, "header");
 			return renderer;
@@ -546,8 +546,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			//		private				
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "leaf");
-				domClass.add(renderer, "dtreemap-leaf");
-				domClass.add(renderer, "dtreemap-leaf_" + level);
+				domClass.add(renderer, "d-treemap-leaf");
+				domClass.add(renderer, "d-treemap-leaf_" + level);
 			}
 			this.styleRenderer(renderer, item, level, "leaf");
 			if (item.tooltip) {
@@ -570,8 +570,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			//		private				
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "content");
-				domClass.add(renderer, "dtreemap-groupcontent");
-				domClass.add(renderer, "dtreemap-groupcontent_" + level);
+				domClass.add(renderer, "d-treemap-groupcontent");
+				domClass.add(renderer, "d-treemap-groupcontent_" + level);
 			}
 			this.styleRenderer(renderer, item, level, "content");
 			return renderer;

@@ -1,3 +1,3 @@
-.dtreemap-group.dtreemap-selected:before {
+.d-treemap .d-treemap-group.d-selected:before {
 	border: none;
 }

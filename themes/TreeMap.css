@@ -1,42 +1,42 @@
-.dtreemap {
+.d-treemap {
 	background-color: #EBEADB;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	display: block;
 }
 
-.dtreemap-leaf {
+.d-treemap-leaf {
 	border: 1px solid black;
 	padding: 3px;
 }
 
-.dtreemap-group {
+.d-treemap-group {
 }
 
-.dtreemap-groupcontent {
+.d-treemap-groupcontent {
 }
 
-.dtreemap-header {
+.d-treemap-header {
 	background-color: white;
 	border: 1px solid black;
 }
 
 /* on desktop recent browsers you may prefer to use :hover pseudo-class instead
-   of dtreemap-hovered */
+   of d-treemap-hovered */
 
-.dtreemap-leaf:hover {
+.d-treemap-leaf:hover {
 	border-color: white;
 	z-index: 20;
 }
 
-.dtreemap-group:hover {
+.d-treemap-group:hover {
 	z-index: 20;
 }
 
-.dtreemap-selected {
+.d-treemap .d-selected {
 	border-color: red;
 }
 
-.dtreemap-selected:before {
+.d-treemap .d-selected:before {
 	content: '';
 	position: absolute;
 	left: 0px;
@@ -48,7 +48,7 @@
 	z-index: 20;
 }
 
-.dtreemap-group.dtreemap-selected:before {
+.d-treemap .d-treemap-group.d-selected:before {
 	content: '';
 	position: absolute;
 	left: 1px;
@@ -60,7 +60,7 @@
 	z-index: 20;
 }
 
-.dtreemap-selected:before {
+.d-treemap .d-selected:before {
 	content: '';
 	position: absolute;
 	left: 0px;
@@ -72,6 +72,6 @@
 	z-index: 20;
 }
 
-.dtreemap-group.dtreemap-selected{
+.d-treemap .d-treemap-group.d-selected{
 	border:2px dashed red;
 }

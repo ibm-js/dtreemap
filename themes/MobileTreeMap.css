@@ -1,28 +1,25 @@
-.dtreemap {
+.d-treemap {
 	background-color: #EBEADB;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 }
 
-.dtreeamap-leaf {
+.d-treemap-leaf {
 	border: 1px solid black;
 }
 
-.dtreeamap-group {
+.d-treemap-group {
 }
 
-.dtreemap-groupcontent {
-}
-
-.dtreemap-header {
+d-treemap-header {
 	background-color: white;
 	border: 1px solid black;
 }
 
-.dtreeamap-selected {
+.d-treemap .d-selected {
 	border-color: red;
 }
 
-.dtreeamap-group.dtreeamap-selected:before {
+.d-treemap-group.d-selected:before {
 	content: '';
 	position: absolute;
 	left: 1px;
