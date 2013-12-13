@@ -8,7 +8,7 @@ title: dtreemap/TreeMap
 
 An example of a treemap is shown below. The treemap shows business sectors at the head of the hierarchy and provides the possibility to drill down to country and then company level.
 
-![xx](http://livedocs.dojotoolkit.org/dojox/treemap.png)
+![xx](treemap.png)
 
 `dtreemap/Treemap` supports squarified algorithms for two-dimensional treemaps, and is characterized by the ability to:
 
@@ -18,8 +18,7 @@ An example of a treemap is shown below. The treemap shows business sectors at th
 * Get an event when clicking and hovering over treemap items.
 * Navigate within a treemap with visual effects on drill down.
 
-TODO using layer …
-TODO multi channel
+Before proceeding checkout [setup page](setup) on how to setup a project using dtreemap. This will be required to leverage the samples from this page.
 
 ##### Table of Contents
 [Element Instantiation](#instantiation)
@@ -32,7 +31,7 @@ TODO multi channel
 <a name="instantiation"></a>
 ## Element Instantiation
 
-See `delite/Widget`for details for full details on how instantiation lifecycle is working.
+See [`delite/Widget`](/delite/docs/Widget) for full details on how instantiation lifecycle is working.
 
 ### Declarative Instantiation
 
@@ -103,8 +102,10 @@ For the cell colors in the value of the binding is used as an input into the spe
 
 Note also that the `groupAttrs` property is of type array instead of just a single attribute. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
 
-XXX
 
+```js
+groupsAttrs: ["continent", "country"]
+```
 Other binding attributes are available:
 
 * the `labelAttr` that binds the cell labels to a data attribute.
@@ -115,14 +116,13 @@ Other binding attributes are available:
 
 In this example the data are mapped from the data store using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
 
-XXX
+TODO other JSFiddle example
 
 The example is very similar to the previous one, except that it is using a function to compute the input value for the cells color. In this case instead of using the absolute profit figure we are computing the profit percentage.
 
 The example is also leveraging the query attribute that allows to reduce the scope of the query made onto the data store in order to extract a subset of the data. Here we are choosing only data items with sales above a given threshold.
 
 Obviously functions are also supported for binding areas, labels or tooltips.
-
 
 
 ### Properties
@@ -133,9 +133,13 @@ In addition to the mapping properties `dtreemap/TreeMap` provides other useful p
   * The `selectionMode` property corresponds to the type of selection you want to enable on the treemap, possible values are `"multiple"`, `"single"` or `"none"`. See `delite/Selection` for details.
   * The `selectedItems` property is the array of selected items. If you want to select only a single item you can alternatively used selectedItem property. See `delite/Selection` for details.
 
-YYYYY
+```js
+var treeMap = new TreeMap({store: dataStore, labelThreshold: 1, selectedItem: dataStore.get("France") ,
+  areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
+  colorModel: colorModel });
+```
 
-For an exhaustive list of treemap properties see LINK TO API
+For an exhaustive list of treemap properties see TODO LINK TO API DOC
 
 <a name="styling"></a>
 ## Element Styling
@@ -148,7 +152,7 @@ The following example shows how to:
   * use rounded corners on treemap cells (HTML5 browsers only)
   
   
-XXXXXX
+TODO JSFiddle example
 
 Here is an exhaustive list of CSS classes that can be used to style the treemap:
 
@@ -182,6 +186,14 @@ Other interactions must be explicitly mixed in the treemap in order to be availa
 
 To get drill down ability on double click or double tap include the `dtreemap/DrillDown` mixin:
 
+```js
+var DrillDownTreeMap = register("drilldown-treemap", [TreeMap, DrillDownUp]);
+```
+
+You can then easily use programmatically the `DrillDownTreeMap` class or declaratively the `drilldown-treemap` tag provided that you have done the registration before use. 
+
+This will enable the following interactions:
+
 |Function|Action|
 |--------|------|
 |Drill Down|Double click a cell in the treemap
@@ -189,6 +201,13 @@ To get drill down ability on double click or double tap include the `dtreemap/Dr
 
 To get keyboard interaction include the `dtreemap/Keyboard` mixin:
 
+```js
+var KeyboardTreeMap = register("key-treemap", [TreeMap, Keyboard]);
+```
+
+You can then easily use programmatically the `KeyboardTreeMap` class or declaratively the `key-treemap` tag provided that you have done the registration before use. 
+
+This will enable the following interactions:
 
 |Function|Action|
 |--------|------|
@@ -206,9 +225,13 @@ By default each treemap cell is drawn with a fixed size label. One can leverage 
 
 The first rendering mixin is the `dtreemap/GroupLabel` mixin. It allows to remove cell labels and only keep group labels centered on the groups:
 
+TODO JSFillde sample
+
 ### ScaledLabel
 
 The second rendering mixin is the `dtreemap/ScaledLabel` mixin. It allows to scale the cell labels so that they fill as much as possible the cells size:
+
+TODO JSFiddle sample
 
 <a name="events"></a>
 ## Element Events
@@ -221,16 +244,37 @@ The `dtreemap/TreeMap` provides the following events:
 |treemap-item-over|when hovering a treemap cell|No|No|<ul><li>`render`: the hovered cell</li><li>`item`: the corresponding data item </li><li>`triggerEvent`: the pointer event that triggered the treemap event</li></ul>
 |treemap-item-out|when rolling out of a treemap cell|No|No|<ul><li>`render`: the rolled out cell</li><li>`item`: the corresponding data item </li><li>`triggerEvent`: the pointer event that triggered the treemap event</li></ul>
 
-
 In addition on can listen on the treemap to the selection events dispatched when a cell is selected. See `delite/Selection`for details.
+
+This code excerpt shows how to listen to various events and react to them:
+
+```js
+var treeMap = ...;
+treeMap.on("selection-change", function (e) {
+	if (e.newValue) {
+		// display the label of the selected value
+    	dom.byId("output").innerHTML = e.newValue.label;
+    }
+});
+treeMap.on("treemap-item-over", function (e) {
+	if (e.item) {
+		// display the label of the hovered value
+    	dom.byId("output").innerHTML = e.newValue.label;
+    }
+});
+```
+
 
 ## Advanced
 
 ### Accessibility
 
-High constrast…
 
-Keyboard accessibility is accomplished through the `dtreemap/Keyboard` mixin. If you want your application be keyboard accessible you'll have to mix it into your widget:
+|type|status|comment|
+|----|------|-------|
+|keyboard|optional|accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions)|
+|Vision|on| tested for high constrast and browser zoom|
+|Reader|on| tesed on JAWS and iOS VoiceOver|
 
 
 ### Globalization
