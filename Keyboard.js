@@ -9,7 +9,6 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 		// tabIndex: String
 		//		Order fields are traversed when user hits the tab key
 		tabIndex: "0",
-		_setTabIndexAttr: "domNode",
 
 		constructor: function () {
 		},
