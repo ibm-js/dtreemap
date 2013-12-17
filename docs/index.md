@@ -22,12 +22,12 @@ An example of a treemap is shown below. The treemap shows business sectors at th
 Before proceeding checkout [setup page](setup) on how to setup a project using dtreemap. This will be required to leverage the samples from this page.
 
 ##### Table of Contents
-[Element Instantiation](#instantiation)
-[Element Configuration](#configuration)
-[Element Styling](#styling)
-[User Interactions](#interactions)
-[Mixins](#mixins)
-[Element Events](#events)
+[Element Instantiation](#instantiation)  
+[Element Configuration](#configuration)  
+[Element Styling](#styling)  
+[User Interactions](#interactions)  
+[Mixins](#mixins)  
+[Element Events](#events)  
 
 <a name="instantiation"></a>
 ## Element Instantiation
@@ -112,7 +112,7 @@ Other binding attributes are available:
 * the `labelAttr` that binds the cell labels to a data attribute.
 * the `tooltipAttr` that binds the cell tooltips to a data attribute.
 
-
+<a name="byfunc"></a>
 #### Mapping using functions
 
 In this example the data are mapped from the data store using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
@@ -266,7 +266,7 @@ treeMap.on("treemap-item-over", function (e) {
 ```
 
 
-## Advanced
+## Enterprise Use
 
 ### Accessibility
 
@@ -274,18 +274,31 @@ treeMap.on("treemap-item-over", function (e) {
 |type|status|comment|
 |----|------|-------|
 |keyboard|optional|accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions)|
-|Vision|on| tested for high constrast and browser zoom|
-|Reader|on| tesed on JAWS and iOS VoiceOver|
+|Visual Formatting|ok| tested for high constrast and browser zoom (200%)|
+|Screen Reader|ok| tesed on JAWS and iOS VoiceOver|
 
 
 ### Globalization
 
-`dtreemap/TreeMap` does not provided any harcoded string. The only strings displayed by the treemap are coming from the user data through the `dojo/store`. One can make sure to 
-bidi?
+`dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dojo/store`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
+
+```js
+require(["dojo/i18!myapp/nls/bundle", …], function(bundle, …) {
+  myTreeMap.labelFunc = function (item) {
+    return bundle[item.label];
+  }
+}); 
+```
+
+Right to left orientation is supported by setting the `dir` attribute to `rtl`on the treemap element:
+
+```js
+<d-treemap style="width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" dir="rtl"></d-treemap>
+``
 
 ### Security
 
-This widget as no particular security concern.
+This widget as no specific security concern. Refers to `delite/Widget` and `delite/StoreMap` documentation for general security advices on this base class and mixin that `dtreemap/TreeMap` is using.
 
 ## See also
 ### Samples
