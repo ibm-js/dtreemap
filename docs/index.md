@@ -28,6 +28,7 @@ Before proceeding checkout [setup page](setup) on how to setup a project using d
 [User Interactions](#interactions)  
 [Mixins](#mixins)  
 [Element Events](#events)  
+[Enteprise Use](#enterprise)  
 
 <a name="instantiation"></a>
 ## Element Instantiation
@@ -265,7 +266,7 @@ treeMap.on("treemap-item-over", function (e) {
 });
 ```
 
-
+<a name="enterprise"></a>
 ## Enterprise Use
 
 ### Accessibility
@@ -273,9 +274,9 @@ treeMap.on("treemap-item-over", function (e) {
 
 |type|status|comment|
 |----|------|-------|
-|keyboard|optional|accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions)|
-|Visual Formatting|ok| tested for high constrast and browser zoom (200%)|
-|Screen Reader|ok| tesed on JAWS and iOS VoiceOver|
+|Keyboard|optional|Accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions).|
+|Visual Formatting|ok, might require customization|Tested for high constrast and browser zoom (200%). In high contrast the color cell information is not conveyed and must be put in the label if important using `labelFunc` to be conveyed through text. |
+|Screen Reader|ok|Tested on JAWS 15 and iOS 6 VoiceOver.|
 
 
 ### Globalization
@@ -294,11 +295,15 @@ Right to left orientation is supported by setting the `dir` attribute to `rtl`on
 
 ```js
 <d-treemap style="width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" dir="rtl"></d-treemap>
-``
+```
 
 ### Security
 
 This widget as no specific security concern. Refers to `delite/Widget` and `delite/StoreMap` documentation for general security advices on this base class and mixin that `dtreemap/TreeMap` is using.
+
+### Browser Support
+
+This widget supports all supported browsers without any degrated behavior.
 
 ## See also
 ### Samples
