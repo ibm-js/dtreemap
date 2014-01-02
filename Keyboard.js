@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
+define(["dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
 	"./_utils", "dui/_FocusMixin", "dpointer/events"],
-	function (lang, event, dcl, on, keys, domAttr, utils, _FocusMixin) {
+	function (dcl, on, keys, domAttr, utils, _FocusMixin) {
 
 	return dcl(_FocusMixin, {
 		// summary:
@@ -14,8 +14,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 		},
 
 		postCreate: function () {
-			this.own(on(this, "keydown", lang.hitch(this, this._keyDownHandler)));
-			this.own(on(this, "pointerdown", lang.hitch(this, this._pointerDownHandler)));
+			this.own(on(this, "keydown", this._keyDownHandler.bind(this)));
+			this.own(on(this, "pointerdown", this._pointerDownHandler.bind(this)));
 		},
 
 		createRenderer: dcl.superCall(function (sup) {
@@ -45,8 +45,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 				e.keyCode !== keys.NUMPAD_PLUS) {
 				children = (e.keyCode === keys.DOWN_ARROW) ? selected.children : parent.children;
 				if (children) {
-					childrenI = utils.initElements(children, lang.hitch(this,
-						this._computeAreaForItem)).elements;
+					childrenI = utils.initElements(children, this._computeAreaForItem.bind(this)).elements;
 					selectedI = childrenI[children.indexOf(selected)];
 					childrenI.sort(function (a, b) {
 						return b.size - a.size;
@@ -80,7 +79,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 			case keys.NUMPAD_PLUS:
 				if (!this._isLeaf(selected) && this.drillDown) {
 					this.drillDown(renderer);
-					event.stop(e);
+					e.preventDefault();
+					e.stopPropagation();
 				}
 				break;
 			// TODO
@@ -88,7 +88,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 			case keys.NUMPAD_MINUS:
 				if (!this._isLeaf(selected) && this.drillUp) {
 					this.drillUp(renderer);
-					event.stop(e);
+					e.preventDefault();
+					e.stopPropagation();
 				}
 				break;
 			}
@@ -100,7 +101,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/keys"
 		_selectItem: function (e, selected) {
 			if (!this._isRoot(selected)) {
 				this.selectedItem = selected;
-				event.stop(e);
+				e.preventDefault();
+				e.stopPropagation();
 			}
 		}
 	});

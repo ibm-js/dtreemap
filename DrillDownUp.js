@@ -1,13 +1,13 @@
-define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
+define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 	"dojo/dom-style", "dojo/_base/fx", "dpointer/events"],
-	function (lang, event, dcl, on, domGeom, domConstruct, domStyle, fx) {
+	function (dcl, on, domGeom, domConstruct, domStyle, fx) {
 
 	return dcl(null, {
 		// summary:
 		//		Specializes TreeMap to support drill down and up operations.
 
 		postCreate: function () {
-			this.own(on(this, "dblclick", lang.hitch(this, this._dblClickHandler)));
+			this.own(on(this, "dblclick", this._dblClickHandler.bind(this)));
 		},
 
 		_dblClickHandler: function (e) {
@@ -29,7 +29,8 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 				} else {
 					this.drillDown(renderer);
 				}
-				event.stop(e);
+				e.preventDefault();
+				e.stopPropagation();
 			}
 		},
 
@@ -39,6 +40,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 			// renderer: DomNode
 			//		The item renderer.
 			var item = renderer.item;
+			var self = this;
 
 			// Remove the current rootItem renderer
 			// rebuild the tree map
@@ -74,13 +76,13 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 						end: finalBox.w
 					}
 				},
-				onAnimate: lang.hitch(this, function () {
+				onAnimate: function () {
 					var box = domGeom.getContentBox(renderer);
-					this._layoutGroupContent(renderer, box.w, box.h, renderer.level + 1, false, true);
-				}),
-				onEnd: lang.hitch(this, function () {
-					this.removeChild(renderer);
-				})
+					self._layoutGroupContent(renderer, box.w, box.h, renderer.level + 1, false, true);
+				},
+				onEnd: function () {
+					self.removeChild(renderer);
+				}
 			}).play();
 		},
 
@@ -91,6 +93,7 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 			//		The item renderer.
 			var box = domGeom.getMarginBox(this);
 			var item = renderer.item;
+			var self = this;
 
 			// Set the new root item into the rootPanel to make it appear on top
 			// of the other nodes, and keep the same global location
@@ -122,14 +125,14 @@ define(["dojo/_base/lang", "dojo/_base/event", "dcl/dcl", "dojo/on", "dojo/dom-g
 						end: box.w
 					}
 				},
-				onAnimate: lang.hitch(this, function () {
+				onAnimate: function () {
 					var box2 = domGeom.getContentBox(renderer);
-					this._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
-				}),
-				onEnd: lang.hitch(this, function () {
+					self._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
+				},
+				onEnd: function () {
 					domStyle.set(renderer, "zIndex", zIndex);
-					this.rootItem = item;
-				})
+					self.rootItem = item;
+				}
 			}).play();
 		}
 	});

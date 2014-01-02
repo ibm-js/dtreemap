@@ -1,8 +1,8 @@
-define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
+define(["dcl/dcl", "dui/register", "dojo/_base/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 	"./_utils", "dpointer/events", "dui/Widget", "dui/Invalidating", "dui/Selection",
 	"dui/StoreMap", "dojo/uacss"],
-	function (lang, dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
+	function (dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
 			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
 	return register("d-treemap", [HTMLElement, Widget, Invalidating, Selection, StoreMap], {
@@ -121,9 +121,9 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 		},
 
 		postCreate: function () {
-			this.own(on(this, "pointerover", lang.hitch(this, this._pointerOverHandler)));
-			this.own(on(this, "pointerout", lang.hitch(this, this._pointerOutHandler)));
-			this.own(on(this, "pointerup", lang.hitch(this, this._pointerUpHandler)));
+			this.own(on(this, "pointerover", this._pointerOverHandler.bind(this)));
+			this.own(on(this, "pointerout", this._pointerOutHandler.bind(this)));
+			this.own(on(this, "pointerup", this._pointerUpHandler.bind(this)));
 			this.setAttribute("role", "presentation");
 			this.setAttribute("aria-label", "treemap");
 		},
@@ -154,7 +154,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 
 			if ((props.colorAttr || props.colorFunc || props.colorModel) &&
 				(this.colorModel != null && this.items != null && this.colorModel.initialize)) {
-				this.colorModel.initialize(this.items, lang.hitch(this, this._colorFunc));
+				this.colorModel.initialize(this.items, this._colorFunc.bind(this));
 			}
 
 			if (props.areaAttr || props.areaFunc) {
@@ -296,7 +296,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			}
 			if (this._groupFuncs != null && this._groupFuncs.length > 0) {
 				this._groupeditems = utils.group(items, this._groupFuncs,
-												lang.hitch(this, this._getAreaForItem)).children;
+												this._getAreaForItem.bind(this)).children;
 			} else {
 				this._groupeditems = items;
 			}
@@ -375,8 +375,8 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			var children = item.children;
 			var box = domGeom.getMarginBox(domNode);
 
-			var solution = utils.solve(children, box.w, box.h, lang.hitch(this,
-				this._computeAreaForItem), !this.isLeftToRight());
+			var solution = utils.solve(children, box.w, box.h, this._computeAreaForItem.bind(this),
+				!this.isLeftToRight());
 
 			var rectangles = solution.rectangles;
 
@@ -618,7 +618,7 @@ define(["dojo/_base/lang", "dcl/dcl", "dui/register", "dojo/_base/Color",
 			if (!items) {
 				return;
 			}
-			if (!lang.isArray(items)) {
+			if (!Array.isArray(items)) {
 				items = [items];
 			}
 			for (var i = 0; i < items.length; i++) {
