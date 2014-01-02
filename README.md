@@ -1,6 +1,6 @@
 # dtreemap [![Build Status](https://travis-ci.org/ibm-dojo/dtreemap.png?branch=master)](https://travis-ci.org/ibm-dojo/dtreemap)
 
-This project provides a dui-based TreeMap widget.
+This project provides a delite-based TreeMap widget.
 
 ## Status
 
@@ -25,16 +25,18 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
 This project requires the following other projects to run:
  * dojo
- * dui
+ * delite
  * dcl
  * dcolor
  * dpointer
 
 ## Installation
 
+* Bower installation by calling bower install dtreemap
+
 * Manual installation of by dropping dtreemap as a sibling of the top level Dojo modules:
  * dojo
- * dui
+ * delite
  * dcl
  * dcolor
  * dpointer

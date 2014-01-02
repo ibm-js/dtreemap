@@ -1,8 +1,8 @@
 define(["dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
-	"./_utils", "dui/_FocusMixin", "dpointer/events"],
-	function (dcl, on, keys, domAttr, utils, _FocusMixin) {
+	"./_utils", "delite/focus", "dpointer/events"],
+	function (dcl, on, keys, domAttr, utils) {
 
-	return dcl(_FocusMixin, {
+	return dcl(null, {
 		// summary:
 		//		Specializes TreeMap to support keyboard navigation and accessibility.
 
