@@ -32,19 +32,16 @@ This project requires the following other projects to run:
 
 ## Installation
 
-* Bower installation by calling bower install dtreemap
+* Bower release installation: `bower install dtreemap`
 
-* Manual installation of by dropping dtreemap as a sibling of the top level Dojo modules:
- * dojo
- * delite
- * dcl
- * dcolor
- * dpointer
- * dtreemap
+* Manual master installation: go to the root Dojo installation directory and clone dtreemap from github:
 
- To install the latest master, go to the root Dojo installation directory and clone dtreemap from github
+	$ git clone git://github.com/ibm-dojo/dtreemap.git
 
- git clone git://github.com/ibm-dojo/dtreemap.git
+Then install dependencies:
+
+	$ cd dtreemap
+	$ bower install
 
 ## Documentation
 
