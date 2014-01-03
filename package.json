@@ -9,7 +9,7 @@
 	],
 	"dependencies": {
 		"dojo": ">=1.9.1",
-		"dui": ">=0.1.0",
+		"delite": ">=0.1.0",
 		"dcl": "1.1",
 		"dcolor": ">=0.1.0",
 		"dpointer": ">=0.1.0"

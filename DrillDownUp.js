@@ -47,8 +47,7 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 			// and animate the old renderer before deleting it.
 
 			this.removeChild(renderer);
-			var parent = this._getRenderer(item).parentItem;
-			this.rootItem = parent;
+			this.rootItem = this._getRenderer(item).parentItem;
 			this.validate();
 
 			// re-add the old renderer to show the animation

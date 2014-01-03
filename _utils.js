@@ -205,7 +205,7 @@ define(function () {
 		},
 		_trySolution: function (elements, start, end, vert, tmpWidth, tmpHeight) {
 			var total = 0;
-			var aspect = 0;
+			var aspect;
 			var localWidth = 0;
 			var localHeight = 0;
 			var n;
