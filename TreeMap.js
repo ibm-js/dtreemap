@@ -599,7 +599,7 @@ define(["dcl/dcl", "delite/register", "dojo/_base/Color",
 			if (renderer.item) {
 				var item = renderer.item;
 				this.updateRenderers(item);
-				this.emit("treemap-item-over", {renderer: renderer, item: item, triggerEvent: e});
+				this.emit("treemap-item-out", {renderer: renderer, item: item, triggerEvent: e});
 			}
 		},
 
