@@ -103,7 +103,7 @@ define(["dcl/dcl", "delite/register", "dojo/_base/Color",
 					"tooltipFunc": "invalidateProperty",
 					"colorAttr": "invalidateProperty",
 					"colorFunc": "invalidateProperty",
-					"items": "invalidateProperty",
+					"renderItems": "invalidateProperty",
 					"groupAttrs": "invalidateProperty",
 					"groupFuncs": "invalidateProperty"
 				});
@@ -132,15 +132,15 @@ define(["dcl/dcl", "delite/register", "dojo/_base/Color",
 		refreshProperties: dcl.superCall(function (sup) {
 			return function (props) {
 				sup.call(this, props);
-				if (this.items && this._mappedKeys.some(function (item) {
+				if (this.renderItems && this._mappedKeys.some(function (item) {
 					return props[item + "Attr"] || props[item + "Func"];
 				})) {
 					this.remap();
 				}
-				if (props.items || props.groupAttrs || props.groupFuncs) {
+				if (props.renderItems || props.groupAttrs || props.groupFuncs) {
 					this._set("rootItem", null);
 				}
-				if (props.items) {
+				if (props.renderItems) {
 					props.groupAttrs = true;
 					props.colorAttr = true;
 				}
@@ -153,8 +153,8 @@ define(["dcl/dcl", "delite/register", "dojo/_base/Color",
 			}
 
 			if ((props.colorAttr || props.colorFunc || props.colorModel) &&
-				(this.colorModel != null && this.items != null && this.colorModel.initialize)) {
-				this.colorModel.initialize(this.items, this._colorFunc.bind(this));
+				(this.colorModel != null && this.renderItems != null && this.colorModel.initialize)) {
+				this.colorModel.initialize(this.renderItems, this._colorFunc.bind(this));
 			}
 
 			if (props.areaAttr || props.areaFunc) {
@@ -290,7 +290,7 @@ define(["dcl/dcl", "delite/register", "dojo/_base/Color",
 		},
 
 		_updateTreeMapHierarchy: function () {
-			var items = this.items;
+			var items = this.renderItems;
 			if (items == null) {
 				return;
 			}
