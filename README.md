@@ -36,7 +36,7 @@ This project requires the following other projects to run:
 
 * Manual master installation: go to the root Dojo installation directory and clone dtreemap from github:
 
-	$ git clone git://github.com/ibm-dojo/dtreemap.git
+	$ git clone git://github.com/ibm-js/dtreemap.git
 
 Then install dependencies:
 

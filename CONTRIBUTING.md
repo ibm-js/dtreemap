@@ -102,7 +102,7 @@ and merge them into your local clone and then push them to your GitHub fork:
 
 ```bash
 $ cd dtreemap
-$ git remote add upstream git@github.com:ibm-dojo/dtreemap.git
+$ git remote add upstream git@github.com:ibm-js/dtreemap.git
 $ git fetch upstream
 ```
 
