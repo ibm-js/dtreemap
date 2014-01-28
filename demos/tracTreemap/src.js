@@ -50,7 +50,7 @@ var sizeByCcFunc = function (item) {
 	return item.cc ? item.cc.split(",").length : 1;
 };
 
-require(["dojo/ready", "dojo/dom", "dojo/_base/Color", "dcl/dcl", "dojo/parser",
+require(["dojo/ready", "dojo/dom", "dcolor/Color", "dcl/dcl", "dojo/parser",
 	"dui/registry", "dui/dijit/Tooltip", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
 	"dui/layout/BorderContainer", "dui/layout/ContentPane", "dtreemap/TreeMap",
 	"dui/form/RadioButton", "dtreemap/Keyboard",

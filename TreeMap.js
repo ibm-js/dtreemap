@@ -1,4 +1,4 @@
-define(["dcl/dcl", "delite/register", "dojo/_base/Color",
+define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Invalidating", "delite/Selection",
 	"delite/StoreMap", "dojo/uacss"],
