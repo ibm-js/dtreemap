@@ -1,4 +1,4 @@
-# dtreemap [![Build Status](https://travis-ci.org/ibm-dojo/dtreemap.png?branch=master)](https://travis-ci.org/ibm-dojo/dtreemap)
+# dtreemap [![Build Status](https://travis-ci.org/ibm-js/dtreemap.png?branch=master)](https://travis-ci.org/ibm-js/dtreemap)
 
 This project provides a delite-based TreeMap widget.
 
