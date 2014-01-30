@@ -21,13 +21,13 @@
 				thresholdChanged, neutralChanged, MyTreeMap, refreshData;
 
 		require(["dojo/domReady", "dojo/dom", "dcolor/Color", "delite/register",
-			"dtreemap/TreeMap", "dcolor/MeanColorModel", "dojox/data/CsvStore", "dojo/store/DataStore",
-			"dojo/store/Observable", "dtreemap/Keyboard", "dtreemap/DrillDownUp"],
-			function(ready, dom, Color, register, TreeMap, MeanColorModel, CsvStore, DataStore, Observable,
+			"dtreemap/TreeMap", "dcolor/MeanColorModel", "dstore/Csv",
+			"dstore/Observable", "dtreemap/Keyboard", "dtreemap/DrillDownUp"],
+			function(ready, dom, Color, register, TreeMap, MeanColorModel, Csv, Observable,
 					 Keyboard, DrillDownUp) {
 
 				var colorModel = new MeanColorModel(new Color(Color.named.green), new Color(Color.named.red));
-				var store = new DataStore({ store: new CsvStore({url: "freight.csv"}) });
+				var store = new Csv({	 store: new CsvStore({url: "freight.csv"}) });
 
 				ready(function(){
 					MyTreeMap = register("my-treemap", [HTMLElement, TreeMap, Keyboard, DrillDownUp]);

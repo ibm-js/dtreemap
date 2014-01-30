@@ -39,7 +39,7 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 
 ```js
 var dataStore;
-require(["delite/register", "dtreemap/TreeMap", "dojo/domReady!"], function (register) {
+require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (register, Memory) {
   dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -66,7 +66,7 @@ require(["delite/register", "dtreemap/TreeMap", "dojo/domReady!"], function (reg
 ### Programmatic Instantiation
 
 ```js
-require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
+require(["dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
   var dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -90,7 +90,7 @@ require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (M
 ## Element Configuration
 ### Data
 
-`dtreemap/TreeMap` can connect to any implementation of `dojo/store/api/Store` interface that implements the get, query and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs` property to group the data based on some of their attributes.
+`dtreemap/TreeMap` can connect to any implementation of `dstore/api/Store` interface that implements the get, filter, map and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
 
 A set of properties are available on the treemap to map the properties from the store to the treemap properties. see `delite/StoreMap`for details on mapping.
 
@@ -281,7 +281,7 @@ treeMap.on("treemap-item-over", function (e) {
 
 ### Globalization
 
-`dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dojo/store`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
+`dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dstore`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
 
 ```js
 require(["dojo/i18!myapp/nls/bundle", …], function(bundle, …) {

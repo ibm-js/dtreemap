@@ -6,6 +6,7 @@
 		"dcl": "1.1.x",
 		"dcolor": ">=0.1.0-dev",
 		"dpointer": ">=0.1.0-dev",
-		"delite": ">=0.1.0-dev"
+		"delite": ">=0.1.0-dev",
+		"dstore": ">=0.0.1-dev"
 	}
 }
