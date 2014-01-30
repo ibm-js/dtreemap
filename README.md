@@ -25,6 +25,7 @@ All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/abou
 
 This project requires the following other projects to run:
  * dojo
+ * requirejs
  * delite
  * dcl
  * dcolor
@@ -36,11 +37,11 @@ _Bower_ release installation:
 
     $ bower install dtreemap
 
-_Manual_ master installation: go to the root Dojo installation directory and clone dtreemap from github:
+_Manual_ master installation:
 
     $ git clone git://github.com/ibm-js/dtreemap.git
 
-Then install dependencies with bower or manual if you want to:
+Then install dependencies with bower (or manually from github if you prefer to):
 
 	$ cd dtreemap
 	$ bower install
