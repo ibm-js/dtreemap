@@ -78,7 +78,7 @@ require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (M
       { label: "China", sales: 500, profit: 40, region: "Asia" },
       { label: "Japan", sales: 900, profit: 100, region: "Asia" }
   ]});
-  var treeMap = new TreeMap({store: dataStore, areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"]);
+  var treeMap = new TreeMap({store: dataStore, areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"]});
   treeMap.style.width = "640px";
   treeMap.style.height = "480px";
   treeMap.placeAt(document.body);
