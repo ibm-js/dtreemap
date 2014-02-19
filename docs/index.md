@@ -19,7 +19,7 @@ An example of a treemap is shown below. The treemap shows business sectors at th
 * Get an event when clicking and hovering over treemap items.
 * Navigate within a treemap with visual effects on drill down.
 
-Before proceeding checkout [setup page](setup) on how to setup a project using dtreemap. This will be required to leverage the samples from this page.
+Before proceeding checkout [setup page](setup.md) on how to setup a project using dtreemap. This will be required to leverage the samples from this page.
 
 ##### Table of Contents
 [Element Instantiation](#instantiation)  
@@ -33,7 +33,7 @@ Before proceeding checkout [setup page](setup) on how to setup a project using d
 <a name="instantiation"></a>
 ## Element Instantiation
 
-See [`delite/Widget`](/delite/docs/Widget) for full details on how instantiation lifecycle is working.
+See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how instantiation lifecycle is working.
 
 ### Declarative Instantiation
 
@@ -98,7 +98,7 @@ A set of properties are available on the treemap to map the properties from the 
 
 In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes value in the data.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/cjolif/gfkJT/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/cjolif/gfkJT/">checkout the sample on JSFiddle</a></iframe>
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/jnh79/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/cjolif/gfkJT/">checkout the sample on JSFiddle</a></iframe>
 
 For the cell colors in the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his one color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dojo/Color` constructor.
 
