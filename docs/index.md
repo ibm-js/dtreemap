@@ -90,19 +90,19 @@ require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (M
 ## Element Configuration
 ### Data
 
-`dtreemap/TreeMap` can connect to any implementation of `dojo/store/api/Store` interface that implements the get, query and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
+`dtreemap/TreeMap` can connect to any implementation of `dojo/store/api/Store` interface that implements the get, query and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs` property to group the data based on some of their attributes.
 
 A set of properties are available on the treemap to map the properties from the store to the treemap properties. see `delite/StoreMap`for details on mapping.
 
 #### Mapping using attributes
 
-In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes value in the data.
+In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes values in the data.
 
 <iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/jnh79/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/cjolif/gfkJT/">checkout the sample on JSFiddle</a></iframe>
 
-For the cell colors in the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his one color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dojo/Color` constructor.
+For the cell colors, the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his own color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dcolor/Color` constructor.
 
-Note also that the `groupAttrs` property is of type array instead of just a single attribute. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
+Note also that the `groupAttrs` property is of type array. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
 
 
 ```js
