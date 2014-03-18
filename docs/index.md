@@ -275,7 +275,7 @@ treeMap.on("treemap-item-over", function (e) {
 |type|status|comment|
 |----|------|-------|
 |Keyboard|optional|Accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions).|
-|Visual Formatting|ok, might require customization|Tested for high constrast and browser zoom (200%). In high contrast the color cell information is not conveyed and must be put in the label if important using `labelFunc` to be conveyed through text. |
+|Visual Formatting|ok, might require customization|Tested for high constrast and browser zoom (200%). In high contrast the color cell information is not conveyed and must be put in the label using `labelFunc` if it is important to be conveyed through text. |
 |Screen Reader|ok|Tested on JAWS 15 and iOS 6 VoiceOver.|
 
 
@@ -299,7 +299,7 @@ Right to left orientation is supported by setting the `dir` attribute to `rtl`on
 
 ### Security
 
-This widget as no specific security concern. Refers to `delite/Widget` and `delite/StoreMap` documentation for general security advices on this base class and mixin that `dtreemap/TreeMap` is using.
+This widget has no specific security concern. Refer to `delite/Widget` and `delite/StoreMap` documentation for general security advice on this base class and mixin that `dtreemap/TreeMap` is using.
 
 ### Browser Support
 
