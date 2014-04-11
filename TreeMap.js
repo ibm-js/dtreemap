@@ -147,6 +147,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			};
 		}),
 
+		/* jshint maxcomplexity: 11 */
 		refreshRendering: function (props) {
 			if (props.groupAttrs || props.groupFuncs) {
 				this._updateTreeMapHierarchy();
@@ -161,27 +162,25 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 				this._removeAreaForGroup();
 			}
 
-			if (this._groupeditems == null) {
-				return;
-			}
-
-			if (this.containerNode == null) {
-				this.containerNode = domConstruct.create("div");
-				domStyle.set(this.containerNode, {
-					"position": "relative",
-					"width": "100%",
-					"height": "100%"
-				});
-				this.appendChild(this.containerNode);
-			}
-
-			if (props.rootItem) {
-				domConstruct.empty(this.containerNode);
-				this._render(true);
-			} else {
-				this._render(false);
+			if (this._groupeditems != null) {
+				if (this.containerNode == null) {
+					this.containerNode = domConstruct.create("div");
+					domStyle.set(this.containerNode, {
+						"position": "relative",
+						"width": "100%",
+						"height": "100%"
+					});
+					this.appendChild(this.containerNode);
+				}
+				if (props.rootItem) {
+					domConstruct.empty(this.containerNode);
+					this._render(true);
+				} else {
+					this._render(false);
+				}
 			}
 		},
+		/* jshint maxcomplexity: 10 */
 
 		_render: function (forceCreate) {
 			var rootItem = this.rootItem, rootParentItem;
