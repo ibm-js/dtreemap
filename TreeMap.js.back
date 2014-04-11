@@ -165,18 +165,8 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 				return;
 			}
 
-			if (this.containerNode == null) {
-				this.containerNode = domConstruct.create("div");
-				domStyle.set(this.containerNode, {
-					"position": "relative",
-					"width": "100%",
-					"height": "100%"
-				});
-				this.appendChild(this.containerNode);
-			}
-
 			if (props.rootItem) {
-				domConstruct.empty(this.containerNode);
+				domConstruct.empty(this);
 				this._render(true);
 			} else {
 				this._render(false);
@@ -197,14 +187,14 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			}
 			var box = domGeom.getMarginBox(this);
 			if (rootItem != null && !this._isRoot(rootItem)) {
-				this._buildRenderer(this.containerNode, rootParentItem, rootItem, {
+				this._buildRenderer(this, rootParentItem, rootItem, {
 					x: 0,
 					y: 0,
 					w: box.w,
 					h: box.h
 				}, 0, forceCreate);
 			} else {
-				this._buildChildrenRenderers(this.containerNode,
+				this._buildChildrenRenderers(this,
 					rootItem ? rootItem : { __treeRoot: true, children: this._groupeditems },
 					0, forceCreate, null);
 			}
@@ -262,7 +252,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			var div = domConstruct.create("div");
 			if (kind !== "header") {
 				domStyle.set(div, "overflow", "hidden");
-				domStyle.set(div, "position", "absolute");
+				domStyle.set(div, "position", "relative");
 			}
 			return div;
 		},
