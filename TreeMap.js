@@ -1,7 +1,7 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Invalidating", "delite/Selection",
-	"delite/StoreMap", "dojo/uacss"],
+	"delite/StoreMap", "delite/uacss"],
 	function (dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
 			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
@@ -465,8 +465,8 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		_layoutGroupContent: function (renderer, width, height, level, forceCreate, anim) {
-			var header = query(".d-treemap-header", renderer)[0];
-			var content = query(".d-treemap-groupcontent", renderer)[0];
+			var header = renderer.querySelector(".d-treemap-header");
+			var content = renderer.querySelector(".d-treemap-groupcontent");
 			if (header == null || content == null) {
 				return;
 			}
@@ -500,19 +500,19 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			// level: Number
 			//		The item depth level.
 			// tags:
-			//		private				
+			//		private
 			var forceCreate = renderer == null;
 			if (renderer == null) {
 				renderer = this.createRenderer("div", level, "group");
 				domClass.add(renderer, "d-treemap-group");
 			}
 			this.styleRenderer(renderer, item, level, "group");
-			var header = query(".d-treemap-header", renderer)[0];
+			var header = renderer.querySelector(".d-treemap-header");
 			header = this._updateHeaderRenderer(header, item, level);
 			if (forceCreate) {
 				domConstruct.place(header, renderer);
 			}
-			var content = query(".d-treemap-groupcontent", renderer)[0];
+			var content = renderer.querySelector(".d-treemap-groupcontent");
 			content = this._updateGroupContentRenderer(content, item, level);
 			if (forceCreate) {
 				domConstruct.place(content, renderer);
