@@ -1,4 +1,5 @@
-define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style"], function (dcl, domConstruct, domStyle) {
+define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style", "delite/css!./themes/GroupLabel.css"],
+	function (dcl, domConstruct, domStyle) {
 
 	return dcl(null, {
 		// summary:

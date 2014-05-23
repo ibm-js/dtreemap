@@ -1,5 +1,5 @@
 define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
-	"dojo/dom-style", "dojo/_base/fx", "dpointer/events"],
+	"dojo/dom-style", "dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
 	function (dcl, on, domGeom, domConstruct, domStyle, fx) {
 
 	return dcl(null, {

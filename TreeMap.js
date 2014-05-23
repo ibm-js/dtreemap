@@ -1,7 +1,7 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Invalidating", "delite/Selection",
-	"delite/StoreMap", "delite/uacss"],
+	"delite/StoreMap", "delite/css!./themes/TreeMap.css", "delite/uacss"],
 	function (dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
 			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
