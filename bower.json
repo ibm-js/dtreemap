@@ -8,5 +8,19 @@
 		"dpointer": ">=0.1.0-dev",
 		"delite": ">=0.1.0-dev",
 		"dstore": ">=0.0.1-dev"
+	},
+	"ibm-js": {
+		"platforms": {
+			"Android": ">=4.4",
+			"iOS": ">=7.0",
+			"Safari": ">=7.0",
+			"Chrome": ">=35",
+			"IE": ">=10",
+			"Firefox": ">=24"
+		},
+		"features": {
+			"a11y": ["JAWS", "highconstrast"],
+			"g11n": ["bidi"]
+		}
 	}
 }
