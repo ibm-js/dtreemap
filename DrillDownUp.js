@@ -1,6 +1,6 @@
 define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
-	"dojo/dom-style", "dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
-	function (dcl, on, domGeom, domConstruct, domStyle, fx) {
+	"dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
+	function (dcl, on, domGeom, domConstruct, fx) {
 
 	return dcl(null, {
 		// summary:
@@ -53,7 +53,7 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 			// re-add the old renderer to show the animation
 			domConstruct.place(renderer, this);
 
-			domStyle.set(renderer, "zIndex", 40);
+			renderer.style.zIndex = 40;
 
 			var finalBox = domGeom.position(this._getRenderer(item), true);
 			var corner = domGeom.getMarginBox(this);
@@ -100,12 +100,12 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 			var spanInfo = domGeom.position(renderer, true);
 			parentNode.removeChild(renderer);
 			domConstruct.place(renderer, this);
-			domStyle.set(renderer, {
+			dcl.mix(renderer.style, {
 				left: (spanInfo.x - box.l) + "px",
 				top: (spanInfo.y - box.t) + "px"
 			});
-			var zIndex = domStyle.get(renderer, "zIndex");
-			domStyle.set(renderer, "zIndex", 40);
+			var zIndex = renderer.style.zIndex;
+			renderer.style.zIndex = 40;
 
 			fx.animateProperty({
 				node: renderer,
@@ -129,7 +129,7 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 					self._layoutGroupContent(renderer, box2.w, box2.h, renderer.level + 1, false);
 				},
 				onEnd: function () {
-					domStyle.set(renderer, "zIndex", zIndex);
+					renderer.style.zIndex = zIndex;
 					self.rootItem = item;
 				}
 			}).play();

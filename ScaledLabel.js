@@ -1,12 +1,11 @@
-define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
-	function (dcl, domGeom, domConstruct, domStyle) {
+define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct"], function (dcl, domGeom, domConstruct) {
 
 	var treemapRendererUpdatedHandler = function (evt) {
 		if (evt.kind === "leaf") {
 			var renderer = evt.renderer;
 			// start back with default size
-			var oldSize = domStyle.get(renderer, "fontSize");
-			domStyle.set(renderer.firstChild, "fontSize", oldSize);
+			var oldSize = renderer.ownerDocument.defaultView.getComputedStyle(renderer, null).fontSize;
+			renderer.firstChild.style.fontSize = oldSize;
 			oldSize = parseInt(oldSize, 10);
 			var hRatio = 0.75 * domGeom.getContentBox(renderer).w / domGeom.getMarginBox(renderer.firstChild).w;
 			var vRatio = domGeom.getContentBox(renderer).h / domGeom.getMarginBox(renderer.firstChild).h;
@@ -14,7 +13,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 			var vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
 			var newSize = Math.floor(oldSize * Math.min(hRatio, vRatio));
 			while (vDiff > 0 && hDiff > 0) {
-				domStyle.set(renderer.firstChild, "fontSize", newSize + "px");
+				renderer.firstChild.style.fontSize = newSize + "px";
 				hDiff = domGeom.getContentBox(renderer).w - domGeom.getMarginBox(renderer.firstChild).w;
 				vDiff = domGeom.getContentBox(renderer).h - domGeom.getMarginBox(renderer.firstChild).h;
 				oldSize = newSize;
@@ -22,7 +21,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 			}
 			if (vDiff < 0 || hDiff < 0) {
 				// back track
-				domStyle.set(renderer.firstChild, "fontSize", oldSize + "px");
+				renderer.firstChild.style.fontSize = oldSize + "px";
 			}
 		}
 	};
@@ -40,7 +39,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 				var renderer = sup.call(this, item, level, kind);
 				if (kind === "leaf") {
 					var p = domConstruct.create("div");
-					domStyle.set(p, {
+					dcl.mix(p.style, {
 						"position": "absolute",
 						"width": "auto"
 					});
@@ -55,7 +54,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct", "dojo/dom-style"],
 				if (kind !== "leaf") {
 					sup.call(this, renderer, item, level, kind);
 				} else {
-					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+					renderer.style.background = this.getColorForItem(item).toHex();
 					renderer.firstChild.innerHTML = this.getLabelForItem(item);
 				}
 			};

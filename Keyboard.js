@@ -1,6 +1,5 @@
-define(["dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
-	"./_utils", "delite/focus", "dpointer/events"],
-	function (dcl, on, keys, domAttr, utils) {
+define(["dcl/dcl", "dojo/on", "dojo/keys", "./_utils", "delite/focus", "dpointer/events"],
+	function (dcl, on, keys, utils) {
 
 	return dcl(null, {
 		// summary:
@@ -23,7 +22,7 @@ define(["dcl/dcl", "dojo/on", "dojo/keys", "dojo/dom-attr",
 				var renderer = sup.call(this, item, level, kind);
 				// on Firefox we need a tabindex on sub divs to let the keyboard event be dispatched
 				// put -1 so that it is not tablable
-				domAttr.set(renderer, "tabindex", "-1");
+				renderer.setAttribute("tabindex", "-1");
 				return renderer;
 			};
 		}),

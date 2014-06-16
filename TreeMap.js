@@ -1,8 +1,8 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
-	"dojo/when", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
+	"dojo/when", "dojo/on", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Invalidating", "delite/Selection",
 	"delite/StoreMap", "delite/css!./themes/TreeMap.css", "delite/uacss"],
-	function (dcl, register, Color, when, on, query, domConstruct, domGeom, domClass, domStyle,
+	function (dcl, register, Color, when, on, domConstruct, domGeom, domClass,
 			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
 
 	return register("d-treemap", [HTMLElement, Widget, Invalidating, Selection, StoreMap], {
@@ -165,7 +165,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			if (this._groupeditems != null) {
 				if (this.containerNode == null) {
 					this.containerNode = domConstruct.create("div");
-					domStyle.set(this.containerNode, {
+					dcl.mix(this.containerNode.style, {
 						"position": "relative",
 						"width": "100%",
 						"height": "100%"
@@ -260,8 +260,10 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			//		protected					
 			var div = domConstruct.create("div");
 			if (kind !== "header") {
-				domStyle.set(div, "overflow", "hidden");
-				domStyle.set(div, "position", "absolute");
+				dcl.mix(div.style, {
+					"overflow": "hidden",
+					"position": "absolute"
+				});
 			}
 			return div;
 		},
@@ -283,7 +285,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			//		protected
 			switch (kind) {
 			case "leaf":
-				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+				renderer.style.background = this.getColorForItem(item).toHex();
 				/* falls through */
 			case "header":
 				var label = this.getLabelForItem(item);
@@ -479,9 +481,9 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 				// TODO: this might cause pb when coming back to visibility later
 				// as the getMarginBox of the header will keep that value?
 				box.h = height;
-				domStyle.set(content, "display", "none");
+				content.style.display = "none";
 			} else {
-				domStyle.set(content, "display", "block");
+				content.style.dispaly = "block";
 				domGeom.setMarginBox(content, {	l: 0, t: box.h, w: width, h: (height - box.h) });
 				this._buildChildrenRenderers(content, renderer.item, level, forceCreate, null, anim);
 			}

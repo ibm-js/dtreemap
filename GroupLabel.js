@@ -1,5 +1,5 @@
-define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style", "delite/css!./themes/GroupLabel.css"],
-	function (dcl, domConstruct, domStyle) {
+define(["dcl/dcl", "dojo/dom-construct", "delite/css!./themes/GroupLabel.css"],
+	function (dcl, domConstruct) {
 
 	return dcl(null, {
 		// summary:
@@ -11,7 +11,7 @@ define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style", "delite/css!./themes/
 				var renderer = sup.call(this, item, level, kind);
 				if (kind === "content" || kind === "leaf") {
 					var p = domConstruct.create("div");
-					domStyle.set(p, {
+					dcl.mix(p.style, {
 						"zIndex": 30,
 						"position": "relative",
 						"height": "100%",
@@ -28,7 +28,7 @@ define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style", "delite/css!./themes/
 		styleRenderer: function (renderer, item, level, kind) {
 			switch (kind) {
 			case "leaf":
-				domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
+				renderer.style.background = this.getColorForItem(item).toHex();
 				/* falls through */
 			case "content":
 				if (level === 0) {
@@ -38,7 +38,7 @@ define(["dcl/dcl", "dojo/dom-construct", "dojo/dom-style", "delite/css!./themes/
 				}
 				break;
 			case "header":
-				domStyle.set(renderer, "display", "none");
+				renderer.style.display = "none";
 			}
 		}
 	});
