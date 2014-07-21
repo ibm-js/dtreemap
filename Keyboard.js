@@ -1,5 +1,5 @@
-define(["dcl/dcl", "dojo/on", "dojo/keys", "./_utils", "delite/focus", "dpointer/events"],
-	function (dcl, on, keys, utils) {
+define(["dcl/dcl", "delite/keys", "./_utils", "delite/focus", "dpointer/events"],
+	function (dcl, keys, utils) {
 
 	return dcl(null, {
 		// summary:
@@ -13,8 +13,8 @@ define(["dcl/dcl", "dojo/on", "dojo/keys", "./_utils", "delite/focus", "dpointer
 		},
 
 		postCreate: function () {
-			this.own(on(this, "keydown", this._keyDownHandler.bind(this)));
-			this.own(on(this, "pointerdown", this._pointerDownHandler.bind(this)));
+			this.on("keydown", this._keyDownHandler.bind(this));
+			this.on("pointerdown", this._pointerDownHandler.bind(this));
 		},
 
 		createRenderer: dcl.superCall(function (sup) {

@@ -1,4 +1,13 @@
+env:
+  global:
+    - secure: "GPMr/RJL3swlz54Wa6conQrIo1nnxHBsE7frtdQz68k1Y3G9x3mamepAitxPErs+pBwitcYs4iDtAeJjHnQze7/iKtWe8FH9o+nhhiu48HAz382ETQIoS6BWPyhonJImobk65oicULaXQK+8VglcrN+uUj7Cqt2AHO4G97GFmQo="
+    - secure: "ODrBSEBVXcAj2eGVg723rUugSsK/mpeV3A6xxeSdAIplpoUTnl0fGr0tE+eHIwXgWJmJo/n0Z8b1BxfQFD3fdi08AiaHyHAm19ce6hKdUCRGO/IhxelEqEamuiEnlief/mP2nuJU0LrR9cjyxHwQi+XZb+I6vm/F4kR0d01YOjQ="
 language: node_js
-node_js: "0.10"
-install: "npm -g install jshint@2.4.x"
-script: "jshint ."
+node_js: 0.10
+install:
+   - npm install -g grunt-cli
+   - npm -g install bower
+   - npm install
+   - bower install
+script:
+   - grunt jshint test:remote 

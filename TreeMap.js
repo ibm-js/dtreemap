@@ -1,11 +1,11 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
-	"dojo/when", "dojo/on", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class",
-	"./_utils", "dpointer/events", "delite/Widget", "delite/Invalidating", "delite/Selection",
+	"dojo/when", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class",
+	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
 	"delite/StoreMap", "delite/css!./themes/TreeMap.css", "delite/uacss"],
-	function (dcl, register, Color, when, on, domConstruct, domGeom, domClass,
-			  utils, pointer, Widget, Invalidating, Selection, StoreMap) {
+	function (dcl, register, Color, when, domConstruct, domGeom, domClass,
+			  utils, pointer, Widget, Selection, StoreMap) {
 
-	return register("d-treemap", [HTMLElement, Widget, Invalidating, Selection, StoreMap], {
+	return register("d-treemap", [HTMLElement, Widget, Selection, StoreMap], {
 		// summary:
 		//		A treemap widget.
 
@@ -93,20 +93,6 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		preCreate: function () {
 			this.allowRemap = true;
 			this.itemToRenderer = {};
-			this.addInvalidatingProperties("colorModel",  "labelThreshold",  "rootItem",
-				{
-					"areaAttr": "invalidateProperty",
-					"areaFunc": "invalidateProperty",
-					"labelAttr": "invalidateProperty",
-					"labelFunc": "invalidateProperty",
-					"tooltipAttr": "invalidateProperty",
-					"tooltipFunc": "invalidateProperty",
-					"colorAttr": "invalidateProperty",
-					"colorFunc": "invalidateProperty",
-					"renderItems": "invalidateProperty",
-					"groupAttrs": "invalidateProperty",
-					"groupFuncs": "invalidateProperty"
-				});
 		},
 
 		getIdentity: function (item) {
@@ -121,48 +107,54 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		postCreate: function () {
-			this.own(on(this, "pointerover", this._pointerOverHandler.bind(this)));
-			this.own(on(this, "pointerout", this._pointerOutHandler.bind(this)));
-			this.own(on(this, "pointerup", this._pointerUpHandler.bind(this)));
+			this.on("pointerover", this._pointerOverHandler.bind(this));
+			this.on("pointerout", this._pointerOutHandler.bind(this));
+			this.on("pointerup", this._pointerUpHandler.bind(this));
 			this.setAttribute("role", "presentation");
 			this.setAttribute("aria-label", "treemap");
 		},
 
-		// we need to call Store.refreshProperties
-		refreshProperties: dcl.superCall(function (sup) {
+		// we need to call Store.computeProperties
+		computeProperties: dcl.superCall(function (sup) {
 			return function (props) {
 				sup.call(this, props);
 				if (this.renderItems && this._mappedKeys.some(function (item) {
-					return props[item + "Attr"] || props[item + "Func"];
+					return props.hasOwnProperty(item + "Attr") || props.hasOwnProperty(item + "Func");
 				})) {
 					this.remap();
 				}
-				if (props.renderItems || props.groupAttrs || props.groupFuncs) {
+				if ("renderItems" in props || "groupAttrs" in props || "groupFuncs" in props) {
 					this._set("rootItem", null);
+					this.notifyCurrentValue("rootItem");
 				}
-				if (props.renderItems) {
-					props.groupAttrs = true;
-					props.colorAttr = true;
+				if ("renderItems" in props) {
+					this.notifyCurrentValue("groupsAttr");
+					this.notifyCurrentValue("colorAttr");
 				}
 			};
 		}),
 
-		/* jshint maxcomplexity: 11 */
+		/* jshint maxcomplexity: 12 */
 		refreshRendering: function (props) {
-			if (props.groupAttrs || props.groupFuncs) {
+			var refresh = false;
+			
+			if ("groupAttrs" in props || "groupFuncs" in props) {
 				this._updateTreeMapHierarchy();
+				refresh = true;
 			}
 
-			if ((props.colorAttr || props.colorFunc || props.colorModel) &&
+			if (("colorAttr" in props || "colorFunc" in props || "colorModel" in props) &&
 				(this.colorModel != null && this.renderItems != null && this.colorModel.initialize)) {
 				this.colorModel.initialize(this.renderItems, this._colorFunc.bind(this));
+				refresh = true;
 			}
 
-			if (props.areaAttr || props.areaFunc) {
+			if ("areaAttr" in props || "areaFunc" in props) {
 				this._removeAreaForGroup();
+				refresh = true;
 			}
 
-			if (this._groupeditems != null) {
+			if (("rootItem" in props || refresh) && this._groupeditems) {
 				if (this.containerNode == null) {
 					this.containerNode = domConstruct.create("div");
 					dcl.mix(this.containerNode.style, {
@@ -172,10 +164,12 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 					});
 					this.appendChild(this.containerNode);
 				}
-				if (props.rootItem) {
+				if ("rootItem" in props) {
+					console.log("render with clear");
 					domConstruct.empty(this.containerNode);
 					this._render(true);
 				} else {
+					console.log("render wo clear");
 					this._render(false);
 				}
 			}

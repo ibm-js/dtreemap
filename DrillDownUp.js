@@ -1,13 +1,13 @@
-define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
+define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct",
 	"dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
-	function (dcl, on, domGeom, domConstruct, fx) {
+	function (dcl, domGeom, domConstruct, fx) {
 
 	return dcl(null, {
 		// summary:
 		//		Specializes TreeMap to support drill down and up operations.
 
 		postCreate: function () {
-			this.own(on(this, "dblclick", this._dblClickHandler.bind(this)));
+			this.on("dblclick", this._dblClickHandler.bind(this));
 		},
 
 		_dblClickHandler: function (e) {
@@ -46,12 +46,13 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 			// rebuild the tree map
 			// and animate the old renderer before deleting it.
 
-			this.removeChild(renderer);
+			var parentNode = renderer.parentNode;
+			parentNode.removeChild(renderer);
 			this.rootItem = this._getRenderer(item).parentItem;
-			this.validate();
+			this.deliver();
 
 			// re-add the old renderer to show the animation
-			domConstruct.place(renderer, this);
+			domConstruct.place(renderer, this.containerNode);
 
 			renderer.style.zIndex = 40;
 
@@ -80,7 +81,7 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 					self._layoutGroupContent(renderer, box.w, box.h, renderer.level + 1, false, true);
 				},
 				onEnd: function () {
-					self.removeChild(renderer);
+					parentNode.removeChild(renderer);
 				}
 			}).play();
 		},
@@ -97,13 +98,8 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 			// Set the new root item into the rootPanel to make it appear on top
 			// of the other nodes, and keep the same global location
 			var parentNode = renderer.parentNode;
-			var spanInfo = domGeom.position(renderer, true);
 			parentNode.removeChild(renderer);
-			domConstruct.place(renderer, this);
-			dcl.mix(renderer.style, {
-				left: (spanInfo.x - box.l) + "px",
-				top: (spanInfo.y - box.t) + "px"
-			});
+			domConstruct.place(renderer, this.containerNode);
 			var zIndex = renderer.style.zIndex;
 			renderer.style.zIndex = 40;
 
@@ -112,10 +108,10 @@ define(["dcl/dcl", "dojo/on", "dojo/dom-geometry", "dojo/dom-construct",
 				duration: 500,
 				properties: {
 					left: {
-						end: box.l
+						end: 0
 					},
 					top: {
-						end: box.t
+						end: 0
 					},
 					height: {
 						end: box.h

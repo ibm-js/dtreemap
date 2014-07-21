@@ -2,14 +2,16 @@
 <html>
 
 <head>
-	<script type="text/javascript" src="../../dojo/dojo.js" data-dojo-config="async: true">
+	<script type="text/javascript" src="../../requirejs/require.js"></script>
+	<script>
+		require.config({ baseUrl: "../.." });
 	</script>
-
+	
 	<script type="text/javascript">
 
-		require(["dojo/domReady", "dojo/dom", "delite/register", "dtreemap/TreeMap",
-			"dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "dtreemap/DrillDownUp"],
-			function(ready, dom, register, TreeMap, Memory, MeanColorModel, Color, DrillDownUp) {
+		require(["dojo/dom", "delite/register", "dtreemap/TreeMap",
+			"dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "dtreemap/DrillDownUp", "requirejs-domready/domReady!"],
+			function(dom, register, TreeMap, Memory, MeanColorModel, Color, DrillDownUp) {
 				dataStore = new Memory({idProperty: "label", data:
 						[
 							{ label: "France", sales: 500, profit: 50, region: "EU" },
@@ -23,16 +25,14 @@
 						]
 				});
 				colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-				ready(function(){
-					register("c-treemap", [TreeMap, DrillDownUp]);
-					register.parse();
-				});
+				register("c-treemap", [TreeMap, DrillDownUp]);
+				register.parse();
 			}
 		);
 	</script>
 </head>
 <body>
-	<c-treemap id="treeMap" style="width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" tooltipAttr="label"
+	<c-treemap id="treeMap" style="position: absolute;top: 40px; width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" tooltipAttr="label"
 			groupAttrs="region" colorModel="colorModel"></c-treemap>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<style type="text/css">
+		.d-treemap {
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+			font-size: 16px;
+			text-align: center;
+			background: none;
+		}
+		.d-treemap-leaf {
+			-webkit-border-radius: 15px 15px;
+			-moz-border-radius: 15px 15px;
+			border-radius: 15px 15px;
+			margin: 1px;
+		}
+
+		.d-treemap-header {
+			text-align: center;
+			-webkit-border-radius: 15px 15px;
+			-moz-border-radius: 15px 15px;
+			border-radius: 15px 15px;
+			background:  #0B8CD4;
+		}
+	</style>
+
+	<script type="text/javascript" src="../../requirejs/require.js"></script>
+	<script>
+		require.config({ baseUrl: "../.." });
+	</script>
+	
+	<script type="text/javascript">
+
+		require(["dtreemap/TreeMap", "dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "requirejs-domready/domReady!"],
+			function(TreeMap, Memory, MeanColorModel, Color) {
+				var dataStore = new Memory({idProperty: "label", data:
+						[
+							{ label: "France", sales: 500, profit: 50, region: "EU" },
+							{ label: "Germany", sales: 450, profit: 48, region: "EU" },
+							{ label: "UK", sales: 700, profit: 60, region: "EU" },
+							{ label: "USA", sales: 2000, profit: 250, region: "America" },
+							{ label: "Canada", sales: 600, profit: 30, region: "America" },
+							{ label: "Brazil", sales: 450, profit: 30, region: "America" },
+							{ label: "China", sales: 500, profit: 40, region: "Asia" },
+							{ label: "Japan", sales: 900, profit: 100, region: "Asia" }
+						]
+				});
+				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
+				var treeMap = new TreeMap({store: dataStore,
+							areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
+							colorModel: colorModel }, "treeMap");
+				treeMap.startup();
+			}
+		);
+	</script>
+</head>
+<body>
+	<d-treemap id="treeMap" style="width:640px;height:640px"></d-treemap>
+</body>
+</html>
