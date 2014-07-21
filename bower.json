@@ -6,10 +6,12 @@
 		"dcl": "1.1.x",
 		"dcolor": "0.1.x-dev",
 		"dpointer": "0.1.x-dev",
-		"delite": "0.1.8-dev",
-		"dstore": "0.1.0-dev",
+		"delite": "0.1.8-dev"
+	},
+	"devDependencies": {
+		"dstore": "0.1.0",
 		"requirejs": "2.1.x",
-		"requirejs-domReady": "2.0.x"
+		"requirejs-domready": "2.0.x"
 	},
 	"ibm-js": {
 		"platforms": {

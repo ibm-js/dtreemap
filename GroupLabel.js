@@ -1,5 +1,5 @@
-define(["dcl/dcl", "dojo/dom-construct", "delite/css!./themes/GroupLabel.css"],
-	function (dcl, domConstruct) {
+define(["dcl/dcl", "delite/css!./themes/GroupLabel.css"],
+	function (dcl) {
 
 	return dcl(null, {
 		// summary:
@@ -10,7 +10,7 @@ define(["dcl/dcl", "dojo/dom-construct", "delite/css!./themes/GroupLabel.css"],
 			return function (item, level, kind) {
 				var renderer = sup.call(this, item, level, kind);
 				if (kind === "content" || kind === "leaf") {
-					var p = domConstruct.create("div");
+					var p = this.ownerDocument.createElement("div");
 					dcl.mix(p.style, {
 						"zIndex": 30,
 						"position": "relative",
@@ -19,7 +19,7 @@ define(["dcl/dcl", "dojo/dom-construct", "delite/css!./themes/GroupLabel.css"],
 						"top": "50%",
 						"marginTop": "-.5em"
 					});
-					domConstruct.place(p, renderer);
+					renderer.appendChild(p);
 				}
 				return renderer;
 			};

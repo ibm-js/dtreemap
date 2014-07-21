@@ -1,4 +1,4 @@
-define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct"], function (dcl, domGeom, domConstruct) {
+define(["dcl/dcl", "dojo/dom-geometry"], function (dcl, domGeom) {
 
 	var treemapRendererUpdatedHandler = function (evt) {
 		if (evt.kind === "leaf") {
@@ -38,12 +38,12 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct"], function (dcl, do
 			return function (item, level, kind) {
 				var renderer = sup.call(this, item, level, kind);
 				if (kind === "leaf") {
-					var p = domConstruct.create("div");
+					var p = this.ownerDocument.createElement("div");
 					dcl.mix(p.style, {
 						"position": "absolute",
 						"width": "auto"
 					});
-					domConstruct.place(p, renderer);
+					renderer.appendChild(p);
 				}
 				return renderer;
 			};

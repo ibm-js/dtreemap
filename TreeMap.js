@@ -1,8 +1,8 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
-	"dojo/when", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class",
+	"dojo/when", "dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
 	"delite/StoreMap", "delite/css!./themes/TreeMap.css", "delite/uacss"],
-	function (dcl, register, Color, when, domConstruct, domGeom, domClass,
+	function (dcl, register, Color, when, domGeom, domClass,
 			  utils, pointer, Widget, Selection, StoreMap) {
 
 	return register("d-treemap", [HTMLElement, Widget, Selection, StoreMap], {
@@ -156,7 +156,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 
 			if (("rootItem" in props || refresh) && this._groupeditems) {
 				if (this.containerNode == null) {
-					this.containerNode = domConstruct.create("div");
+					this.containerNode = this.ownerDocument.createElement("div");
 					dcl.mix(this.containerNode.style, {
 						"position": "relative",
 						"width": "100%",
@@ -165,11 +165,9 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 					this.appendChild(this.containerNode);
 				}
 				if ("rootItem" in props) {
-					console.log("render with clear");
-					domConstruct.empty(this.containerNode);
+					this.containerNode.innerHTML = "";
 					this._render(true);
 				} else {
-					console.log("render wo clear");
 					this._render(false);
 				}
 			}
@@ -252,7 +250,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			//		The renderer use for the specified kind.
 			// tags:
 			//		protected					
-			var div = domConstruct.create("div");
+			var div = this.ownerDocument.createElement("div");
 			if (kind !== "header") {
 				dcl.mix(div.style, {
 					"overflow": "hidden",
@@ -286,7 +284,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 				if (label && (isNaN(this.labelThreshold) || level < this.labelThreshold)) {
 					renderer.innerHTML = label;
 				} else {
-					domConstruct.empty(renderer);
+					renderer.innerHTML = "";
 				}
 				break;
 			default:
@@ -446,7 +444,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			// before sizing put the item inside its parent so that styling
 			// is applied and taken into account
 			if (forceCreate) {
-				domConstruct.place(renderer, container);
+				container.appendChild(renderer);
 			}
 
 			domGeom.setMarginBox(renderer, { l: x, t: y, w: w, h: h	});
@@ -506,12 +504,12 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			var header = renderer.querySelector(".d-treemap-header");
 			header = this._updateHeaderRenderer(header, item, level);
 			if (forceCreate) {
-				domConstruct.place(header, renderer);
+				renderer.appendChild(header);
 			}
 			var content = renderer.querySelector(".d-treemap-groupcontent");
 			content = this._updateGroupContentRenderer(content, item, level);
 			if (forceCreate) {
-				domConstruct.place(content, renderer);
+				renderer.appendChild(content);
 			}
 			return renderer;
 		},

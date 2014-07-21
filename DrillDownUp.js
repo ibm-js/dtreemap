@@ -1,6 +1,5 @@
-define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct",
-	"dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
-	function (dcl, domGeom, domConstruct, fx) {
+define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
+	function (dcl, domGeom, fx) {
 
 	return dcl(null, {
 		// summary:
@@ -52,7 +51,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct",
 			this.deliver();
 
 			// re-add the old renderer to show the animation
-			domConstruct.place(renderer, this.containerNode);
+			this.containerNode.appendChild(renderer);
 
 			renderer.style.zIndex = 40;
 
@@ -99,7 +98,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/dom-construct",
 			// of the other nodes, and keep the same global location
 			var parentNode = renderer.parentNode;
 			parentNode.removeChild(renderer);
-			domConstruct.place(renderer, this.containerNode);
+			this.containerNode.appendChild(renderer);
 			var zIndex = renderer.style.zIndex;
 			renderer.style.zIndex = 40;
 
