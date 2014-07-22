@@ -4,6 +4,10 @@
 	display: block;
 }
 
+.d-treemap * {
+	box-sizing: content-box;
+}
+
 .d-treemap-leaf {
 	border: 1px solid black;
 	padding: 3px;
