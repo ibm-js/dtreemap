@@ -6,27 +6,94 @@ title: dtreemap
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-12 col-md-8">
-				<h2>Title</h2>
-				<p>Summary</p>
+				<h2>Treemap Web Component</h2>
+				<p> Treemap reveals data patterns and trends easily by relying on data clustering, using areas and color information to represent the data you want to explore.</p>
 				<p>
 					<!--<a href="getting-started.html" class="btn btn-primary btn-lg" role="button">Get started</a>-->
 					<a href="docs/master/index.html" class="btn btn-success btn-lg" role="button">Learn more &raquo;</a>
 				</p>
 			</div>
-			<!--
-			<div class="col-xs-12 col-md-4"><img style="width: 320px; height: 240px" class="img-thumbnail" alt="deliteful" src="deliteful.gif">
-			</div>-->
+			<div class="col-xs-12 col-md-4"><img style="width: 300px; height: 320px" class="img-thumbnail" alt="deliteful" src="docs/master/treemap.png"></div>
 		</div>
 	</div>
 </div>
 
 <p></p>
 
-<h3>Title</h3>
+<h3>Learn how to add Treemap Custom Element to your Web or Mobile Hybrid Application!</h3>
+
 
 <div class="page-header">
-	<h2>Header</h2>
+	<h2>Install the TreeMap Custom Element</h2>
 </div>
-<p>
-	Content
-</p>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Start with installing Node.js, then you are ready to install bower and using bower the dtreemap custom element.
+	</div>
+	<div class="col-xs-12 col-md-6">
+{% highlight bash %}
+$ npm install -g bower
+$ mkdir -p my-app
+$ cd my-app
+$ bower install dtreemap{% endhighlight %}
+	</div>
+</div>
+
+<div class="page-header">
+	<h2>Use it in your application</h2>
+</div>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Edit the application code to include the TreeMap just as any other standard Custom Element using the d-treemap
+		tag.
+	</div>
+	<div class="col-xs-12 col-md-6">
+		{% highlight html %}
+<head>
+<script src="bower_components/requirejs/require.js"></script>
+<script>
+  require.config({ baseUrl: "bower_components "});
+</script>
+<script>
+  var dataStore;
+  require(["delite/register", "dstore/Memory", 
+    "dtreemap/TreeMap", "requirejs-domready/domReady!"], 
+  function(register, Memory){
+    dataStore = new Memory({idProperty: "label", data:
+	  [{ label: "France", sales: 500, profit: 50, region: "EU" },
+	   { label: "Germany", sales: 450, profit: 48, region: "EU" },
+	   { label: "UK", sales: 700, profit: 60, region: "EU" },
+	   { label: "Japan", sales: 900, profit: 100, region: "Asia" }
+	  ]});
+	register.parse();	
+  });
+</script>
+</head>
+<body>
+  <d-treemap style="width:640px;height:640px" store="dataStore" 
+    areaAttr="sales" colorAttr="profit" tooltipAttr="label" 
+    groupAttrs="region">
+  </d-treemap>		
+</body>{% endhighlight %}
+	</div>
+</div>
+
+<div class="page-header">
+	<h2>Go further</h2>
+</div>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Don't hesitate to checkout the <a href="docs.html">documentation</a> to go further.
+		You might want to leverage other Web Component from
+		<a href="../deliteful/getting-started.html">deliteful</a> and build your application from there.
+	</div>
+	<div class="col-xs-12 col-md-6">
+		{% highlight bash %}
+$ npm install -g yo
+$ npm install -g delite-element-generator
+$ npm install generator-deliteful-app
+$ yo deliteful-app{% endhighlight %}
+	</div>
+</div>
+</body>
+</html>
