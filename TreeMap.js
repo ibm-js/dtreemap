@@ -115,24 +115,21 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		// we need to call Store.computeProperties
-		computeProperties: dcl.superCall(function (sup) {
-			return function (props) {
-				sup.call(this, props);
-				if (this.renderItems && this._mappedKeys.some(function (item) {
-					return props.hasOwnProperty(item + "Attr") || props.hasOwnProperty(item + "Func");
-				})) {
-					this.remap();
-				}
-				if ("renderItems" in props || "groupAttrs" in props || "groupFuncs" in props) {
-					this._set("rootItem", null);
-					this.notifyCurrentValue("rootItem");
-				}
-				if ("renderItems" in props) {
-					this.notifyCurrentValue("groupsAttr");
-					this.notifyCurrentValue("colorAttr");
-				}
-			};
-		}),
+		computeProperties: function (props) {
+			if (this.renderItems && this._mappedKeys.some(function (item) {
+				return props.hasOwnProperty(item + "Attr") || props.hasOwnProperty(item + "Func");
+			})) {
+				this.remap();
+			}
+			if ("renderItems" in props || "groupAttrs" in props || "groupFuncs" in props) {
+				this._set("rootItem", null);
+				this.notifyCurrentValue("rootItem");
+			}
+			if ("renderItems" in props) {
+				this.notifyCurrentValue("groupAttrs");
+				this.notifyCurrentValue("colorAttr");
+			}
+		},
 
 		/* jshint maxcomplexity: 12 */
 		refreshRendering: function (props) {
@@ -143,10 +140,11 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 				refresh = true;
 			}
 
-			if (("colorAttr" in props || "colorFunc" in props || "colorModel" in props) &&
-				(this.colorModel != null && this.renderItems != null && this.colorModel.initialize)) {
-				this.colorModel.initialize(this.renderItems, this._colorFunc.bind(this));
+			if ("colorAttr" in props || "colorFunc" in props || "colorModel" in props) {
 				refresh = true;
+				if (this.colorModel != null && this.renderItems != null && this.colorModel.initialize) {
+					this.colorModel.initialize(this.renderItems, this._colorFunc.bind(this));
+				}
 			}
 
 			if ("areaAttr" in props || "areaFunc" in props) {
@@ -228,11 +226,15 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		_colorFunc: function (/*Object*/ item) {
-			var color = item.color;
-			if (!color) {
-				color = 0;
+			if (this.colorFunc) {
+				return this.colorFunc(item);
+			} else {
+				var color = item.color;
+				if (!color) {
+					color = 0;
+				}
+				return parseFloat(color);
 			}
-			return parseFloat(color);
 		},
 
 		createRenderer: function (item, level, kind) {
