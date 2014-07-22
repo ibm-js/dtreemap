@@ -131,7 +131,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			}
 		},
 
-		/* jshint maxcomplexity: 12 */
+		/* jshint maxcomplexity: 13 */
 		refreshRendering: function (props) {
 			var refresh = false;
 			
