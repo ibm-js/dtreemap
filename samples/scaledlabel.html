@@ -25,10 +25,14 @@
 						]
 				});
 				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-				var treeMap = new register("c-treemap", [TreeMap, ScaledLabel])
-						({ store: dataStore, areaAttr: "sales", colorAttr: "profit",
-					  	   tooltipAttr: "label", groupAttrs: ["region"], colorModel: colorModel },
-						"treeMap");
+				register("c-treemap", [TreeMap, ScaledLabel]);
+				register.parse();
+				treeMap.store = dataStore;
+				treeMap.areaAttr = "sales";
+				treeMap.colorAttr = "profit";
+				treeMap.tooltipAttr = "label";
+				treeMap.groupAttrs = ["region"];
+				treeMap.colorModel = colorModel;
 				treeMap.startup();
 			}
 		);

@@ -118,7 +118,7 @@ Other binding attributes are available:
 
 In this example the data are mapped from the data store using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
 
-TODO other JSFiddle example
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/TWJ3z/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/TWJ3z/">checkout the sample on JSFiddle</a></iframe>
 
 The example is very similar to the previous one, except that it is using a function to compute the input value for the cells color. In this case instead of using the absolute profit figure we are computing the profit percentage.
 
@@ -152,9 +152,8 @@ The following example shows how to:
   * center the labels
   * change the font size
   * use rounded corners on treemap cells (HTML5 browsers only)
-  
-  
-TODO JSFiddle example
+    
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/u7S5z/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/u7S5z/">checkout the sample on JSFiddle</a></iframe>
 
 Here is an exhaustive list of CSS classes that can be used to style the treemap:
 
@@ -227,13 +226,13 @@ By default each treemap cell is drawn with a fixed size label. One can leverage 
 
 The first rendering mixin is the `dtreemap/GroupLabel` mixin. It allows to remove cell labels and only keep group labels centered on the groups:
 
-TODO JSFillde sample
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/GtAy7/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/GtAy7/">checkout the sample on JSFiddle</a></iframe>
 
 ### ScaledLabel
 
 The second rendering mixin is the `dtreemap/ScaledLabel` mixin. It allows to scale the cell labels so that they fill as much as possible the cells size:
 
-TODO JSFiddle sample
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/wUbNR/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/wUbNR/">checkout the sample on JSFiddle</a></iframe>
 
 <a name="events"></a>
 ## Element Events

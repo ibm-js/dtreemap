@@ -25,21 +25,20 @@
 						]
 				});
 				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-				var treeMap = new (register("c-treemap", [TreeMap, GroupLabel]))();
-				treeMap.style.width = "640px";
-				treeMap.style.height = "480px";
+				register("c-treemap", [TreeMap, GroupLabel]);
+				register.parse();
 				treeMap.store = dataStore;
 				treeMap.areaAttr = "sales";
 				treeMap.colorAttr = "profit";
 				treeMap.tooltipAttr = "label";
 				treeMap.groupAttrs = ["region"];
 				treeMap.colorModel = colorModel;
-				treeMap.placeAt("main");
 				treeMap.startup();
 			}
 		);
 	</script>
 </head>
-<body id="main">
+<body>
+	<c-treemap id="treeMap" style="width:640px;height:640px"></c-treemap>
 </body>
 </html>
