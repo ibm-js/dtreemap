@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 					reporters: ["runner"]
 				}
 			}
-		},
+		}/*,
 		"jsdoc-amddcl": {
 			"dcolor": {
 				files: [
@@ -60,15 +60,16 @@ module.exports = function (grunt) {
 				]
 			}
 		}
+		*/
 	});
 
 	// Load plugins
 	grunt.loadNpmTasks("intern");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
-	grunt.loadNpmTasks("jsdoc-amddcl");
+	//grunt.loadNpmTasks("jsdoc-amddcl");
 
 	// Aliases
-	grunt.registerTask("jsdoc", "jsdoc-amddcl");
+	//grunt.registerTask("jsdoc", "jsdoc-amddcl");
 
 	// Testing.
 	// Always specify the target e.g. grunt test:remote, grunt test:remote
