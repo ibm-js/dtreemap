@@ -1,0 +1,8 @@
+markdown: redcarpet
+
+baseurl: /RepoName
+
+pygments: true
+
+redcarpet:
+  extensions: ['tables']

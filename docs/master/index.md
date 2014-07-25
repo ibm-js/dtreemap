@@ -39,7 +39,7 @@ See [`delite/Widget`](/delite/docs/master/Widget.html) for full details on how i
 
 ```js
 var dataStore;
-require(["delite/register", "dtreemap/TreeMap", "dojo/domReady!"], function (register) {
+require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (register, Memory) {
   dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -66,7 +66,7 @@ require(["delite/register", "dtreemap/TreeMap", "dojo/domReady!"], function (reg
 ### Programmatic Instantiation
 
 ```js
-require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
+require(["dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
   var dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -90,19 +90,19 @@ require(["dojo/store/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (M
 ## Element Configuration
 ### Data
 
-`dtreemap/TreeMap` can connect to any implementation of `dojo/store/api/Store` interface that implements the get, query and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
+`dtreemap/TreeMap` can connect to any implementation of `dstore/api/Store` interface that implements the get, filter, map and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
 
 A set of properties are available on the treemap to map the properties from the store to the treemap properties. see `delite/StoreMap`for details on mapping.
 
 #### Mapping using attributes
 
-In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes value in the data.
+In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes values in the data.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/jnh79/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/cjolif/gfkJT/">checkout the sample on JSFiddle</a></iframe>
+<iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/jnh79/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/jnh79/">checkout the sample on JSFiddle</a></iframe>
 
-For the cell colors in the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his one color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dojo/Color` constructor.
+For the cell colors, the value of the binding is used as an input into the specified color model. In this case this is a color model that returns a color interpolated between the red and green colors with a mean neutral value. One can specify his own color model like a similar one based on average neutral value instead of mean neutral. If no color model is specified at all the color is expected to be found directly in the value of the colorAttr binding as a suitable input for the `dcolor/Color` constructor.
 
-Note also that the `groupAttrs` property is of type array instead of just a single attribute. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
+Note also that the `groupAttrs` property is of type array. This allows one to specify several attributes for grouping thus creating a multi-level hierarchy. As for example:
 
 
 ```js
@@ -275,13 +275,13 @@ treeMap.on("treemap-item-over", function (e) {
 |type|status|comment|
 |----|------|-------|
 |Keyboard|optional|Accomplished through the `dtreemap/Keyboard` mixin see [User Interactions](#interactions).|
-|Visual Formatting|ok, might require customization|Tested for high constrast and browser zoom (200%). In high contrast the color cell information is not conveyed and must be put in the label if important using `labelFunc` to be conveyed through text. |
+|Visual Formatting|ok, might require customization|Tested for high constrast and browser zoom (200%). In high contrast the color cell information is not conveyed and must be put in the label using `labelFunc` if it is important to be conveyed through text. |
 |Screen Reader|ok|Tested on JAWS 15 and iOS 6 VoiceOver.|
 
 
 ### Globalization
 
-`dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dojo/store`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
+`dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dstore`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
 
 ```js
 require(["dojo/i18!myapp/nls/bundle", …], function(bundle, …) {
@@ -299,7 +299,7 @@ Right to left orientation is supported by setting the `dir` attribute to `rtl`on
 
 ### Security
 
-This widget as no specific security concern. Refers to `delite/Widget` and `delite/StoreMap` documentation for general security advices on this base class and mixin that `dtreemap/TreeMap` is using.
+This widget has no specific security concern. Refer to `delite/Widget` and `delite/StoreMap` documentation for general security advice on this base class and mixin that `dtreemap/TreeMap` is using.
 
 ### Browser Support
 

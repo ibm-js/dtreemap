@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>dtreemap</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="/dtreemap/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Bootstrap theme -->
+	<link href="/dtreemap/css/bootstrap-theme.min.css" rel="stylesheet">
+	<!-- syntax highlight -->
+	<link href="/dtreemap/css/syntax.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="/dtreemap/css/site.css" rel="stylesheet">
+
+	<link href="/dtreemap/css/default.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body role="document">
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/dtreemap/index.html"><img src="/dtreemap/ibmjs.png" id="avatar"></a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<!--<li id="getting-started"><a href="/dtreemap/getting-started.html">Getting Started</a></li>-->
+				<li id="docs"><a href="/dtreemap/docs/master/index.html">Docs</a></li>
+				<!--<li><a href="#Showcase">Demos</a></li>-->
+				<!--<li id="community"><a href="/dtreemap/community.html">Community</a></li>-->
+				<li id="blog"><a href="/dtreemap/../blog/index.html">Blog</a></li>
+				<li><a href="/dtreemap/../index.html">More Projects</a></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</div>
+<div class="container" role="main">
+	<div class="jumbotron">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<h2>Treemap Web Component</h2>
+				<p> Treemap reveals data patterns and trends easily by relying on data clustering, using areas and color information to represent the data you want to explore.</p>
+				<p>
+					<!--<a href="getting-started.html" class="btn btn-primary btn-lg" role="button">Get started</a>-->
+					<a href="docs/master/index.html" class="btn btn-success btn-lg" role="button">Learn more &raquo;</a>
+				</p>
+			</div>
+			<div class="col-xs-12 col-md-4"><img style="width: 300px; height: 320px" class="img-thumbnail" alt="deliteful" src="docs/master/treemap.png"></div>
+		</div>
+	</div>
+</div>
+
+<p></p>
+
+<h3>Learn how to add Treemap Custom Element to your Web or Mobile Hybrid Application!</h3>
+
+
+<div class="page-header">
+	<h2>Install the TreeMap Custom Element</h2>
+</div>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Start with installing Node.js, then you are ready to install bower and using bower the dtreemap custom element.
+	</div>
+	<div class="col-xs-12 col-md-6">
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>npm install -g bower
+<span class="nv">$ </span>mkdir -p my-app
+<span class="nv">$ </span><span class="nb">cd </span>my-app
+<span class="nv">$ </span>bower install dtreemap
+</code></pre></div>
+	</div>
+</div>
+
+<div class="page-header">
+	<h2>Use it in your application</h2>
+</div>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Edit the application code to include the TreeMap just as any other standard Custom Element.
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<div class="highlight"><pre><code class="html"><span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span> <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;bower_components &quot;</span><span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="kd">var</span> <span class="nx">dataStore</span><span class="p">;</span>
+  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;delite/register&quot;</span><span class="p">,</span> <span class="s2">&quot;dstore/Memory&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;dtreemap/TreeMap&quot;</span><span class="p">,</span> <span class="s2">&quot;requirejs-domready/domReady!&quot;</span><span class="p">],</span> 
+  <span class="kd">function</span><span class="p">(</span><span class="nx">register</span><span class="p">,</span> <span class="nx">Memory</span><span class="p">){</span>
+    <span class="nx">dataStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Memory</span><span class="p">({</span><span class="nx">idProperty</span><span class="o">:</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span>
+	  <span class="p">[{</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;France&quot;</span><span class="p">,</span> <span class="nx">sales</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span> <span class="nx">profit</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span> <span class="nx">region</span><span class="o">:</span> <span class="s2">&quot;EU&quot;</span> <span class="p">},</span>
+	   <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Germany&quot;</span><span class="p">,</span> <span class="nx">sales</span><span class="o">:</span> <span class="mi">450</span><span class="p">,</span> <span class="nx">profit</span><span class="o">:</span> <span class="mi">48</span><span class="p">,</span> <span class="nx">region</span><span class="o">:</span> <span class="s2">&quot;EU&quot;</span> <span class="p">},</span>
+	   <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;UK&quot;</span><span class="p">,</span> <span class="nx">sales</span><span class="o">:</span> <span class="mi">700</span><span class="p">,</span> <span class="nx">profit</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span> <span class="nx">region</span><span class="o">:</span> <span class="s2">&quot;EU&quot;</span> <span class="p">},</span>
+	   <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Japan&quot;</span><span class="p">,</span> <span class="nx">sales</span><span class="o">:</span> <span class="mi">900</span><span class="p">,</span> <span class="nx">profit</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">region</span><span class="o">:</span> <span class="s2">&quot;Asia&quot;</span> <span class="p">}</span>
+	  <span class="p">]});</span>
+	<span class="nx">register</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>	
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;d-treemap</span> <span class="na">style=</span><span class="s">&quot;width:640px;height:640px&quot;</span> <span class="na">store=</span><span class="s">&quot;dataStore&quot;</span> 
+    <span class="na">areaAttr=</span><span class="s">&quot;sales&quot;</span> <span class="na">colorAttr=</span><span class="s">&quot;profit&quot;</span> <span class="na">tooltipAttr=</span><span class="s">&quot;label&quot;</span> 
+    <span class="na">groupAttrs=</span><span class="s">&quot;region&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/d-treemap&gt;</span>		
+<span class="nt">&lt;/body&gt;</span>
+		
+</code></pre></div>
+	</div>
+</div>
+
+<div class="page-header">
+	<h2>Go further</h2>
+</div>
+<div class="container-fluid">
+	<div class="col-xs-12 col-md-6">
+		Don't hesitate to checkout the <a href="docs.html">documentation</a> to go further.
+		You might want to leverage other Web Component from
+		<a href="../deliteful/getting-started.html">deliteful</a> and build your application from there.
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>npm install -g yo
+<span class="nv">$ </span>npm install -g delite-element-generator
+<span class="nv">$ </span>npm install generator-deliteful-app
+<span class="nv">$ </span>yo deliteful-app
+</code></pre></div>
+	</div>
+</div>
+</body>
+</html>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/dtreemap/js/bootstrap.min.js"></script>
+<script>
+	if ($(".doc").length) {
+		$(".doc table").addClass("table-striped table-bordered table");
+		$(document).scroll(function () {
+			$(".navbar").toggleClass("hidden", $(document).scrollTop() > 50);
+		});
+	}
+</script>
+
+</body>
+</html>
