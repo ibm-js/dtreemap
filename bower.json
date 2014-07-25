@@ -2,16 +2,14 @@
 	"name": "dtreemap",
 	"version": "0.1.0-dev",
 	"dependencies": {
-		"dojo": "1.9.x",
+		"dojo": ">=1.9.1",
 		"dcl": "1.1.x",
-		"dcolor": "0.1.x-dev",
-		"dpointer": "0.1.x-dev",
-		"delite": "0.1.8-dev"
-	},
-	"devDependencies": {
-		"dstore": "0.1.0",
+		"dcolor": "0.1.x",
+		"dpointer": "0.1.x",
+		"delite": "0.1.10-dev",
 		"requirejs": "2.1.x",
-		"requirejs-domready": "2.0.x"
+		"requirejs-domready": ">=2.0.1",
+		"dstore": "0.1.0"
 	},
 	"ibm-js": {
 		"platforms": {
