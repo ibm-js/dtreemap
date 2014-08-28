@@ -11,6 +11,11 @@
 		"requirejs-domready": "2.0.x",
 		"dstore": "0.1.0"
 	},
+	"keywords": [
+		"web-components",
+		"delite",
+		"custom-elements"
+	],
 	"ibm-js": {
 		"platforms": {
 			"Android": ">=4.4",
