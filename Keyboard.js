@@ -1,20 +1,22 @@
+/** @module dtreemap/Keyboard */
 define(["dcl/dcl", "delite/keys", "./_utils", "delite/focus", "dpointer/events"],
 	function (dcl, keys, utils) {
 
-	return dcl(null, {
-		// summary:
-		//		Specializes TreeMap to support keyboard navigation and accessibility.
-
-		// tabIndex: String
-		//		Order fields are traversed when user hits the tab key
-		tabIndex: "0",
-
+	/**
+	 * Mixin that specializes TreeMap to support keyboard navigation and accessibility.
+	 * @mixin module:dtreemap/Keyboard
+	 */
+	return dcl(null, /** @lends module:dtreemap/Keyboard# */ {
 		constructor: function () {
 		},
 
 		postCreate: function () {
 			this.on("keydown", this._keyDownHandler.bind(this));
 			this.on("pointerdown", this._pointerDownHandler.bind(this));
+			if (!this.hasAttribute("tabindex")) {
+				this.tabIndex = "0";
+			}
+			this.on("focusin", this._focusInHandler.bind(this));
 		},
 
 		createRenderer: dcl.superCall(function (sup) {
@@ -27,6 +29,13 @@ define(["dcl/dcl", "delite/keys", "./_utils", "delite/focus", "dpointer/events"]
 			};
 		}),
 
+		_focusInHandler: function () {
+			// if no selection, select first item
+			if (!this.selectedItem) {
+				this.selectedItem = this.firstChild.firstChild.item;
+			}
+		},
+		
 		_pointerDownHandler: function () {
 			this.focus();
 		},

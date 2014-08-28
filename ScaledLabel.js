@@ -1,3 +1,4 @@
+/** @module dtreemap/ScaledLabel */
 define(["dcl/dcl", "dojo/dom-geometry"], function (dcl, domGeom) {
 
 	var treemapRendererUpdatedHandler = function (evt) {
@@ -26,10 +27,11 @@ define(["dcl/dcl", "dojo/dom-geometry"], function (dcl, domGeom) {
 		}
 	};
 
-	return dcl(null, {
-		// summary:
-		//		Specializes TreeMap to display scaled leaf labels instead of constant size labels.
-
+	/**
+	 * Mixin that specializes TreeMap to display scaled leaf labels instead of constant size labels.
+	 * @mixin module:dtreemap/Keyboard
+	 */
+	return dcl(null, /** @lends module:dtreemap/ScaledLabel# */ {
 		preCreate: function () {
 			this.on("treemap-renderer-updated", treemapRendererUpdatedHandler);
 		},

@@ -1,11 +1,13 @@
+/** @module dtreemap/GroupLabel */
 define(["dcl/dcl", "delite/css!./themes/GroupLabel.css"],
 	function (dcl) {
 
-	return dcl(null, {
-		// summary:
-		//		Specializes TreeMap to remove leaf labels and display group labels centered on group
-		//		content instead of display them in headers.
-
+	/**
+	 * Mixin that specializes TreeMap to remove leaf labels and display group labels centered on group
+	 * content instead of display them in headers.
+	 * @mixin module:dtreemap/GroupLabel
+	 */
+	return dcl(null, /** @lends module:dtreemap/GroupLabel# */ {
 		createRenderer: dcl.superCall(function (sup) {
 			return function (item, level, kind) {
 				var renderer = sup.call(this, item, level, kind);

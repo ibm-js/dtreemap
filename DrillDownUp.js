@@ -1,9 +1,12 @@
+/** @module dtreemap/DrillDownUp */
 define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
 	function (dcl, domGeom, fx) {
-
-	return dcl(null, {
-		// summary:
-		//		Specializes TreeMap to support drill down and up operations.
+		
+	/**
+	 * Mixin that specializes TreeMap to support drill down and up operations.
+	 * @mixin module:dtreemap/DrillDownUp
+	 */
+	return dcl(null, /** @lends module:dtreemap/DrillDownUp# */ {
 
 		postCreate: function () {
 			this.on("dblclick", this._dblClickHandler.bind(this));
@@ -33,11 +36,11 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/Dr
 			}
 		},
 
+		/**
+		 * Drill up from the given item renderer.
+		 * @param {Element} renderer The item renderer.
+		 */
 		drillUp: function (renderer) {
-			// summary:
-			//		Drill up from the given renderer.
-			// renderer: DomNode
-			//		The item renderer.
 			var item = renderer.item;
 			var self = this;
 
@@ -85,11 +88,11 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/Dr
 			}).play();
 		},
 
+		/**
+		 * Drill down on the given item renderer.
+		 * @param {Element} renderer The item renderer.
+		 */
 		drillDown: function (renderer) {
-			// summary:
-			//		Drill up from the given renderer.
-			// renderer: DomNode
-			//		The item renderer.
 			var box = domGeom.getMarginBox(this);
 			var item = renderer.item;
 			var self = this;

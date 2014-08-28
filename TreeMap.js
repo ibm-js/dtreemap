@@ -1,3 +1,4 @@
+/** @module dtreemap/TreeMap */
 define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
@@ -5,83 +6,121 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 	function (dcl, register, Color, when, domGeom, domClass,
 			  utils, pointer, Widget, Selection, StoreMap) {
 
-	return register("d-treemap", [HTMLElement, Widget, Selection, StoreMap], {
-		// summary:
-		//		A treemap widget.
+	/**
+	 * A treemap widget.
+	 * @class module:dtreemap/TreeMap
+	 * @augments module:delite/Widget
+	 * @augments module:delite/Selection
+	 * @augments module:delite/StoreMap
+	 */
+	return register("d-treemap", [HTMLElement, Widget, Selection, StoreMap], /** @lends module:dtreemap/TreeMap# */ {
 
 		baseClass: "d-treemap",
 
-		// itemToRenderer: [protected] Object
-		//		The associated array item to renderer list.
+		/**
+		 * The associated array item to renderer list.
+		 * @member {Object}
+		 * @protected
+		 */
 		itemToRenderer: null,
 
-		// rootItem: Object
-		//		The root item of the treemap, that is the first visible item.
-		//		If null the entire treemap hierarchy is shown.	
-		//		Default is null.
+		/**
+		 * The root item of the treemap, that is the first visible item.
+		 * If null the entire treemap hierarchy is shown.
+		 * @member {Object}
+		 * @default null
+		 */
 		rootItem: null,
 
-		// tooltipAttr: String
-		//		The attribute of the store item that contains the tooltip text of a treemap cell.	
-		//		Default is "". 
+		/**
+		 * The attribute of the store item that contains the tooltip text of a treemap cell.
+		 * @member {string}
+		 * @default ""
+		 */
 		tooltipAttr: "",
 
-		// tooltipFunc: Function
-		//		A function that returns the tooltip text of a treemap cell from a store item. If specified takes
-		//		precedence over tooltipAttr.
+		/**
+		 * A function that returns the tooltip text of a treemap cell from a store item. If specified takes
+		 * precedence over tooltipAttr.
+		 * @member {Function}
+		 * @default null
+		 */
 		tooltipFunc: null,
 
-		// areaAttr: String
-		//		The attribute of the store item that contains the data used to compute the area of a treemap cell.	
-		//		Default is "".
+		/**
+		 * The attribute of the store item that contains the data used to compute the area of a treemap cell.
+		 * @member {string}
+		 * @default ""
+		 */
 		areaAttr: "",
 
-		// areaFunc: Function
-		//		A function that returns the value use to compute the area of cell from a store item. If specified
-		// 		takes precedence over areaAttr.
+		/**
+		 * A function that returns the value use to compute the area of cell from a store item. If specified
+		 * takes precedence over areaAttr.
+		 * @member {Function}
+		 * @default null
+		 */
 		areaFunc: null,
 
-		// labelAttr: String
-		//		The attribute of the store item that contains the label of a treemap cell.	
-		//		Default is "label". 
+		/**
+		 * The attribute of the store item that contains the label of a treemap cell.
+		 * @member {string}
+		 * @default "label"
+		 */
 		labelAttr: "label",
 
-		// labelFunc: Function
-		//		A function that returns the label of a treemap cell from a store item. If specified takes
-		//		precedence over labelAttr.
+		/**
+		 * A function that returns the label of a treemap cell from a store item. If specified takes
+		 * precedence over labelAttr.
+		 * @member {Function}
+		 * @default null
+		 */
 		labelFunc: null,
 
-		// labelThreshold: Number
-		//		The starting depth level at which the labels are not displayed anymore on cells.  
-		//		If NaN no threshold is applied. The depth is the visual depth of the items on the screen not
-		//		in the data (i.e. after drill down the depth of an item might change).
-		//		Default is NaN.
+		/**
+		 * The starting depth level at which the labels are not displayed anymore on cells.
+		 * If NaN no threshold is applied. The depth is the visual depth of the items on the screen not
+		 * in the data (i.e. after drill down the depth of an item might change).
+		 * @member {number}
+		 * @default NaN
+		 */
 		labelThreshold: NaN,
 
-		// colorAttr: String
-		//		The attribute of the store item that contains the data used to compute the color of a treemap cell.
-		//		Default is "". 
+		/**
+		 * The attribute of the store item that contains the data used to compute the color of a treemap cell.
+		 * @member {string}
+		 * @default ""
+		 */
 		colorAttr: "",
 
-		// colorFunc: Function
-		//		A function that returns from a store item the data used to compute the color of a treemap cell.
-		// 		If specified takes precedence over colorAttr.
+		/**
+		 * A function that returns from a store item the data used to compute the color of a treemap cell.
+		 * If specified takes precedence over colorAttr.
+		 * @member {Function}
+		 * @default null
+		 */
 		colorFunc: null,
 
-		// colorModel: dcolor/api/ColorModel
-		//		The optional color model that converts data to color.
-		//		Default is null.
+		/**
+		 * The optional color model that converts data to color.
+		 * @member {dcolor/api/ColorModel}
+		 * @default null
+		 */
 		colorModel: null,
 
-		// groupAttrs: Array
-		//		An array of data attributes used to group data in the treemap.	
-		//		Default is []. 
+		/**
+		 * An array of data attributes used to group data in the treemap.
+		 * @member {string[]}
+		 * @default []
+		 */
 		groupAttrs: [],
 
-		// groupFuncs: Array
-		//		An array of grouping functions used to group data in the treemap.
-		//		When null, groupAttrs is to compute grouping functions.
-		//		Default is null.
+		/**
+		 * An array of grouping functions used to group data in the treemap.
+		 * When null, groupAttrs is used to compute grouping functions.
+		 * @member {Function[]}
+		 * @default null
+		 */
 		groupFuncs: null,
 
 		_groupFuncs: null,
@@ -237,21 +276,17 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			}
 		},
 
+		/**
+		 * Creates an item renderer of the specified kind. This is called only when the treemap
+		 * is created. Default implementation always create div nodes. It also sets overflow
+		 * to hidden and position to absolute on non-header renderers.
+		 * @param item The render item.
+		 * @param level The item depth level.
+		 * @param kind The specified kind. This can either be "leaf", "group", "header" or "content".
+		 * @returns {HTMLElement} The renderer use for the specified kind.
+		 * @protected
+		 */
 		createRenderer: function (item, level, kind) {
-			// summary:
-			//		Creates an item renderer of the specified kind. This is called only when the treemap
-			//		is created. Default implementation always create div nodes. It also sets overflow
-			//		to hidden and position to absolute on non-header renderers.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.		
-			// kind: String
-			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
-			// returns: DomNode
-			//		The renderer use for the specified kind.
-			// tags:
-			//		protected					
 			var div = this.ownerDocument.createElement("div");
 			if (kind !== "header") {
 				dcl.mix(div.style, {
@@ -262,21 +297,17 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return div;
 		},
 
+		/**
+		 * Style the item renderer. This is called each time the treemap is refreshed.
+		 * For leaf items it colors them with the color computed from the color model.
+		 * For other items it does nothing.
+		 * @param renderer The item renderer.
+		 * @param item The render item.
+		 * @param level The item depth level.
+		 * @param kind The specified kind. This can either be "leaf", "group", "header" or "content".
+		 * @protected
+		 */
 		styleRenderer: function (renderer, item, level, kind) {
-			// summary:
-			//		Style the item renderer. This is called each time the treemap is refreshed.
-			//		For leaf items it colors them with the color computed from the color model. 
-			//		For other items it does nothing.
-			// renderer: DomNode
-			//		The item renderer.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.
-			// kind: String
-			//		The specified kind. This can either be "leaf", "group", "header" or "content". 
-			// tags:
-			//		protected
 			switch (kind) {
 			case "leaf":
 				renderer.style.background = this.getColorForItem(item).toHex();
@@ -350,14 +381,13 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return value;
 		},
 
+		/**
+		 * Returns the color for a given item. This either use the colorModel if not null
+		 * or just the result of the colorFunc.
+		 * @param item The render item.
+		 * @returns {dcolor/Color} The item color
+		 */
 		getColorForItem: function (item) {
-			// summary:
-			//		Returns the color for a given item. This either use the colorModel if not null
-			//		or just the result of the colorFunc.
-			// item: Object
-			//		The data item.
-			// tags:
-			//		protected	
 			var value = this._colorFunc(item);
 			if (this.colorModel != null) {
 				return this.colorModel.getColor(value);
@@ -366,13 +396,12 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			}
 		},
 
+		/**
+		 * Returns the label for a given item.
+		 * @param item The render item.
+		 * @returns {string}
+		 */
 		getLabelForItem: function (item) {
-			// summary:
-			//		Returns the label for a given item.
-			// item: Object
-			//		The data item.
-			// tags:
-			//		protected
 			return item.__treeName ? item.__treeName : item.label.toString();
 		},
 
@@ -485,18 +514,16 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			domGeom.setMarginBox(header, { l: 0, t: 0, w: width, h: box.h });
 		},
 
+		/**
+		 * Update a group renderer. This creates the renderer if not already created,
+		 * call styleRender for it and recurse into children.
+		 * @param renderer The item renderer.
+		 * @param item The render item.
+		 * @param level The item depth level.
+		 * @returns {HTMLElement}
+		 * @private
+		 */
 		_updateGroupRenderer: function (renderer, item, level) {
-			// summary:
-			//		Update a group renderer. This creates the renderer if not already created,
-			//		call styleRender for it and recurse into children.
-			// renderer: DomNode
-			//		The item renderer.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.
-			// tags:
-			//		private
 			var forceCreate = renderer == null;
 			if (renderer == null) {
 				renderer = this.createRenderer("div", level, "group");
@@ -516,18 +543,16 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return renderer;
 		},
 
+		/**
+		 * Update a leaf renderer. This creates the renderer if not already created,
+		 * call styleRender for it and set the label as its innerHTML.
+		 * @param renderer The item renderer.
+		 * @param item The render item.
+		 * @param level The item depth level.
+		 * @returns {HTMLElement}
+		 * @private
+		 */
 		_updateHeaderRenderer: function (renderer, item, level) {
-			// summary:
-			//		Update a leaf renderer. This creates the renderer if not already created,
-			//		call styleRender for it and set the label as its innerHTML.
-			// renderer: DomNode
-			//		The item renderer.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.
-			// tags:
-			//		private			
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "header");
 				domClass.add(renderer, "d-treemap-header");
@@ -537,18 +562,16 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return renderer;
 		},
 
+		/**
+		 * Update a leaf renderer. This creates the renderer if not already created,
+		 * call styleRender for it and set the label as its innerHTML.
+		 * @param renderer The item renderer.
+		 * @param item The render item.
+		 * @param level The item depth level.
+		 * @returns {HTMLElement}
+		 * @private
+		 */
 		_updateLeafRenderer: function (renderer, item, level) {
-			// summary:
-			//		Update a leaf renderer. This creates the renderer if not already created,
-			//		call styleRender for it and set the label as its innerHTML.
-			// renderer: DomNode
-			//		The item renderer.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.
-			// tags:
-			//		private				
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "leaf");
 				domClass.add(renderer, "d-treemap-leaf");
@@ -561,18 +584,16 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return renderer;
 		},
 
+		/**
+		 * Update a group content renderer. This creates the renderer if not already created,
+		 * and call styleRender for it.
+		 * @param renderer The item renderer.
+		 * @param item The render item.
+		 * @param level The item depth level
+		 * @returns {HTMLElement}
+		 * @private
+		 */
 		_updateGroupContentRenderer: function (renderer, item, level) {
-			// summary:
-			//		Update a group content renderer. This creates the renderer if not already created,
-			//		and call styleRender for it.
-			// renderer:
-			//		The item renderer.
-			// item: Object
-			//		The data item.
-			// level: Number
-			//		The item depth level.
-			// tags:
-			//		private				
 			if (renderer == null) {
 				renderer = this.createRenderer(item, level, "content");
 				domClass.add(renderer, "d-treemap-groupcontent");
@@ -616,10 +637,6 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		updateRenderers: function (items) {
-			// summary:
-			//		Updates the renderer(s) that represent the specified item(s).
-			// item: Object|Array
-			//		The item(s).
 			if (!items) {
 				return;
 			}
