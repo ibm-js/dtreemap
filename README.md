@@ -49,7 +49,7 @@ Then install dependencies with bower (or manually from github if you prefer to):
 
 ## Documentation
 
-http://livedocs.dojotoolkit.org/dojox/treemap
+http://ibm-js.github.io/dtreemap/docs/master/index.html
 
 ## Credits
 
