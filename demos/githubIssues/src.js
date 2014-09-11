@@ -94,9 +94,9 @@ var sizeByCommentFunc = function (item) {
 require(["dcl/dcl", "dojo/request", "dcolor/Color", "delite/register",
 		/*"delite/Tooltip", */ "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
 		"deliteful/LinearLayout", "dtreemap/TreeMap", "dtreemap/Keyboard", "dtreemap/DrillDownUp",
-		"dstore/Memory", "dstore/Observable", "requirejs-domready/domReady!"],
+		"dstore/Memory", "dstore/Trackable", "requirejs-domready/domReady!"],
 function (dcl, request, Color, register, /*Tooltip, */domStyle, domAttr, domConstruct, LinearLayout, TreeMap,
-		  Keyboard, DrillDownUp, Memory, Observable) {
+		  Keyboard, DrillDownUp, Memory, Trackable) {
 	register("my-treemap", [TreeMap, Keyboard, DrillDownUp], {
 		createRenderer: dcl.superCall(function (sup) {
 			return function (item, level, kind) {
@@ -131,7 +131,7 @@ function (dcl, request, Color, register, /*Tooltip, */domStyle, domAttr, domCons
 	request.get("https://api.github.com/repos/ibm-js/deliteful/issues?per_page=100", {
 		handleAs: "json"
 	}).then(function (data) {
-		var store = new (Memory.createSubclass(Observable))({data: data});
+		var store = new (Memory.createSubclass(Trackable))({data: data});
 		// depending on when we arrive here treemap
 		// might already been there...
 		// reset data:
