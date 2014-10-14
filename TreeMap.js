@@ -2,7 +2,7 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
-	"delite/StoreMap", "delite/css!./themes/TreeMap.css", "delite/uacss"],
+	"delite/StoreMap", "requirejs-dplugins/css!./themes/TreeMap.css", "delite/uacss"],
 	function (dcl, register, Color, when, domGeom, domClass,
 			  utils, pointer, Widget, Selection, StoreMap) {
 
@@ -129,7 +129,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 
 		copyAllItemProps: true,
 
-		preCreate: function () {
+		preRender: function () {
 			this.allowRemap = true;
 			this.itemToRenderer = {};
 		},
@@ -145,7 +145,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			}
 		},
 
-		postCreate: function () {
+		postRender: function () {
 			this.on("pointerover", this._pointerOverHandler.bind(this));
 			this.on("pointerout", this._pointerOutHandler.bind(this));
 			this.on("pointerup", this._pointerUpHandler.bind(this));

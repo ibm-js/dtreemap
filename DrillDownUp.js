@@ -1,6 +1,6 @@
 /** @module dtreemap/DrillDownUp */
-define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/DrillDownUp.css", "dpointer/events"],
-	function (dcl, domGeom, fx) {
+define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "requirejs-dplugins/css!./themes/DrillDownUp.css",
+		"dpointer/events"], function (dcl, domGeom, fx) {
 		
 	/**
 	 * Mixin that specializes TreeMap to support drill down and up operations.
@@ -8,7 +8,7 @@ define(["dcl/dcl", "dojo/dom-geometry", "dojo/_base/fx", "delite/css!./themes/Dr
 	 */
 	return dcl(null, /** @lends module:dtreemap/DrillDownUp# */ {
 
-		postCreate: function () {
+		postRender: function () {
 			this.on("dblclick", this._dblClickHandler.bind(this));
 		},
 

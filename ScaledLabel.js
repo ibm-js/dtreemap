@@ -32,7 +32,7 @@ define(["dcl/dcl", "dojo/dom-geometry"], function (dcl, domGeom) {
 	 * @mixin module:dtreemap/Keyboard
 	 */
 	return dcl(null, /** @lends module:dtreemap/ScaledLabel# */ {
-		preCreate: function () {
+		preRender: function () {
 			this.on("treemap-renderer-updated", treemapRendererUpdatedHandler);
 		},
 

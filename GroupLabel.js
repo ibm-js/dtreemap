@@ -1,5 +1,5 @@
 /** @module dtreemap/GroupLabel */
-define(["dcl/dcl", "delite/css!./themes/GroupLabel.css"],
+define(["dcl/dcl", "requirejs-dplugins/css!./themes/GroupLabel.css"],
 	function (dcl) {
 
 	/**

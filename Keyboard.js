@@ -10,7 +10,7 @@ define(["dcl/dcl", "delite/keys", "./_utils", "delite/focus", "dpointer/events"]
 		constructor: function () {
 		},
 
-		postCreate: function () {
+		postRender: function () {
 			this.on("keydown", this._keyDownHandler.bind(this));
 			this.on("pointerdown", this._pointerDownHandler.bind(this));
 			if (!this.hasAttribute("tabindex")) {
