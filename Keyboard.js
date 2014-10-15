@@ -1,5 +1,5 @@
 /** @module dtreemap/Keyboard */
-define(["dcl/dcl", "delite/keys", "./_utils", "delite/focus", "dpointer/events"],
+define(["dcl/dcl", "delite/keys", "./_utils", "dpointer/events"],
 	function (dcl, keys, utils) {
 
 	/**
