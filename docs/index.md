@@ -39,7 +39,7 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 
 ```js
 var dataStore;
-require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (register, Memory) {
+require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (register, Memory) {
   dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -66,7 +66,7 @@ require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!
 ### Programmatic Instantiation
 
 ```js
-require(["dstore/Memory", "dtreemap/TreeMap", "dojo/domReady!"], function (Memory, TreeMap) {
+require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (Memory, TreeMap) {
   var dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -283,7 +283,7 @@ treeMap.on("treemap-item-over", function (e) {
 `dtreemap/TreeMap` does not provide any internationalizable bundle. The only strings displayed by the treemap are coming from the user data through the `dstore`. A possible way to internationalize those user data strings would be either to serve different data based on user locale or serve string keys that will be looked up into interatonalization bundles when consumed. In this case you might use the [mapping by function](#byfunc) in order to recover the actual translated string from the string keys as follows:
 
 ```js
-require(["dojo/i18!myapp/nls/bundle", …], function(bundle, …) {
+require(["requirejs-dplugins/i18!myapp/nls/bundle", …], function(bundle, …) {
   myTreeMap.labelFunc = function (item) {
     return bundle[item.label];
   }
