@@ -3,9 +3,9 @@ layout: default
 title: setup
 ---
 
-# setup a dtreemap project
+# setup a project using dtreemap
 
-The dtreemap project and in particular the `d-treemap` custom element can be consumed in two forms:
+The `d-treemap` custom element and other modules from the dtreemap project can be consumed in two forms:
 
 * the dtreemap built AMD layer
 * the dtreemap source AMD modules
@@ -14,35 +14,37 @@ In order to install the built form:
 
 ```sh
 bower install dtreemap-build
-``
+```
 
-The source form:
+Similarly, for the source form:
 
 ```sh
 bower install dtreemap
 ```
 
-Using the source form is as simple as requiring the needed AMD modules:
+Using the source form is as simple as requiring the needed AMD modules using RequireJS:
 
 ```js
-require(["delite/register", "dtreemap/TreeMap", "dtreemap/DrillDownUp", "dojo/domReady!"], 
+require(["delite/register", "dtreemap/TreeMap", "dtreemap/DrillDownUp", "requirejs-domready/domReady!"], 
    function (register, TreeMap, DrillDownUp) {
    //...
 });
 ```
    
-In order to consume the [built form](https://github.com/ibm-js/delite-build#how-to-use) you need first to load the corresponding layer and then the AMD modules:
+In order to consume the [built form](https://github.com/ibm-js/dtreemap-build#how-to-use) you first need to load the 
+corresponding layer and then the AMD modules as follows:
  
  ```js
  require(["dtreemap/layer"], function() {
-   require(["delite/register", "dtreemap/TreeMap", "dtreemap/DrillDownUp", "dojo/domReady!"], 
+   require(["delite/register", "dtreemap/TreeMap", "dtreemap/DrillDownUp", "requirejs-domready/domReady!"], 
       function (register, TreeMap, DrillDownUp) {
       //...
    });
  });
  ```
  
- When using the source form, you can built your resulting application using the [grunt-amd-build](https://github.com/ibm-js/grunt-amd-build) project.
+ When using the source form (or the built form if needed), you can built your resulting application using 
+ the [grunt-amd-build](https://github.com/ibm-js/grunt-amd-build) project.
  
 
 
