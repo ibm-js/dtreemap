@@ -1,8 +1,7 @@
 {
 	"name": "dtreemap",
-	"version": "0.2.0",
-	"dependencies": {
-	},
+	"version": "0.2.1",
+	"dependencies": {},
 	"devDependencies": {
 		"intern": "1.6",
 		"grunt": "~0.4.2",

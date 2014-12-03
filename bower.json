@@ -1,16 +1,16 @@
 {
 	"name": "dtreemap",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"dependencies": {
 		"dojo": ">=1.9.1",
 		"dcl": "1.1.x",
 		"dcolor": "0.1.x",
-		"dpointer": "0.3.x",
-		"delite": "0.4.x",
+		"dpointer": "0.4.x",
+		"delite": "0.5.x",
 		"requirejs": "2.1.x",
-		"requirejs-dplugins": "0.3.x",
+		"requirejs-dplugins": "0.4.x",
 		"requirejs-domready": "2.0.x",
-		"dstore": "0.2.0"
+		"dstore": "1.0.x"
 	},
 	"keywords": [
 		"web-components",
@@ -27,8 +27,13 @@
 			"Firefox": ">=24"
 		},
 		"features": {
-			"a11y": ["JAWS", "highconstrast"],
-			"g11n": ["bidi"]
+			"a11y": [
+				"JAWS",
+				"highconstrast"
+			],
+			"g11n": [
+				"bidi"
+			]
 		}
 	}
 }
