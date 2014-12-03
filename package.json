@@ -14,5 +14,6 @@
 		}
 	],
 	"bugs": "https://github.com/ibm-js/dtreemap/issues",
-	"main": "./TreeMap"
+	"main": "./TreeMap",
+	"private": true
 }
