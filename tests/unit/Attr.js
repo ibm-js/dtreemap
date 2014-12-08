@@ -29,15 +29,26 @@ define([
 		"Regular" : function () {
 			var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
 			var treeMap = register.createElement("d-treemap");
+			treeMap.style.height = "480px";
 			treeMap.store = store;
 			treeMap.areaAttr = "sales";
 			treeMap.colorAttr = "profit";
-			treeMap.groupsAttr = ["region"];
+			treeMap.groupAttrs = ["region"];
 			treeMap.colorModel = colorModel;
 			container.appendChild(treeMap);
 			treeMap.startup();
 			treeMap.deliver();
-			
+			var div = treeMap.firstChild;
+			var groups = div.querySelectorAll(".d-treemap-group");
+			assert.strictEqual(groups.length, 3, "groups");
+			for (var i = 0; i < groups.length; i++) {
+				var headers = groups[i].querySelectorAll(".d-treemap-header");
+				assert.strictEqual(headers.length, 1, "headers");
+				var content = groups[i].querySelectorAll(".d-treemap-groupcontent");
+				assert.strictEqual(content.length, 1, "content");
+				var leafs = content[0].querySelectorAll(".d-treemap-leaf");
+				assert.strictEqual(leafs.length, (i === 2 ? 2 : 3), "leafs");
+			}
 		},
 		teardown : function () {
 			container.parentNode.removeChild(container);
