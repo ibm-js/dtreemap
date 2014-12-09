@@ -2,7 +2,7 @@
 define(["dcl/dcl", "delite/register", "dcolor/Color",
 	"dojo/when", "dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
-	"delite/StoreMap", "requirejs-dplugins/css!./themes/TreeMap.css", "delite/uacss"],
+	"delite/StoreMap", "requirejs-dplugins/css!./themes/TreeMap.css"],
 	function (dcl, register, Color, when, domGeom, domClass,
 			  utils, pointer, Widget, Selection, StoreMap) {
 
@@ -138,11 +138,13 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			return item.__treeID ? item.__treeID : this.store.getIdentity(item);
 		},
 
-		resize: function (box) {
-			if (box) {
-				domGeom.setMarginBox(this, box);
-				this.invalidateRendering();
-			}
+
+		/**
+		 * To be called when the TreeMap should relayout itself following a change in CSS layout. The application
+		 * typically calls this method when a `resize` event occurs. 
+		 */
+		update: function () {
+			this.notifyCurrentValue("areaAttr");
 		},
 
 		postRender: function () {
