@@ -1,6 +1,5 @@
 .d-treemap {
 	background-color: #EBEADB;
-	font-family: Geneva, Arial, Helvetica, sans-serif;
 	display: block;
 }
 
@@ -76,6 +75,6 @@
 	z-index: 20;
 }
 
-.d-treemap .d-treemap-group.d-selected{
+.d-treemap .d-treemap-group.d-selected {
 	border:2px dashed red;
 }
