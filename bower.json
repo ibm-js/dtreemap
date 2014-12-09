@@ -12,6 +12,9 @@
 		"requirejs-domready": "2.0.x",
 		"dstore": "1.0.x"
 	},
+	"devDependencies": {
+		"deliteful": "0.5.x"
+	},
 	"keywords": [
 		"web-components",
 		"delite",

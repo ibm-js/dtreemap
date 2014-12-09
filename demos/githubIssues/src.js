@@ -18,15 +18,15 @@ var colorByPriorityFunc = function (item) {
 	var priority = getPriority(item);
 	switch (priority) {
 	case "blocker":
-		return {r: 255, g: 0, b: 0};
+		return "#f7c6c7"; //{r: 255, g: 0, b: 0};
 	case "high":
-		return {r: 170, g: 85, b: 0};
+		return "#fad8c7"; //{r: 170, g: 85, b: 0};
 	case "medium":
-		return {r: 128, g: 128, b: 0};
+		return "#fef2c0"; //{r: 128, g: 128, b: 0};
 	case "low":
-		return {r: 85, g: 170, b: 0};
+		return "#bfe5bf"; //{r: 85, g: 170, b: 0};
 	default:
-		return {r: 0, g: 255, b: 0};
+		return "#e6e6e6"; //{r: 0, g: 255, b: 0};
 	}
 	return {};
 };
@@ -59,13 +59,13 @@ var colorByDateFunc = function (item) {
 	// color based on how ancient is the bug
 	var old = new Date().getTime() - created;
 	if (old < 8 * DAY) {
-		return {r: 0, g: 255, b: 0};
+		return "#bfe5bf";
 	} else if (old < 35 * DAY) {
-		return {r: 85, g: 170, b: 0};
+		return "#fef2c0";
 	} else if (old < 400 * DAY) {
-		return {r: 170, g: 85, b: 0};
+		return "#fad8c7";
 	} else {
-		return {r: 255, g: 0, b: 0};
+		return "#f7c6c7";
 	}
 	return {};
 };
@@ -92,21 +92,20 @@ var sizeByCommentFunc = function (item) {
 };
 
 require(["dcl/dcl", "dojo/request", "dcolor/Color", "delite/register",
-		/*"delite/Tooltip", */ "dojo/dom-style", "dojo/dom-attr", "dojo/dom-construct",
-		"deliteful/LinearLayout", "dtreemap/TreeMap", "dtreemap/Keyboard", "dtreemap/DrillDownUp",
-		"dstore/Memory", "dstore/Trackable", "requirejs-domready/domReady!"],
-function (dcl, request, Color, register, /*Tooltip, */domStyle, domAttr, domConstruct, LinearLayout, TreeMap,
-		  Keyboard, DrillDownUp, Memory, Trackable) {
+		 "dtreemap/TreeMap", "dtreemap/Keyboard", "dtreemap/DrillDownUp",
+		 "dstore/Memory", "dstore/Trackable",
+		 "requirejs-domready/domReady!", "deliteful/RadioButton", "deliteful/LinearLayout"],
+function (dcl, request, Color, register, TreeMap, Keyboard, DrillDownUp, Memory, Trackable) {
 	register("my-treemap", [TreeMap, Keyboard, DrillDownUp], {
 		createRenderer: dcl.superCall(function (sup) {
 			return function (item, level, kind) {
 				if (kind === "leaf") {
-					var div = domConstruct.create("a");
+					var div = this.ownerDocument.createElement("a");
 					/*jshint -W106*/
-					domAttr.set(div, "href", item.html_url);
+					div.setAttribute("href", item.html_url);
 					/*jshint +W106*/
-					domStyle.set(div, "overflow", "hidden");
-					domStyle.set(div, "position", "absolute");
+					div.style.overflow = "hidden";
+					div.style.position = "absolute";
 					return div;
 				} else {
 					return sup.call(this, item, level, kind);
@@ -131,6 +130,11 @@ function (dcl, request, Color, register, /*Tooltip, */domStyle, domAttr, domCons
 	request.get("https://api.github.com/repos/ibm-js/deliteful/issues?per_page=100", {
 		handleAs: "json"
 	}).then(function (data) {
+		// sanitize data
+		for (var i = 0; i < data.length; i++) {
+			data[i].title = data[i].title.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
+				.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
 		var store = new (Memory.createSubclass(Trackable))({data: data});
 		// depending on when we arrive here treemap
 		// might already been there...

@@ -2,7 +2,28 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+	<style>
+		html, body {
+			background-color: #d3d3d3;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+		}
+		
+		a.d-treemap-leaf {
+			text-decoration: none;
+			color: black;
+		}
+		
+		a.d-treemap-leaf:visited {
+			color: darkblue;
+		}
+
+		.d-treemap-header {
+			background-color: #d3d3d3;
+		}
+	</style>
 	<script type="text/javascript" src="../../../requirejs/require.js"></script>
 	<script>
 		require.config({ baseUrl: "../../.." });
@@ -10,62 +31,48 @@
 	<script type="text/javascript" src="src.js"></script>
 </head>
 
-<body>
+<body onresize="treeMap.update()">
 
-<d-linear-layout class="width100 height100" vertical="false">
-	<div class="fill height100">
-		<my-treemap id="treeMap" labelAttr="title" selectionMode="multiple" style="width: 100%; height: 100%"></my-treemap>
-	</div>
+<d-linear-layout style="width: 100%; height: 100%" vertical="false">
+	<my-treemap id="treeMap" labelAttr="title" selectionMode="multiple" class="fill" style="height: 100%"></my-treemap>
 	<div style="width: 200px;">
 		<label>Group first by:</label>
 		<br/>
-		<input type="radio" name="groupBy" id="g1" onchange="groupByChanged()"/>
-		<label for="g1">None</label>
+		<label><d-radio-button name="groupBy" id="g1" onchange="groupByChanged()"></d-radio-button>None</label>
 		<br/>
-		<input type="radio" name="groupBy" id="g2" onchange="groupByChanged()"/>
-		<label for="g2">Reporter</label>
+		<label><d-radio-button name="groupBy" id="g2" onchange="groupByChanged()"></d-radio-button>Reporter</label>
 		<br/>
-		<input type="radio" name="groupBy" id="g3" checked onchange="groupByChanged()"/>
-		<label for="g3">Owner</label>
+		<label><d-radio-button name="groupBy" id="g3" checked onchange="groupByChanged()"></d-radio-button>Owner</label>
 		<br/>
-		<input type="radio" name="groupBy" id="g4" onchange="groupByChanged()"/>
-		<label for="g4">Milestone</label>
+		<label><d-radio-button name="groupBy" id="g4" onchange="groupByChanged()"></d-radio-button>Milestone</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Then group by:</label>
 		<br/>
-		<input type="radio" name="groupBy2" id="g21" checked onchange="groupByChanged()"/>
-		<label for="g21">None</label>
+		<label><d-radio-button name="groupBy2" id="g21" checked onchange="groupByChanged()"></d-radio-button>None</label>
 		<br/>
-		<input type="radio" name="groupBy2" id="g22" onchange="groupByChanged()"/>
-		<label for="g22">Reporter</label>
+		<label><d-radio-button name="groupBy2" id="g22" onchange="groupByChanged()"></d-radio-button>Reporter</label>
 		<br/>
-		<input type="radio" name="groupBy2" id="g23" onchange="groupByChanged()"/>
-		<label for="g23">Owner</label>
+		<label><d-radio-button name="groupBy2" id="g23" onchange="groupByChanged()"></d-radio-button>Owner</label>
 		<br/>
-		<input type="radio" name="groupBy2" id="g24" onchange="groupByChanged()"/>
-		<label for="g24">Milestone</label>
+		<label><d-radio-button name="groupBy2" id="g24" onchange="groupByChanged()"></d-radio-button>Milestone</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Size by:</label>
 		<br/>
-		<input type="radio" name="sizeBy" id="s1" onchange="sizeByChanged()"/>
-		<label for="s1">Priority</label>
+		<label><d-radio-button name="sizeBy" id="s1" onchange="sizeByChanged()"></d-radio-button>Priority</label>
 		<br/>
-		<input type="radio" name="sizeBy" id="s2" checked onchange="sizeByChanged()"/>
-		<label for="s2">Number of Comments</label>
+		<label><d-radio-button name="sizeBy" id="s2" checked onchange="sizeByChanged()"></d-radio-button>Number of Comments</label>
 		<br/>
 		<br/>
 		<br/>
 		<label>Color by:</label>
 		<br/>
-		<input type="radio" name="colorBy" id="c1" checked onchange="colorByChanged()"/>
-		<label for="c1">Priority</label>
+		<label><d-radio-button name="colorBy" id="c1" checked onchange="colorByChanged()"></d-radio-button>Priority</label>
 		<br/>
-		<input type="radio" name="colorBy" id="c2" onchange="colorByChanged()"/>
-		<label for="c2">Age</label>
+		<label><d-radio-button name="colorBy" id="c2" onchange="colorByChanged()"></d-radio-button>Age</label>
 	</div>
 </d-linear-layout>
 </body>
