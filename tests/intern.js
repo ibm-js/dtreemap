@@ -42,5 +42,7 @@ define({
 	suites: [ "dtreemap/tests/unit/all" ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis
-	excludeInstrumentation: /^(?:dtreemap\/tests|dcl|dcolor|dpointer|dstore|dojo|delite|decor|deliteful|requirejs.*)\//
+	excludeInstrumentation:
+		/*jshint maxlen:1000*/
+		/^(?:dtreemap\/(tests|node_modules)|dcl|dcolor|dpointer|dstore|dojo|jquery|delite|decor|deliteful|requirejs.*)\//
 });
