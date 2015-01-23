@@ -147,7 +147,7 @@ For an exhaustive list of treemap properties see TODO LINK TO API DOC
 <a name="styling"></a>
 ## Element Styling
 
-`dtreemap/TreeMap` generates HTML markup that can be styled using CSS. The treemap provides a default TreeMap.css that must be included in your application. Alternate rendering can be achieved by overriding some of the CSS rules and using the classes put by the treemap on the HTML elements.
+`dtreemap/TreeMap` generates HTML markup that can be styled using CSS. The treemap provides a default CSS styling that is automatically included in the application. Alternate rendering can be achieved by overriding some of the CSS rules and using the classes put by the treemap on the HTML elements.
 
 The following example shows how to:
   * center the labels
