@@ -35,13 +35,14 @@
 							colorModel: colorModel,
 							query: function(item){
 								return item.sales > 500;
-							}}, dom.byId("treeMap"));
-				treeMap.startup();
+							}});
+				treeMap.style.width = "640px";
+				treeMap.style.height = "640px";
+				treeMap.placeAt(document.body);
 			}
 		);
 	</script>
 </head>
 <body>
-	<d-treemap id="treeMap" style="width:640px;height:640px"></d-treemap>
 </body>
 </html>

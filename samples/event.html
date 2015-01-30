@@ -27,19 +27,20 @@
 				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
 				var treeMap = new TreeMap({store: dataStore,
 							areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
-							colorModel: colorModel }, dom.byId("treeMap"));
+							colorModel: colorModel });
 				treeMap.on("selection-change", function(e){
 					if(e.newValue){
 						dom.byId("output").innerHTML = treeMap.getLabelForItem(e.newValue);
 					}
 				});
-				treeMap.startup();
+				treeMap.style.width = "640px";
+				treeMap.style.height = "640px";
+				treeMap.placeAt(document.body);
 			}
 		);
 	</script>
 </head>
 <body>
-	<d-treemap id="treeMap" style="width:640px;height:640px"></d-treemap>
 	<div id="output"></div>
 </body>
 </html>

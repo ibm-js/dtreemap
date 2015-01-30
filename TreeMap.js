@@ -1,9 +1,9 @@
 /** @module dtreemap/TreeMap */
 define(["dcl/dcl", "delite/register", "dcolor/Color",
-	"dojo/when", "dojo/dom-geometry", "dojo/dom-class",
+	"dojo/dom-geometry", "dojo/dom-class",
 	"./_utils", "dpointer/events", "delite/Widget", "delite/Selection",
 	"delite/StoreMap", "requirejs-dplugins/css!./themes/TreeMap.css"],
-	function (dcl, register, Color, when, domGeom, domClass,
+	function (dcl, register, Color, domGeom, domClass,
 			  utils, pointer, Widget, Selection, StoreMap) {
 
 	/**
