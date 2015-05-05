@@ -40,7 +40,7 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 
 ```js
 var dataStore;
-require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (register, Memory) {
+require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (register, Memory) {
   dataStore = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
@@ -52,7 +52,6 @@ require(["delite/register", "dstore/Memory", "dtreemap/TreeMap", "requirejs-domr
       { label: "China", sales: 500, profit: 40, region: "Asia" },
       { label: "Japan", sales: 900, profit: 100, region: "Asia" }
   ]});
-  register.parse();
 });
 ```
 

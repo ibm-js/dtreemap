@@ -412,7 +412,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 			var box = domGeom.getMarginBox(domNode);
 
 			var solution = utils.solve(children, box.w, box.h, this._computeAreaForItem.bind(this),
-				!this.isLeftToRight());
+				this.effectiveDir === "rtl");
 
 			var rectangles = solution.rectangles;
 

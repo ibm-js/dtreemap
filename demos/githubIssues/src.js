@@ -113,7 +113,7 @@ function (dcl, request, Color, register, TreeMap, Keyboard, DrillDownUp, Memory,
 			};
 		})
 	});
-	register.parse();
+	register.deliver();
 	treeMap = document.getElementById("treeMap");
 	treeMap.colorFunc = colorByPriorityFunc;
 	treeMap.areaFunc = sizeByCommentFunc;

@@ -1,19 +1,19 @@
 {
 	"name": "dtreemap",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"dependencies": {
 		"dojo": ">=1.9.1",
 		"dcl": "1.1.x",
 		"dcolor": "0.1.x",
 		"dpointer": "0.5.x",
-		"delite": "0.6.x",
+		"delite": "0.7.x",
 		"requirejs": "2.1.x",
 		"requirejs-dplugins": "0.5.x",
 		"requirejs-domready": "2.0.x",
 		"dstore": "1.0.x"
 	},
 	"devDependencies": {
-		"deliteful": "0.6.x"
+		"deliteful": "0.7.x"
 	},
 	"keywords": [
 		"web-components",
