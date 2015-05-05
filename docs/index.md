@@ -82,7 +82,6 @@ require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], f
   treeMap.style.width = "640px";
   treeMap.style.height = "480px";
   treeMap.placeAt(document.body);
-  treeMap.startup();
 });
 ```
 

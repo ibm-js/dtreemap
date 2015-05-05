@@ -36,7 +36,7 @@ define([
 			treeMap.groupAttrs = ["region"];
 			treeMap.colorModel = colorModel;
 			container.appendChild(treeMap);
-			treeMap.startup();
+			treeMap.attachedCallback();
 			treeMap.deliver();
 			var div = treeMap.firstChild;
 			var groups = div.querySelectorAll(".d-treemap-group");
