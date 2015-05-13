@@ -36,7 +36,7 @@ define(["dcl/dcl", "requirejs-dplugins/css!./themes/GroupLabel.css"],
 				if (level === 0) {
 					renderer.firstChild.innerHTML = this.getLabelForItem(item);
 				} else {
-					renderer.firstChild.innerHTML = null;
+					renderer.firstChild.innerHTML = "";
 				}
 				break;
 			case "header":
