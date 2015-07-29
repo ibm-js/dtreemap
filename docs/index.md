@@ -14,7 +14,7 @@ An example of a treemap is shown below. The treemap shows business sectors at th
 
 `dtreemap/TreeMap` supports squarified algorithms for two-dimensional treemaps, and is characterized by the ability to:
 
-* Map the size, color, and label of treemap cells to properties in a data store.
+* Map the size, color, and label of treemap cells to properties in a data source.
 * Choose either a predefined algorithm for computing the item colors or specify a color using a customizable color function.
 * Specify the treemap levels at which labels are to appear.
 * Get an event when clicking and hovering over treemap items.
@@ -39,9 +39,9 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 ### Declarative Instantiation
 
 ```js
-var dataStore;
+var dataSource;
 require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (register, Memory) {
-  dataStore = new Memory({idProperty: "label", data:
+  dataSource = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
       { label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -57,7 +57,7 @@ require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], f
 
 ```html
 <html>
-  <d-treemap style="width:640px;height:640px" store="dataStore" areaAttr="sales" 
+  <d-treemap style="width:640px;height:640px" source="dataSource" areaAttr="sales"
     colorAttr="profit" tooltipAttr="label" groupAttrs="region">
   </d-treemap>
 </html>
@@ -67,7 +67,7 @@ require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], f
 
 ```js
 require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], function (Memory, TreeMap) {
-  var dataStore = new Memory({idProperty: "label", data:
+  var dataSource = new Memory({idProperty: "label", data:
     [
       { label: "France", sales: 500, profit: 50, region: "EU" },
       { label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -78,7 +78,7 @@ require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], f
       { label: "China", sales: 500, profit: 40, region: "Asia" },
       { label: "Japan", sales: 900, profit: 100, region: "Asia" }
   ]});
-  var treeMap = new TreeMap({store: dataStore, areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"]});
+  var treeMap = new TreeMap({source: dataSource, areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"]});
   treeMap.style.width = "640px";
   treeMap.style.height = "480px";
   treeMap.placeAt(document.body);
@@ -91,11 +91,11 @@ require(["dstore/Memory", "dtreemap/TreeMap", "requirejs-domready/domReady!"], f
 
 `dtreemap/TreeMap` can connect to any implementation of `dstore/api/Store` interface that implements the get, filter, map and getIdentity methods. It supports flat data and optionally creates a hierarchy from this data using `groupAttrs`property to group the data based on certain of their attributes.
 
-A set of properties are available on the treemap to map the properties from the store to the treemap properties. see `delite/StoreMap`for details on mapping.
+A set of properties are available on the treemap to map the properties from the source to the treemap properties. see `delite/StoreMap`for details on mapping.
 
 #### Mapping using attributes
 
-In this example the data are mapped from the data store using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes values in the data.
+In this example the data are mapped from the data source using an attribute based mapping. That means the cell size and color as well as the grouping are extracted from attributes values in the data.
 
 <iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/jnh79/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/jnh79/">checkout the sample on JSFiddle</a></iframe>
 
@@ -115,13 +115,13 @@ Other binding attributes are available:
 <a name="byfunc"></a>
 #### Mapping using functions
 
-In this example the data are mapped from the data store using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
+In this example the data are mapped from the data source using custom functions. That means the cell size and color as well as the grouping are computed by functions specified by the application.
 
 <iframe width="100%" height="300" src="http://jsfiddle.net/ibmjs/TWJ3z/embedded/" allowfullscreen="allowfullscreen" frameborder="0"><a href="http://jsfiddle.net/ibmjs/TWJ3z/">checkout the sample on JSFiddle</a></iframe>
 
 The example is very similar to the previous one, except that it is using a function to compute the input value for the cells color. In this case instead of using the absolute profit figure we are computing the profit percentage.
 
-The example is also leveraging the query attribute that allows to reduce the scope of the query made onto the data store in order to extract a subset of the data. Here we are choosing only data items with sales above a given threshold.
+The example is also leveraging the query attribute that allows to reduce the scope of the query made onto the data source in order to extract a subset of the data. Here we are choosing only data items with sales above a given threshold.
 
 Obviously functions are also supported for binding areas, labels or tooltips.
 
@@ -135,7 +135,7 @@ In addition to the mapping properties `dtreemap/TreeMap` provides other useful p
   * The `selectedItems` property is the array of selected items. If you want to select only a single item you can alternatively used selectedItem property. See `delite/Selection` for details.
 
 ```js
-var treeMap = new TreeMap({store: dataStore, labelThreshold: 1, selectedItem: dataStore.get("France") ,
+var treeMap = new TreeMap({source: dataSource, labelThreshold: 1, selectedItem: dataSource.get("France") ,
   areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
   colorModel: colorModel });
 ```
@@ -292,7 +292,7 @@ require(["requirejs-dplugins/i18!myapp/nls/bundle", …], function(bundle, …) 
 Right to left orientation is supported by setting the `dir` attribute to `rtl`on the treemap element:
 
 ```js
-<d-treemap style="width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" dir="rtl"></d-treemap>
+<d-treemap style="width:640px;height:640px" source="dataSource" areaAttr="sales" colorAttr="profit" dir="rtl"></d-treemap>
 ```
 
 ### Security

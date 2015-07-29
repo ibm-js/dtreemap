@@ -7,13 +7,13 @@ define([
 	"dcolor/MeanColorModel",
 	"dcolor/Color"
 ], function (registerSuite, assert, register, TreeMap, Memory, MeanColorModel, Color) {
-	var container, store;
+	var container, source;
 	registerSuite({
 		name: "Attr",
 		setup: function () {
 			container = document.createElement("div");
 			document.body.appendChild(container);
-			store = new Memory({idProperty: "label", data:
+			source = new Memory({idProperty: "label", data:
 				[
 					{ label: "France", sales: 500, profit: 50, region: "EU" },
 					{ label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -30,7 +30,7 @@ define([
 			var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
 			var treeMap = register.createElement("d-treemap");
 			treeMap.style.height = "480px";
-			treeMap.store = store;
+			treeMap.source = source;
 			treeMap.areaAttr = "sales";
 			treeMap.colorAttr = "profit";
 			treeMap.groupAttrs = ["region"];

@@ -135,11 +135,11 @@ function (dcl, request, Color, register, TreeMap, Keyboard, DrillDownUp, Memory,
 			data[i].title = data[i].title.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
 				.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		}
-		var store = new (Memory.createSubclass(Trackable))({data: data});
+		var source = new (Memory.createSubclass(Trackable))({data: data});
 		// depending on when we arrive here treemap
 		// might already been there...
 		// reset data:
-		treeMap.store = store;
+		treeMap.source = source;
 	}, function () {
 		console.log("could not reach data source");
 	});

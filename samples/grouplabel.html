@@ -12,7 +12,7 @@
 		require(["delite/register", "dtreemap/TreeMap",
 			"dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "dtreemap/GroupLabel", "requirejs-domready/domReady!"],
 			function(register, TreeMap, Memory, MeanColorModel, Color, GroupLabel) {
-				var dataStore = new Memory({idProperty: "label", data:
+				var dataSource = new Memory({idProperty: "label", data:
 						[
 							{ label: "France", sales: 500, profit: 50, region: "EU" },
 							{ label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -27,7 +27,7 @@
 				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
 				register("c-treemap", [TreeMap, GroupLabel]);
 				register.deliver();
-				treeMap.store = dataStore;
+				treeMap.source = dataSource;
 				treeMap.areaAttr = "sales";
 				treeMap.colorAttr = "profit";
 				treeMap.tooltipAttr = "label";

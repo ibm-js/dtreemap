@@ -12,7 +12,7 @@
 		require(["dojo/dom", "delite/register", "dtreemap/TreeMap",
 			"dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "dtreemap/DrillDownUp", "requirejs-domready/domReady!"],
 			function(dom, register, TreeMap, Memory, MeanColorModel, Color, DrillDownUp) {
-				dataStore = new Memory({idProperty: "label", data:
+				dataSource = new Memory({idProperty: "label", data:
 						[
 							{ label: "France", sales: 500, profit: 50, region: "EU" },
 							{ label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -31,7 +31,7 @@
 	</script>
 </head>
 <body>
-	<c-treemap id="treeMap" style="position: absolute;top: 40px; width:640px;height:640px" store="dataStore" areaAttr="sales" colorAttr="profit" tooltipAttr="label"
+	<c-treemap id="treeMap" style="position: absolute;top: 40px; width:640px;height:640px" source="dataSource" areaAttr="sales" colorAttr="profit" tooltipAttr="label"
 			groupAttrs="region" colorModel="colorModel"></c-treemap>
 </body>
 </html>
