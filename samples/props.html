@@ -12,7 +12,7 @@
 		require(["dojo/dom", "dtreemap/TreeMap",
 			"dstore/Memory", "dcolor/MeanColorModel", "dcolor/Color", "requirejs-domready/domReady!"],
 			function(dom, TreeMap, Memory, MeanColorModel, Color) {
-				var dataStore = new Memory({idProperty: "label", data:
+				var dataSource = new Memory({idProperty: "label", data:
 						[
 							{ label: "France", sales: 500, profit: 50, region: "EU" },
 							{ label: "Germany", sales: 450, profit: 48, region: "EU" },
@@ -25,7 +25,7 @@
 						]
 				});
 				var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-				var treeMap = new TreeMap({store: dataStore, labelThreshold: 1, selectedItem:  dataStore.get("France") ,
+				var treeMap = new TreeMap({source: dataSource, labelThreshold: 1, selectedItem:  dataSource.get("France") ,
 							areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
 							colorModel: colorModel });
 				treeMap.style.width = "640px";

@@ -33,14 +33,14 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		rootItem: null,
 
 		/**
-		 * The attribute of the store item that contains the tooltip text of a treemap cell.
+		 * The attribute of the source item that contains the tooltip text of a treemap cell.
 		 * @member {string}
 		 * @default ""
 		 */
 		tooltipAttr: "",
 
 		/**
-		 * A function that returns the tooltip text of a treemap cell from a store item. If specified takes
+		 * A function that returns the tooltip text of a treemap cell from a source item. If specified takes
 		 * precedence over tooltipAttr.
 		 * @member {Function}
 		 * @default null
@@ -48,14 +48,14 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		tooltipFunc: null,
 
 		/**
-		 * The attribute of the store item that contains the data used to compute the area of a treemap cell.
+		 * The attribute of the source item that contains the data used to compute the area of a treemap cell.
 		 * @member {string}
 		 * @default ""
 		 */
 		areaAttr: "",
 
 		/**
-		 * A function that returns the value use to compute the area of cell from a store item. If specified
+		 * A function that returns the value use to compute the area of cell from a source item. If specified
 		 * takes precedence over areaAttr.
 		 * @member {Function}
 		 * @default null
@@ -63,14 +63,14 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		areaFunc: null,
 
 		/**
-		 * The attribute of the store item that contains the label of a treemap cell.
+		 * The attribute of the source item that contains the label of a treemap cell.
 		 * @member {string}
 		 * @default "label"
 		 */
 		labelAttr: "label",
 
 		/**
-		 * A function that returns the label of a treemap cell from a store item. If specified takes
+		 * A function that returns the label of a treemap cell from a source item. If specified takes
 		 * precedence over labelAttr.
 		 * @member {Function}
 		 * @default null
@@ -87,14 +87,14 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		labelThreshold: NaN,
 
 		/**
-		 * The attribute of the store item that contains the data used to compute the color of a treemap cell.
+		 * The attribute of the source item that contains the data used to compute the color of a treemap cell.
 		 * @member {string}
 		 * @default ""
 		 */
 		colorAttr: "",
 
 		/**
-		 * A function that returns from a store item the data used to compute the color of a treemap cell.
+		 * A function that returns from a source item the data used to compute the color of a treemap cell.
 		 * If specified takes precedence over colorAttr.
 		 * @member {Function}
 		 * @default null
@@ -135,7 +135,7 @@ define(["dcl/dcl", "delite/register", "dcolor/Color",
 		},
 
 		getIdentity: function (item) {
-			return item.__treeID ? item.__treeID : this.store.getIdentity(item);
+			return item.__treeID ? item.__treeID : this.source.getIdentity(item);
 		},
 
 

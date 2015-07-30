@@ -14,7 +14,7 @@ Migration steps from dojox/treemap to dtreemap:
 
 * replace any use of `"dojox/treemap"` AMD module path by `"dtreemap"`
 * replace any use of `.dojoxTreeMapXSomething` CSS classes by `.dtreemap-xsomething`
-* replace any use in markup of `<div data-dojo-type="dojox/treemap/TreeMap" data-dojo-props="store: mystore"></div>` by `<d-treemap store="mystore"><d-treemap>`
+* replace any use in markup of `<div data-dojo-type="dojox/treemap/TreeMap" data-dojo-props="source: mysource"></div>` by `<d-treemap source="mysource"><d-treemap>`
 
 ## Licensing
 
