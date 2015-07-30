@@ -1,6 +1,6 @@
 /** @module dtreemap/Keyboard */
-define(["dcl/dcl", "delite/keys", "./_utils", "dpointer/events"],
-	function (dcl, keys, utils) {
+define(["dcl/dcl", "./_utils", "dpointer/events"],
+	function (dcl, utils) {
 
 	/**
 	 * Mixin that specializes TreeMap to support keyboard navigation and accessibility.
@@ -49,9 +49,9 @@ define(["dcl/dcl", "delite/keys", "./_utils", "dpointer/events"],
 			var parent = renderer.parentItem;
 			var children, childrenI, selectedI;
 			// we also need items to be sorted out
-			if (e.keyCode !== keys.UP_ARROW && e.keyCode !== keys.NUMPAD_MINUS &&
-				e.keyCode !== keys.NUMPAD_PLUS) {
-				children = (e.keyCode === keys.DOWN_ARROW) ? selected.children : parent.children;
+			if (e.key !== "Up" && e.key !== "Subtract" &&
+				e.key !== "Add") {
+				children = (e.key === "Down") ? selected.children : parent.children;
 				if (children) {
 					childrenI = utils.initElements(children, this._computeAreaForItem.bind(this)).elements;
 					selectedI = childrenI[children.indexOf(selected)];
@@ -68,23 +68,23 @@ define(["dcl/dcl", "delite/keys", "./_utils", "dpointer/events"],
 
 		_navigate: function (e, renderer, selected, parent, children, childrenI, selectedI) {
 			var newSelected;
-			switch (e.keyCode) {
-			case keys.LEFT_ARROW:
+			switch (e.key) {
+			case "Left":
 				newSelected = children[childrenI[Math.max(0, childrenI.indexOf(selectedI) - 1)].index];
 				break;
-			case keys.RIGHT_ARROW:
+			case "Right":
 				newSelected = children[childrenI[Math.min(childrenI.length - 1,
 					childrenI.indexOf(selectedI) + 1)].index];
 				break;
-			case keys.DOWN_ARROW:
+			case "Down":
 				newSelected = children[childrenI[0].index];
 				break;
-			case keys.UP_ARROW:
+			case "Up":
 				newSelected = parent;
 				break;
 			// TODO
 			//case "+":
-			case keys.NUMPAD_PLUS:
+			case "Add":
 				if (!this._isLeaf(selected) && this.drillDown) {
 					this.drillDown(renderer);
 					e.preventDefault();
@@ -93,7 +93,7 @@ define(["dcl/dcl", "delite/keys", "./_utils", "dpointer/events"],
 				break;
 			// TODO
 			//case "-":
-			case keys.NUMPAD_MINUS:
+			case "Subtract":
 				if (!this._isLeaf(selected) && this.drillUp) {
 					this.drillUp(renderer);
 					e.preventDefault();
